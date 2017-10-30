@@ -1,0 +1,101 @@
+service: auto-remediate
+
+provider:
+  name: aws
+  runtime: nodejs6.10
+  stage: v1
+  region: us-west-2
+  stackTags:
+    service: auto-remediate
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - logs:CreateLogGroup
+      Resource:
+        - 'Fn::Join':
+          - ':'
+          -
+            - 'arn:aws:logs'
+            - Ref: 'AWS::Region'
+            - Ref: 'AWS::AccountId'
+            - '*'
+
+    - Effect: Allow
+      Action:
+        - logs:CreateLogStream
+        - logs:PutLogEvents
+        - logs:DescribeLogStream
+      Resource:
+        - 'Fn::Join':
+          - ':'
+          -
+            - 'arn:aws:logs'
+            - Ref: 'AWS::Region'
+            - Ref: 'AWS::AccountId'
+            - 'log-group:/aws/lambda/*:*:*'
+
+    - Effect: Allow
+      Action: "lambda:InvokeFunction"
+      Resource: "*"
+
+    - Effect: Allow
+      Action:
+        - rds:Describe*
+        - rds:ModifyDBInstance
+      Resource: "*"
+
+    - Effect: Allow
+      Action:
+        - s3:GetBucket*
+        - s3:PutBucketPolicy
+        - s3:PutBucketAcl
+      Resource: "*"
+
+package:
+  individually: true
+
+functions:
+
+  AutoRemediateOrchestrator:
+    handler: functions/AutoRemediateOrchestrator.handler
+    timeout: 10
+    memorySize: 128
+    events:
+      - sns:
+          topicName: CloudConformity
+          displayName: CloudConformity topic
+    tags:
+      Name: Auto Remediate Orchestrator
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateOrchestrator.js
+        - node_modules/**
+
+  AutoRemediateS3-001:
+    handler: functions/AutoRemediateS3-001.handler
+    memorySize: 128
+    tags:
+      Name: Auto Remediate S3-001
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateS3-001.js
+        - node_modules/**
+
+  AutoRemediateRDS-008:
+    handler: functions/AutoRemediateRDS-008.handler
+    memorySize: 128
+    tags:
+      Name: Auto Remediate RDS-008
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateRDS-008.js
+        - node_modules/**
