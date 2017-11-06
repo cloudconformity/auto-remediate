@@ -23,7 +23,7 @@ Here's an example:
 1. Go to the official [Serverless Framework](https://serverless.com/framework/docs/providers/aws/guide/installation/)  and follow the instructions to install the framework
 2. Create a working copy of "Cloud Conformity Auto Remediation" repository by running the following command:
 ```bash
-git clone https://github.com/cloudconformity/auto-remediation.git
+git clone https://github.com/cloudconformity/auto-remediate.git
 ```
 3. Change directory to auto-remediation:
 
