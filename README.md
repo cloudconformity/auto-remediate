@@ -28,7 +28,7 @@ git clone https://github.com/cloudconformity/auto-remediate.git
 3. Change directory to auto-remediation:
 
 ```bash
-cd auto-remediation
+cd auto-remediate
 ```
 4. `IMPORTANT` Make any necessary adjustments before deployment
 5. Run `npm install` before deploying so that the node_modules folder would be available to AWS
