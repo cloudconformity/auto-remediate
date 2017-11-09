@@ -77,6 +77,7 @@ The table below lists the supported auto auto-remediate functions:
 | ------------- | ------------- | ------------- |
 |  S3  | [S3-001](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-public-read-access.html) | Ensure S3 buckets do not allow public READ access |
 |  RDS | [RDS-008](https://www.cloudconformity.com/conformity-rules/RDS/rds-publicly-accessible.html)    | Ensure RDS instances are not public facing to minimise security risks |
+|  CloudTrail | [CT-001](https://www.cloudconformity.com/conformity-rules/CloudTrail/cloudtrail-enabled.htm)    | Ensure CloudTrail API logging is activated for all Regions |
 
 
 For more information about `Rule Id`, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
@@ -88,4 +89,3 @@ You are welcome to contribute to "Cloud Conformity Auto Remediation"
 1. [Fork](https://help.github.com/articles/fork-a-repo/) the project
 2. Make a well commented and clean commit to the repository
 3. Create a [pull request](https://help.github.com/articles/about-pull-requests/)
-
