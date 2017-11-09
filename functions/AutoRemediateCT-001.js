@@ -1,10 +1,49 @@
 "use strict";
 
-//CloudTrailEnabled
+const AWS = require("aws-sdk");
+
+/**
+* Lambda function to automatically remediate CloudTrail not Enabled
+*
+*/
 module.exports.handler = (event, context, callback) => {
 
-	console.log('CloudTrail Enabled - Received event:', JSON.stringify(event, null, 2));
+	console.log('CloudTrail not Enabled - Received event:', JSON.stringify(event, null, 2));
 
-	callback(null, "Success");
+	if (!event || !event.ccrn || !event.resource || !event.region) {
+		return handleError("Invalid event");
+	}
+
+	var cloudtrail = new AWS.CloudTrail({apiVersion: '2013-11-01'});
+	cloudtrail.createTrail({
+		
+		Name: 'GlobalTrail',
+		S3BucketName: 'cc-remediate-cloudtrail',
+		// CloudWatchLogsLogGroupArn: 'STRING_VALUE',
+		// CloudWatchLogsRoleArn: 'STRING_VALUE',
+		IncludeGlobalServiceEvents: true,
+		IsMultiRegionTrail: true ,
+		// KmsKeyId: 'STRING_VALUE',
+		S3KeyPrefix: 'cloudtrail-global',
+		// SnsTopicName: 'STRING_VALUE'
+
+		if (err) {
+
+			console.log("Error", err);
+			return handleError(err.message ? err.message : "modify db instance failed");
+
+		}
+
+		console.log("Result", result);
+		return callback(null, "Successfully processed event");
+
+	});
+
+	function handleError(message) {
+
+		message = message || "Failed to process request.";
+		return callback(new Error(message));
+
+	}
 
 };
