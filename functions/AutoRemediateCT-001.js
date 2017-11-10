@@ -8,7 +8,7 @@ const AWS = require("aws-sdk");
 */
 module.exports.handler = (event, context, callback) => {
 
-	console.log('CloudTrail not Enabled - Received event:', JSON.stringify(event, null, 2));
+	console.log('CloudTrail not Global - Received event:', JSON.stringify(event, null, 2));
 
 	if (!event || !event.ccrn || !event.resource || !event.region) {
 		return handleError("Invalid event");
@@ -16,7 +16,7 @@ module.exports.handler = (event, context, callback) => {
 
 	var cloudtrail = new AWS.CloudTrail({apiVersion: '2013-11-01'});
 	cloudtrail.createTrail({
-		
+
 		Name: 'GlobalTrail',
 		S3BucketName: 'cc-remediate-cloudtrail',
 		// CloudWatchLogsLogGroupArn: 'STRING_VALUE',
@@ -27,16 +27,15 @@ module.exports.handler = (event, context, callback) => {
 		S3KeyPrefix: 'cloudtrail-global',
 		// SnsTopicName: 'STRING_VALUE'
 
+	} , (err, result) => {
+
 		if (err) {
-
-			console.log("Error", err);
-			return handleError(err.message ? err.message : "modify db instance failed");
-
-		}
-
-		console.log("Result", result);
+				console.log("Error" + err);
+				return handleError(err.message ? err.message : "Make CloudTrail global failed");
+	  }
+		
+		//console.log("Result"+ result);
 		return callback(null, "Successfully processed event");
-
 	});
 
 	function handleError(message) {
