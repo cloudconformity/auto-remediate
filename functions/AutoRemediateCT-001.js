@@ -3,7 +3,7 @@
 const AWS = require("aws-sdk");
 
 /**
-* Lambda function to automatically remediate CloudTrail not Enabled
+* Lambda function to automatically remediate CloudTrail not Global
 */
 module.exports.handler = (event, context, callback) => {
 
@@ -18,22 +18,17 @@ module.exports.handler = (event, context, callback) => {
 
 		Name: 'GlobalTrail',
 		S3BucketName: 'cc-remediate-cloudtrail',
-		// CloudWatchLogsLogGroupArn: 'STRING_VALUE',
-		// CloudWatchLogsRoleArn: 'STRING_VALUE',
 		IncludeGlobalServiceEvents: true,
 		IsMultiRegionTrail: true ,
-		// KmsKeyId: 'STRING_VALUE',
 		S3KeyPrefix: 'cloudtrail-global',
-		// SnsTopicName: 'STRING_VALUE'
 
 		} , (err, result) => {
 
 		if (err) {
 				console.log("Error" + err);
-				return handleError(err.message ? err.message : "Make CloudTrail global failed");
+				return handleError(err.message ? err.message : "Make CloudTrail global in account failed");
 	  }
 
-		//console.log("Result"+ result);
 		return callback(null, "Successfully processed event");
 	});
 
