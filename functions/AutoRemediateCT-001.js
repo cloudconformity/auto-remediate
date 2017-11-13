@@ -1,5 +1,6 @@
 "use strict";
 
+const config = require('./config');
 const AWS = require("aws-sdk");
 
 /**
@@ -16,11 +17,11 @@ module.exports.handler = (event, context, callback) => {
 	var cloudtrail = new AWS.CloudTrail({apiVersion: '2013-11-01'});
 	cloudtrail.updateTrail({
 
-		Name: 'GlobalTrail',
-		S3BucketName: 'cc-remediate-cloudtrail',
-		IncludeGlobalServiceEvents: true,
-		IsMultiRegionTrail: true ,
-		S3KeyPrefix: 'cloudtrail-global',
+		Name: config[`${"CT-001"."Name"}`],
+		S3BucketName: config[`${"CT-001"."S3BucketName"}`],
+		IncludeGlobalServiceEvents: config[`${"CT-001"."IncludeGlobalServiceEvents"}`],
+		IsMultiRegionTrail: config[`${"CT-001"."IsMultiRegionTrail"}`] ,
+		S3KeyPrefix: config[`${"CT-001"."S3KeyPrefix"}`],
 
 		} , (err, result) => {
 
