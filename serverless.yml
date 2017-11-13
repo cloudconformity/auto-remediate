@@ -51,15 +51,15 @@ provider:
         - s3:PutBucketAcl
       Resource: "*"
 
-    - Effect: Allow
-      Action:
-        - sns:AddPermission
-        - sns:CreateTopic
-        - sns:DeleteTopic
-        - sns:ListTopics
-        - sns:SetTopicAttributes
-        - sns:GetTopicAttributes
-      Resource: "*"
+    # - Effect: Allow
+    #   Action:
+    #     - sns:AddPermission
+    #     - sns:CreateTopic
+    #     - sns:DeleteTopic
+    #     - sns:ListTopics
+    #     - sns:SetTopicAttributes
+    #     - sns:GetTopicAttributes
+    #   Resource: "*"
 
     - Effect: Allow
       Action: cloudtrail:*
