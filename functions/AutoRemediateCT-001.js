@@ -17,11 +17,11 @@ module.exports.handler = (event, context, callback) => {
 	var cloudtrail = new AWS.CloudTrail({apiVersion: '2013-11-01'});
 	cloudtrail.updateTrail({
 
-		Name: config[`${"CT-001"."Name"}`],
-		S3BucketName: config[`${"CT-001"."S3BucketName"}`],
-		IncludeGlobalServiceEvents: config[`${"CT-001"."IncludeGlobalServiceEvents"}`],
-		IsMultiRegionTrail: config[`${"CT-001"."IsMultiRegionTrail"}`] ,
-		S3KeyPrefix: config[`${"CT-001"."S3KeyPrefix"}`],
+		Name:                       config["CT-001"]["Name"],
+		S3BucketName:               config["CT-001"]["S3BucketName"],
+		IncludeGlobalServiceEvents: config["CT-001"]["IncludeGlobalServiceEvents"],
+		IsMultiRegionTrail:         config["CT-001"]["IsMultiRegionTrail"],
+		S3KeyPrefix:                config["CT-001"]["S3KeyPrefix"]
 
 		} , (err, result) => {
 
