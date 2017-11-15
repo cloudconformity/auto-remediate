@@ -14,7 +14,7 @@ module.exports = {
 	"CT-001": {
 		"Name": 'GlobalTrail',
 		"S3BucketName": 'cc-remediate-cloudtrail',
-		// "IncludeGlobalServiceEvents": true,
+		"IncludeGlobalServiceEvents": true,
 		"IsMultiRegionTrail": true,
 		"S3KeyPrefix": 'cloudtrail-global'
 	}
