@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs6.10
   stage: v1
-  region: us-west-2
+  region: ${opt:AWS_REGION}
   stackTags:
     service: auto-remediate
   iamRoleStatements:
@@ -49,6 +49,10 @@ provider:
         - s3:GetBucket*
         - s3:PutBucketPolicy
         - s3:PutBucketAcl
+      Resource: "*"
+
+    - Effect: Allow
+      Action: cloudtrail:UpdateTrail
       Resource: "*"
 
     - Effect: Allow
@@ -106,6 +110,19 @@ functions:
     package:
       include:
         - functions/AutoRemediateOrchestrator.js
+        - node_modules/**
+
+  AutoRemediateCT-001:
+    handler: functions/AutoRemediateCT-001.handler
+    memorySize: 128
+    tags:
+      Name: Auto Remediate CT-001
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateCT-001.js
         - node_modules/**
 
   AutoRemediateS3-001:
