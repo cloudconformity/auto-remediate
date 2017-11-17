@@ -52,7 +52,7 @@ provider:
       Resource: "*"
 
     - Effect: Allow
-      Action: cloudtrail:*
+      Action: cloudtrail:UpdateTrail
       Resource: "*"
 
     - Effect: Allow
