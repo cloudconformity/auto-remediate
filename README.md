@@ -40,7 +40,7 @@ npm install
 7. Finally deploy
 
 ```bash
-serverless deploy
+serverless deploy --region us-west-2
 ```
 
 
@@ -80,6 +80,7 @@ The table below lists the supported auto auto-remediate functions:
 |  S3  | [S3-001](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-public-read-access.html) | Ensure S3 buckets do not allow public READ access |
 |  RDS | [RDS-008](https://www.cloudconformity.com/conformity-rules/RDS/rds-publicly-accessible.html)    | Ensure RDS instances are not public facing to minimise security risks |
 |  CloudTrail | [CT-001](https://www.cloudconformity.com/conformity-rules/CloudTrail/cloudtrail-enabled.html)    | Ensure CloudTrail API logging is activated for all Regions |
+|  Redshift | [RS-001](https://www.cloudconformity.com/conformity-rules/Redshift/redshift-cluster-publicly-accessible.html)    | Ensure Redshift clusters are not publicly accessible to minimise security risks |
 
 
 For more information about `Rule Id`, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
