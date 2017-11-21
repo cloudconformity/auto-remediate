@@ -19,7 +19,7 @@ module.exports.handler = (event, context, callback) => {
 
 		Name:                       config["CT-001"]["Name"],
 		S3BucketName:               config["CT-001"]["S3BucketName"],
-		IncludeGlobalServiceEvents: (event.region === "us-east-1"),
+		IncludeGlobalServiceEvents: config["CT-001"]["IncludeGlobalServiceEvents"],
 		IsMultiRegionTrail:         config["CT-001"]["IsMultiRegionTrail"],
 		S3KeyPrefix:                config["CT-001"]["S3KeyPrefix"]
 
