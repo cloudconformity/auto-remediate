@@ -20,7 +20,7 @@ module.exports.handler = (event, context, callback) => {
 
 	let AutoRemediate = "AutoRemediate" + message.ruleId;
 
-	if (AutoRemediate === null) {
+	if (!config[`${AutoRemediate}`]) {
 
 		console.log("The %s is not supported. Exiting gracefully ...", AutoRemediate);
 		callback(null);
@@ -28,7 +28,7 @@ module.exports.handler = (event, context, callback) => {
 
 	}
 
-	if (!config[`${AutoRemediate}`]) {
+	if (!config[`${AutoRemediate}`]["enabled"]) {
 
 		console.log("The %s is not enabled. Exiting gracefully ...", AutoRemediate);
 		callback(null);

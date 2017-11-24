@@ -37,7 +37,7 @@ module.exports.handler = (event, context, callback) => {
 		return handleError("Invalid event");
 	}
 
-	if (!config['CONFIG_S3_BUCKET']) {
+	if (!config["AutoRemediateConfig-001"]["S3BucketName"]) {
 
 		return handleError("Missing CONFIG_S3_BUCKET configuration");
 	}
@@ -131,7 +131,7 @@ module.exports.handler = (event, context, callback) => {
 									"Action": [
 										"s3:PutObject"
 									],
-									"Resource": "arn:aws:s3:::" + config['CONFIG_S3_BUCKET'] + "/AWSLogs/"  + accountId + "/Config/*",
+									"Resource": "arn:aws:s3:::" + config["AutoRemediateConfig-001"]["S3BucketName"] + "/AWSLogs/"  + accountId + "/Config/*",
 									"Condition": {
 										"StringLike": {
 											"s3:x-amz-acl": "bucket-owner-full-control"
@@ -143,7 +143,7 @@ module.exports.handler = (event, context, callback) => {
 									"Action": [
 										"s3:GetBucketAcl"
 									],
-									"Resource": "arn:aws:s3:::" + config['CONFIG_S3_BUCKET']
+									"Resource": "arn:aws:s3:::" + config["AutoRemediateConfig-001"]["S3BucketName"]
 								}
 							]
 						}),
@@ -198,7 +198,7 @@ module.exports.handler = (event, context, callback) => {
 			let PutDeliveryChannelParams = {
 				DeliveryChannel: {
 					name: 'default',
-					s3BucketName: config['CONFIG_S3_BUCKET']
+					s3BucketName: config["AutoRemediateConfig-001"]["S3BucketName"]
 				}
 			};
 
