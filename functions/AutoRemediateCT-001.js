@@ -17,7 +17,7 @@ module.exports.handler = (event, context, callback) => {
 	let params = {
 		Name:                       config["AutoRemediateCT-001"]["Name"],
 		S3BucketName:               config["AutoRemediateCT-001"]["S3BucketName"],
-		IncludeGlobalServiceEvents: (event.region === "us-east-1"),
+		IncludeGlobalServiceEvents: config["AutoRemediateCT-001"]["IncludeGlobalServiceEvents"],
 		IsMultiRegionTrail:         config["AutoRemediateCT-001"]["IsMultiRegionTrail"],
 		S3KeyPrefix:                config["AutoRemediateCT-001"]["S3KeyPrefix"]
 
