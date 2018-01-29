@@ -28,6 +28,10 @@ module.exports = {
 
 	"AutoRemediateRS-001": {
 		"enabled": true
+	},
+
+	"AutoRemediateIAM-001": {
+		"enabled": true
 	}
 
 }
