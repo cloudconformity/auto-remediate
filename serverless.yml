@@ -48,6 +48,7 @@ provider:
         - s3:GetBucket*
         - s3:PutBucketPolicy
         - s3:PutBucketAcl
+        - s3:PutBucketVersioning
       Resource: "*"
 
     - Effect: Allow
@@ -140,6 +141,19 @@ functions:
     package:
       include:
         - functions/AutoRemediateS3-001.js
+        - node_modules/**
+
+  AutoRemediateS3-012:
+    handler: functions/AutoRemediateS3-012.handler
+    memorySize: 128
+    tags:
+      Name: Auto Remediate S3-012
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateS3-012.js
         - node_modules/**
 
   AutoRemediateRDS-008:

@@ -78,6 +78,7 @@ The table below lists the supported auto auto-remediate functions:
 |  CloudFormation | [CFM-005](https://www.cloudconformity.com/conformity-rules/CloudFormation/stack-termination-protection.html)    | Ensure Termination Protection feature is enabled for your AWS CloudFormation stacks |
 |  Config | [Config-001](https://www.cloudconformity.com/conformity-rules/Config/aws-config-enabled.html)    | Ensure AWS Config is enabled in all regions |
 |  S3  | [S3-001](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-public-read-access.html) | Ensure S3 buckets do not allow public READ access |
+|  S3  | [S3-012](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-versioning-enabled.html) | Enable versioning for AWS S3 buckets |
 |  RDS | [RDS-008](https://www.cloudconformity.com/conformity-rules/RDS/rds-publicly-accessible.html)    | Ensure RDS instances are not public facing to minimise security risks |
 |  CloudTrail | [CT-001](https://www.cloudconformity.com/conformity-rules/CloudTrail/cloudtrail-enabled.html)    | Ensure CloudTrail API logging is activated for all Regions |
 |  Redshift | [RS-001](https://www.cloudconformity.com/conformity-rules/Redshift/redshift-cluster-publicly-accessible.html)    | Ensure Redshift clusters are not publicly accessible to minimise security risks |
