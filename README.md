@@ -4,6 +4,8 @@
 This early "Auto Remediation" is subject to change. Cloud Conformity will use commercially reasonable efforts to support the previous version of the project.
 This project is provided on an ‘AS IS’ and ‘WHEN AVAILABLE’ basis.  Cloud Conformity has no liability to user as a result of any changes made to their AWS infrastructure by installing this project.
 
+Auto Remediation is an MIT open-source project, actively maintained by Cloud Conformity team.
+
 ## How it works
 
 The following image shows how Cloud Conformity Auto Remediation works:
