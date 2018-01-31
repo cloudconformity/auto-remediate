@@ -11,7 +11,7 @@
     "type": "git",
     "url": "ssh://git@github.com:cloudconformity/auto-remediate"
   },
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {},
   "devDependencies": {
     "@types/chai": "^3.5.1",
