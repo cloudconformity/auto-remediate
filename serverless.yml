@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: nodejs6.10
   stage: v1
+  region: ${opt:AWS_REGION}
   stackTags:
     service: auto-remediate
   iamRoleStatements:
@@ -90,11 +91,28 @@ provider:
 
     - Effect: Allow
       Action:
-        - redshift:ModifyCluster
+        - sns:ListTopics
+        - sns:Publish
       Resource: "*"
 
 package:
   individually: true
+  include:
+    - "lib/*"
+    - "node_modules/firebase/**"
+    - "node_modules/bluebird/**"
+    - "node_modules/moment/**"
+    - "node_modules/oauth/**"
+    - "node_modules/dotenv/**"
+    - "node_modules/lodash/**"
+  exclude:
+    - "*.mp3"
+    - "test/*"
+    - "src/*"
+    - ".git/**"
+    - ".serverless/*.zip"
+    - "node_modules/**"
+
 
 functions:
 
@@ -115,6 +133,21 @@ functions:
       include:
         - functions/AutoRemediateOrchestrator.js
         - node_modules/**
+
+  AutoRemediateXX-001:
+    handler: functions/AutoRemediateXX-001.handler
+    memorySize: 128
+    tags:
+      Name: Auto Remediate XX-001
+      Owner: testing
+      Role: Auto Remediate testing
+      Environment: Ops
+    environment:
+      SNS_OUTCOME_TOPIC: arn:aws:sns:ap-southeast-2:870109809871:AutoRemediationOutcome
+    package:
+      include:
+        - functions/AutoRemediateXX-001.js
+        #- node_modules/**
 
   AutoRemediateCT-001:
     handler: functions/AutoRemediateCT-001.handler
@@ -181,18 +214,4 @@ functions:
     package:
       include:
         - functions/AutoRemediateCFM-005.js
-        - node_modules/**
-
-  AutoRemediateRS-001:
-    handler: functions/AutoRemediateRS-001.handler
-    timeout: 120
-    memorySize: 128
-    tags:
-      Name: Auto Remediate RS-001
-      Owner: CloudConformity
-      Role: Auto Remediate
-      Environment: Ops
-    package:
-      include:
-        - functions/AutoRemediateRS-001.js
         - node_modules/**
