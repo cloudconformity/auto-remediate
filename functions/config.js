@@ -36,6 +36,10 @@ module.exports = {
 
 	"AutoRemediateIAM-001": {
 		"enabled": true
+	},
+
+	"AutoRemediateEC2-002": {
+		"enabled": true
 	}
 
 }

@@ -94,6 +94,11 @@ provider:
         - redshift:ModifyCluster
       Resource: "*"
 
+    - Effect: Allow
+      Action:
+        - ec2:RevokeSecurityGroupIngress
+      Resource: "*"
+
 package:
   individually: true
 
@@ -209,4 +214,18 @@ functions:
     package:
       include:
         - functions/AutoRemediateRS-001.js
+        - node_modules/**
+
+  AutoRemediateEC2-002:
+    handler: functions/AutoRemediateEC-002.handler
+    timeout: 120
+    memorySize: 128
+    tags:
+      Name: Auto Remediate EC-002
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateEC-002.js
         - node_modules/**
