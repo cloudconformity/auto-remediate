@@ -1,28 +1,28 @@
 module.exports = {
 
 	"AutoRemediateRDS-008": {
-		"enabled": true
+		"enabled": false
 	},
 
 	"AutoRemediateS3-001": {
-		"enabled": true
+		"enabled": false
   },
 
 	"AutoRemediateS3-012": {
-		"enabled": true
+		"enabled": false
 	},
 
 	"AutoRemediateConfig-001": {
-		"enabled": true,
+		"enabled": false,
 		"S3BucketName": "",
 	},
 
 	"AutoRemediateCFM-005": {
-		"enabled": true
+		"enabled": false
 	},
 
 	"AutoRemediateCT-001": {
-		"enabled": true,
+		"enabled": false,
 		"Name": 'GlobalTrail',
 		"S3BucketName": '',
 		"IncludeGlobalServiceEvents": true,
@@ -31,15 +31,15 @@ module.exports = {
 	},
 
 	"AutoRemediateRS-001": {
-		"enabled": true
+		"enabled": false
 	},
 
 	"AutoRemediateIAM-001": {
-		"enabled": true
+		"enabled": false
 	},
 
 	"AutoRemediateEC2-002": {
-		"enabled": true
+		"enabled": false
 	}
 
 }
