@@ -86,6 +86,7 @@ The table below lists the supported auto auto-remediate functions:
 |  Redshift | [RS-001](https://www.cloudconformity.com/conformity-rules/Redshift/redshift-cluster-publicly-accessible.html)    | Ensure Redshift clusters are not publicly accessible to minimise security risks |
 |  IAM | [IAM-001](https://www.cloudconformity.com/conformity-rules/IAM/access-keys-rotated-30-days.html)    | Ensure that all your IAM user access keys are rotated every month  |
 |  EC2 | [EC2-002](https://www.cloudconformity.com/conformity-rules/EC2/unrestricted-ssh-access.html)    | Ensure that there is no unrestricted access through TCP port 22 from the selected EC2 security group  |
+|  EC2 | [EC2-005](https://www.cloudconformity.com/conformity-rules/EC2/unrestricted-mysql-access.html)    | Ensure that there is no unrestricted access through TCP port 3306 (which is used by MYSQL Database Server) from the selected EC2 security group  |
 
 For more information about `Rule Id`, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
 
