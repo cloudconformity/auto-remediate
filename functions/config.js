@@ -40,6 +40,10 @@ module.exports = {
 
 	"AutoRemediateEC2-002": {
 		"enabled": false
+	},
+
+	"AutoRemediateEC2-005": {
+		"enabled": false
 	}
 
 }
