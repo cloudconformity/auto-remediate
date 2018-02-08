@@ -4,7 +4,8 @@
   "description": "Auto Remediate",
   "main": "Orchestrator.js",
   "scripts": {
-    "test": "./node_modules/.bin/mocha --recursive --reporter spec"
+    "test": "./node_modules/.bin/mocha --recursive --reporter spec",
+    "sls:package": "serverless package"
   },
   "author": "Mike Rahmati",
   "repository": {
@@ -20,6 +21,7 @@
     "bluebird": "^3.5.0",
     "chai": "^3.5.0",
     "dotenv": "^2.0.0",
-    "mocha": "^3.3.0"
+    "mocha": "^3.3.0",
+    "serverless": "^1.26.0"
   }
 }

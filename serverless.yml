@@ -101,6 +101,8 @@ provider:
 
 package:
   individually: true
+  exclude:
+    - "node_modules/**"
 
 functions:
 
@@ -120,7 +122,6 @@ functions:
     package:
       include:
         - functions/AutoRemediateOrchestrator.js
-        - node_modules/**
 
   AutoRemediateCT-001:
     handler: functions/AutoRemediateCT-001.handler
@@ -133,7 +134,6 @@ functions:
     package:
       include:
         - functions/AutoRemediateCT-001.js
-        - node_modules/**
 
   AutoRemediateS3-001:
     handler: functions/AutoRemediateS3-001.handler
@@ -146,7 +146,6 @@ functions:
     package:
       include:
         - functions/AutoRemediateS3-001.js
-        - node_modules/**
 
   AutoRemediateS3-012:
     handler: functions/AutoRemediateS3-012.handler
@@ -159,7 +158,6 @@ functions:
     package:
       include:
         - functions/AutoRemediateS3-012.js
-        - node_modules/**
 
   AutoRemediateRDS-008:
     handler: functions/AutoRemediateRDS-008.handler
@@ -172,7 +170,6 @@ functions:
     package:
       include:
         - functions/AutoRemediateRDS-008.js
-        - node_modules/**
 
   AutoRemediateConfig-001:
     handler: functions/AutoRemediateConfig-001.handler
@@ -186,7 +183,6 @@ functions:
     package:
       include:
         - functions/AutoRemediateConfig-001.js
-        - node_modules/**
 
   AutoRemediateCFM-005:
     handler: functions/AutoRemediateCFM-005.handler
@@ -200,7 +196,6 @@ functions:
     package:
       include:
         - functions/AutoRemediateCFM-005.js
-        - node_modules/**
 
   AutoRemediateRS-001:
     handler: functions/AutoRemediateRS-001.handler
@@ -214,7 +209,6 @@ functions:
     package:
       include:
         - functions/AutoRemediateRS-001.js
-        - node_modules/**
 
   AutoRemediateEC2-002:
     handler: functions/AutoRemediateEC-002.handler
@@ -228,7 +222,6 @@ functions:
     package:
       include:
         - functions/AutoRemediateEC-002.js
-        - node_modules/**
 
   AutoRemediateEC2-005:
     handler: functions/AutoRemediateEC-005.handler
@@ -242,4 +235,3 @@ functions:
     package:
       include:
         - functions/AutoRemediateEC-005.js
-        - node_modules/**
