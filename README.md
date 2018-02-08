@@ -4,6 +4,8 @@
 This early "Auto Remediation" is subject to change. Cloud Conformity will use commercially reasonable efforts to support the previous version of the project.
 This project is provided on an ‘AS IS’ and ‘WHEN AVAILABLE’ basis.  Cloud Conformity has no liability to user as a result of any changes made to their AWS infrastructure by installing this project.
 
+Auto Remediation is an MIT open-source project, actively maintained by Cloud Conformity team.
+
 ## How it works
 
 The following image shows how Cloud Conformity Auto Remediation works:
@@ -30,7 +32,7 @@ git clone https://github.com/cloudconformity/auto-remediate.git
 ```bash
 cd auto-remediate
 ```
-4. `IMPORTANT` Update `functions/config.js` with required configurations.
+4. `IMPORTANT` Update `functions/config.js` with required configurations. Please note that all the rules in config file are disabled by default to prevent unwanted changed. User needs to enabled the ones they need manually.
 5. `IMPORTANT` Make any other necessary adjustments before deployment.
 6. Run `npm install` before deploying so that the node_modules folder would be available to AWS
 
@@ -78,10 +80,13 @@ The table below lists the supported auto auto-remediate functions:
 |  CloudFormation | [CFM-005](https://www.cloudconformity.com/conformity-rules/CloudFormation/stack-termination-protection.html)    | Ensure Termination Protection feature is enabled for your AWS CloudFormation stacks |
 |  Config | [Config-001](https://www.cloudconformity.com/conformity-rules/Config/aws-config-enabled.html)    | Ensure AWS Config is enabled in all regions |
 |  S3  | [S3-001](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-public-read-access.html) | Ensure S3 buckets do not allow public READ access |
+|  S3  | [S3-012](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-versioning-enabled.html) | Enable versioning for AWS S3 buckets |
 |  RDS | [RDS-008](https://www.cloudconformity.com/conformity-rules/RDS/rds-publicly-accessible.html)    | Ensure RDS instances are not public facing to minimise security risks |
 |  CloudTrail | [CT-001](https://www.cloudconformity.com/conformity-rules/CloudTrail/cloudtrail-enabled.html)    | Ensure CloudTrail API logging is activated for all Regions |
 |  Redshift | [RS-001](https://www.cloudconformity.com/conformity-rules/Redshift/redshift-cluster-publicly-accessible.html)    | Ensure Redshift clusters are not publicly accessible to minimise security risks |
-
+|  IAM | [IAM-001](https://www.cloudconformity.com/conformity-rules/IAM/access-keys-rotated-30-days.html)    | Ensure that all your IAM user access keys are rotated every month  |
+|  EC2 | [EC2-002](https://www.cloudconformity.com/conformity-rules/EC2/unrestricted-ssh-access.html)    | Ensure that there is no unrestricted access through TCP port 22 from the selected EC2 security group  |
+|  EC2 | [EC2-005](https://www.cloudconformity.com/conformity-rules/EC2/unrestricted-mysql-access.html)    | Ensure that there is no unrestricted access through TCP port 3306 (which is used by MYSQL Database Server) from the selected EC2 security group  |
 
 For more information about `Rule Id`, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
 
@@ -92,10 +97,3 @@ You are welcome to contribute to "Cloud Conformity Auto Remediation"
 1. [Fork](https://help.github.com/articles/fork-a-repo/) the project
 2. Make a well commented and clean commit to the repository
 3. Create a [pull request](https://help.github.com/articles/about-pull-requests/)
-
-## Temporary space for reminders, information - to be re-written before publication
-
-# This installation creates SNS topics
-
-In the Cloud Conformity console, in the account you are deploying to, select "Settings - Communication Settings - Update Communication Settings - Amazon SNS - Configure".
-Confirm that the SNS Topic ARN entry matches the one the deployment subscribes to, and follow the instructions given to ensure that Cloud Conformity can publish to your subscription - particularly the Policy Document permissions.

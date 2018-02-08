@@ -49,6 +49,7 @@ provider:
         - s3:GetBucket*
         - s3:PutBucketPolicy
         - s3:PutBucketAcl
+        - s3:PutBucketVersioning
       Resource: "*"
 
     - Effect: Allow
@@ -93,6 +94,11 @@ provider:
       Action:
         - sns:ListTopics
         - sns:Publish
+      Resource: "*"
+
+    - Effect: Allow
+      Action:
+        - ec2:RevokeSecurityGroupIngress
       Resource: "*"
 
 package:
@@ -175,6 +181,19 @@ functions:
         - functions/AutoRemediateS3-001.js
         - node_modules/**
 
+  AutoRemediateS3-012:
+    handler: functions/AutoRemediateS3-012.handler
+    memorySize: 128
+    tags:
+      Name: Auto Remediate S3-012
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateS3-012.js
+        - node_modules/**
+
   AutoRemediateRDS-008:
     handler: functions/AutoRemediateRDS-008.handler
     memorySize: 128
@@ -214,4 +233,46 @@ functions:
     package:
       include:
         - functions/AutoRemediateCFM-005.js
+        - node_modules/**
+
+  AutoRemediateRS-001:
+    handler: functions/AutoRemediateRS-001.handler
+    timeout: 120
+    memorySize: 128
+    tags:
+      Name: Auto Remediate RS-001
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateRS-001.js
+        - node_modules/**
+
+  AutoRemediateEC2-002:
+    handler: functions/AutoRemediateEC-002.handler
+    timeout: 120
+    memorySize: 128
+    tags:
+      Name: Auto Remediate EC-002
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateEC-002.js
+        - node_modules/**
+
+  AutoRemediateEC2-005:
+    handler: functions/AutoRemediateEC-005.handler
+    timeout: 120
+    memorySize: 128
+    tags:
+      Name: Auto Remediate EC-005
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateEC-005.js
         - node_modules/**
