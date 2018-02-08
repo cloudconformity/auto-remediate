@@ -21,8 +21,8 @@ module.exports.handler = (event, context, callback) => {
   let getAclPromise = s3.getBucketAcl(params).promise();
 
   getAclPromise
-    .then(() => { console.log(data) })
-    .catch(() => { console.log(err, err.stack) });
+    .then((data) => { console.log(data) })
+    .catch((err) => { console.log(err, err.stack) });
 
   // actually close off access
   var params = {
@@ -32,8 +32,8 @@ module.exports.handler = (event, context, callback) => {
   let putAclPromise = s3.putBucketAcl(params).promise();
 
   putAclPromise
-    .then(() => { console.log(data) })
-    .catch(() => {
+    .then((data) => { console.log(data) })
+    .catch((err) => {
       console.log(err, err.stack);
       callback(err, "Failed to auto-remediate S3-001");
     });
