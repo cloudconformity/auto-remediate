@@ -140,21 +140,6 @@ functions:
         - functions/AutoRemediateOrchestrator.js
         - node_modules/**
 
-  AutoRemediateXX-001:
-    handler: functions/AutoRemediateXX-001.handler
-    memorySize: 128
-    tags:
-      Name: Auto Remediate XX-001
-      Owner: testing
-      Role: Auto Remediate testing
-      Environment: Ops
-    environment:
-      SNS_OUTCOME_TOPIC: arn:aws:sns:ap-southeast-2:870109809871:AutoRemediationOutcome
-    package:
-      include:
-        - functions/AutoRemediateXX-001.js
-        #- node_modules/**
-
   AutoRemediateCT-001:
     handler: functions/AutoRemediateCT-001.handler
     memorySize: 128
