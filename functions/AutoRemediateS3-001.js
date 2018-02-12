@@ -3,23 +3,12 @@
 const config = require('./config');
 const AWS    = require("aws-sdk");
 
-const allUsersURI           = 'http://acs.amazonaws.com/groups/global/AllUsers'
-const fullControlPermission = "FULL_CONTROL"
-const readPermission        = "READ"
-const allUsersWriteAcp      = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "WRITE_ACP" }')
-const allUsersWrite         = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "WRITE" }')
-const allUsersReadAcp       = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "READ_ACP" }')
+const allUsersURI    = 'http://acs.amazonaws.com/groups/global/AllUsers'
+const readPermission = "READ"
 
 function remediateAllUsers(thisGrant, newAcl) {
-  if (thisGrant.Permission == fullControlPermission) { // in this case, apply all permission except READ
-    newAcl['Grants'].push(allUsersWrite);
-    newAcl['Grants'].push(allUsersReadAcp);
-    newAcl['Grants'].push(allUsersWriteAcp);
-  }
-  else if (thisGrant.Permission == readPermission) {  // do not pass through
-  }
-  else {
-    newAcl['Grants'].push(thisGrant);
+  if (thisGrant.Permission != readPermission) {  // any besides READ are passed through
+     newAcl['Grants'].push(thisGrant);
   }
 
   return newAcl;
@@ -47,6 +36,7 @@ module.exports.handler = (event, context, callback) => {
   getAclPromise
     .then((aclWas) => {
       aclNew.Owner = aclWas.Owner; // transfer the existing bucket owner
+
       // now, act on any grants to all users - and just copy over any other grants
       aclWas.Grants.forEach(function(grant, i){ if (grant.Grantee.URI == allUsersURI) {remediateAllUsers(grant, aclNew)} else {aclNew['Grants'].push(grant)}; })
     })
@@ -70,4 +60,3 @@ module.exports.handler = (event, context, callback) => {
  callback(null, "Success");
 
 };
-
