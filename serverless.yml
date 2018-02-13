@@ -92,8 +92,7 @@ provider:
 
     - Effect: Allow
       Action:
-        - sns:ListTopics
-        - sns:Publish
+        - redshift:ModifyCluster
       Resource: "*"
 
     - Effect: Allow
