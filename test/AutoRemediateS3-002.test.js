@@ -10,6 +10,7 @@ const readAcpPermission = "READ_ACP"
 
 const aclSkeleton = JSON.parse('{"Owner":"", "Grants":[]}'); // skeleton for new permission grants
  
+describe('S3 ACL Grant transfer for READ_ACP grant for allUsersURI group', () => {
 test('S3 ACL READ_ACP grant is transfered if not from allUsersURI', () => {
   var aclNew = aclSkeleton;
   const readAcpGrant = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/SomeUsers" }, "Permission": "READ_ACP" }');
@@ -36,7 +37,9 @@ test('S3 ACL READ grant is transfered if from allUsersURI', () => {
 
   expect( readGrant.Permission ).toBe( 'READ' );
   expect(remediateAllUsers( readGrant, aclNew ) ).toEqual( readAcl );
-console.log( JSON.stringify( readAcl ) );
+//console.log( JSON.stringify( readAcl ) );
+});
+
 });
 
 // all grants aside from allUsersURI && readAcpPermission are transferred, json is well-formed.
