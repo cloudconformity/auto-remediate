@@ -1,4 +1,5 @@
 "use strict";
+var source = require('../functions/AutoRemediateS3-002.js');
 
 //const config = require('./config');
 const AWS = require("aws-sdk");
@@ -41,6 +42,7 @@ describe('S3 ACL Grant transfer to new ACL for READ_ACP grant for allUsersURI gr
     });
 });
 
+/*
 // all grants aside from allUsersURI && readAcpPermission are transferred, json is well-formed.
 function remediateAllUsers(thisGrant, newAcl) 
 {
@@ -119,3 +121,4 @@ module.exports.handler = (event, context, callback) =>
 
     callback(null, 'Success');
 };
+*/
