@@ -149,6 +149,19 @@ functions:
       include:
         - functions/AutoRemediateS3-001.js
 
+  AutoRemediateS3-001:
+    handler: functions/AutoRemediateS3-002.handler
+    memorySize: 128
+    tags:
+      Name: Auto Remediate S3-002
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateS3-002.js
+        - utils/S3_utils.js
+
   AutoRemediateS3-012:
     handler: functions/AutoRemediateS3-012.handler
     memorySize: 128

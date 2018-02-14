@@ -1,5 +1,5 @@
 let event = {
-	"resource": "YOUR_SECURITY_GROUP_NAME"
+	"resource": "YOUR_SECURITY_GROUP_NAME",
 	"region": "us-east-1"
 };
 
