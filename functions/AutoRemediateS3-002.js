@@ -3,10 +3,10 @@
 const config = require('./config');
 const AWS    = require("aws-sdk");
 
-const CCRuleCode     = 'S3-002'
-const CCRuleName     = 'BucketPublicReadAcpAccess'
-const allUsersURI    = 'http://acs.amazonaws.com/groups/global/AllUsers'
-const readPermission = "READ"
+const CCRuleCode        = 'S3-002'
+const CCRuleName        = 'BucketPublicReadAcpAccess'
+const allUsersURI       = 'http://acs.amazonaws.com/groups/global/AllUsers'
+const readAcpPermission = "READ_ACP"
 
 function remediateAllUsers(thisGrant, newAcl) {
   if (thisGrant.Permission != readPermission) {  // any besides READ are passed through
