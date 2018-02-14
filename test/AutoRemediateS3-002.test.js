@@ -1,15 +1,14 @@
 "use strict";
 
 //const config = require('./config');
-const AWS = require("aws-sdk");;
+const AWS = require("aws-sdk");
 
 const CCRuleCode = 'S3-002';
 const CCRuleName = 'BucketPublicReadAcpAccess';
 const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers';
 const readAcpPermission = "READ_ACP";
-const aclSkeleton = JSON.parse('{"Owner":"", "Grants":[]}');
+const aclSkeleton = JSON.parse('{"Owner":"", "Grants":[]}'); // skeleton for new permission grants
 
-// skeleton for new permission grants
 describe('S3 ACL Grant transfer to new ACL for READ_ACP grant for allUsersURI group', () => 
 {
     test('S3 ACL READ_ACP grant is transfered to new ACL if not from allUsersURI', () => 
