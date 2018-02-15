@@ -8,21 +8,22 @@ const CCRuleName        = 'BucketPublicReadAcpAccess'
 const allUsersURI       = 'http://acs.amazonaws.com/groups/global/AllUsers'
 const readAcpPermission = "READ_ACP"
 
-function remediateAllUsers(thisGrant, newAcl) {
-  if (thisGrant.Permission != readPermission) {  // any besides READ are passed through
+module.exports = {
+remediateAllUsers: function(thisGrant, newAcl) {
+  if (thisGrant.Permission != readAcpPermission) {  // any besides READ are passed through
      newAcl['Grants'].push(thisGrant);
   }
 
   return newAcl;
-}
+},
 
-function transferOwner(oldAcl, newAcl) {
+transferOwner: function (oldAcl, newAcl) {
  aclNew.Owner = aclWas.Owner; // transfer the existing bucket owner
 
  return newAcl;
-}
+},
 
-function transferAcl(oldAcl, newAcl) {
+transferAcl: function (oldAcl, newAcl) {
   transferOwner(oldAcl, newAcl);
 
   // now, act on any grants to all users - and just copy over any other grants
@@ -30,7 +31,7 @@ function transferAcl(oldAcl, newAcl) {
  
   return newAcl;
 }
-
+}
 
 // look for and remove S3BucketPublicReadAccess
 module.exports.handler = (event, context, callback) => {

@@ -1,5 +1,5 @@
 "use strict";
-var source = require('../functions/AutoRemediateS3-002.js');
+const source = require('../functions/AutoRemediateS3-002.js');
 
 //const config = require('./config');
 const AWS = require("aws-sdk");
@@ -18,7 +18,7 @@ describe('S3 ACL Grant transfer to new ACL for READ_ACP grant for allUsersURI gr
         const readAcpGrant = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/SomeUsers" }, "Permission": "READ_ACP" }');
 
         expect( readAcpGrant.Permission ).toBe( 'READ_ACP' );
-        expect(remediateAllUsers( readAcpGrant, aclNew ) ).toEqual( aclSkeleton );
+        expect(source.remediateAllUsers( readAcpGrant, aclNew ) ).toEqual( aclSkeleton );
     });
 
     test('S3 ACL READ_ACP grant is not transfered to new ACL if from allUsersURI', () => 
@@ -27,7 +27,7 @@ describe('S3 ACL Grant transfer to new ACL for READ_ACP grant for allUsersURI gr
         const readAcpGrant = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "READ_ACP" }');
 
         expect( readAcpGrant.Permission ).toBe( 'READ_ACP' );
-        expect(remediateAllUsers( readAcpGrant, aclNew ) ).toEqual( aclSkeleton );
+        expect(source.remediateAllUsers( readAcpGrant, aclNew ) ).toEqual( aclSkeleton );
     });
 
     test('S3 ACL READ grant is transfered to new ACL if from allUsersURI', () => 
@@ -37,7 +37,7 @@ describe('S3 ACL Grant transfer to new ACL for READ_ACP grant for allUsersURI gr
         const readAcl = JSON.parse('{ "Owner":"", "Grants":[ { "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "READ" } ] }');
 
         expect( readGrant.Permission ).toBe( 'READ' );
-        expect(remediateAllUsers( readGrant, aclNew ) ).toEqual( readAcl );
+        expect(source.remediateAllUsers( readGrant, aclNew ) ).toEqual( readAcl );
         //console.log( JSON.stringify( readAcl ) );
     });
 });
