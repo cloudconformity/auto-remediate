@@ -1,36 +1,37 @@
 "use strict";
 
 const config = require('./config');
-const AWS    = require("aws-sdk");
+const AWS = require("aws-sdk");
 
-const CCRuleCode        = 'S3-002'
-const CCRuleName        = 'BucketPublicReadAcpAccess'
-const allUsersURI       = 'http://acs.amazonaws.com/groups/global/AllUsers'
+const CCRuleCode = 'S3-002'
+const CCRuleName = 'BucketPublicReadAcpAccess'
+const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
 const readAcpPermission = "READ_ACP"
 
 module.exports = {
-remediateAllUsers: function(thisGrant, newAcl) {
-  if (thisGrant.Permission != readAcpPermission) {  // any besides READ are passed through
-     newAcl['Grants'].push(thisGrant);
+
+  remediateAllUsers: function (thisGrant, newAcl) {
+    if (thisGrant.Permission != readAcpPermission) {  // any besides READ are passed through
+      newAcl['Grants'].push(thisGrant);
+    }
+
+    return newAcl;
+  },
+
+  transferOwner: function (oldAcl, newAcl) {
+    newAcl.Owner = oldAcl.Owner; // transfer the existing bucket owner
+
+    return newAcl;
+  },
+
+  transferAcl: function (oldAcl, newAcl) {
+    transferOwner(oldAcl, newAcl);
+
+    // now, act on any grants to all users - and just copy over any other grants
+    aclWas.Grants.forEach(function (grant, i) { if (grant.Grantee.URI == allUsersURI) { remediateAllUsers(grant, newAcl) } else { newAcl['Grants'].push(grant) }; })
+
+    return newAcl;
   }
-
-  return newAcl;
-},
-
-transferOwner: function (oldAcl, newAcl) {
- aclNew.Owner = aclWas.Owner; // transfer the existing bucket owner
-
- return newAcl;
-},
-
-transferAcl: function (oldAcl, newAcl) {
-  transferOwner(oldAcl, newAcl);
-
-  // now, act on any grants to all users - and just copy over any other grants
-  aclWas.Grants.forEach( function( grant, i ) { if ( grant.Grantee.URI == allUsersURI ) { remediateAllUsers( grant, aclNew ) } else { aclNew['Grants'].push( grant ) }; } )
- 
-  return newAcl;
-}
 }
 
 // look for and remove S3BucketPublicReadAccess
@@ -73,6 +74,5 @@ module.exports.handler = (event, context, callback) => {
       callback(err, 'failed to auto-remediate', CCRuleCode);
     })
 
- callback(null, 'Success');
-
+  callback(null, 'Success');
 };
