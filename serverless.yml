@@ -4,6 +4,7 @@ provider:
   name: aws
   runtime: nodejs6.10
   stage: v1
+  region: ${opt:AWS_REGION}
   stackTags:
     service: auto-remediate
   iamRoleStatements:
@@ -102,7 +103,7 @@ provider:
 package:
   individually: true
   exclude:
-    - "node_modules/**"
+   - "node_modules/**"
 
 functions:
 
