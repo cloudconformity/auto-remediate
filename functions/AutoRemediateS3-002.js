@@ -10,8 +10,9 @@ const readAcpPermission = "READ_ACP"
 
 module.exports = {
 
-  remediateAllUsers: function (thisGrant, newAcl) {
-    if (thisGrant.Permission != readAcpPermission) {  // any besides READ are passed through
+  removeAcpPermission: function (thisGrant, newAcl) {
+    console.log("in removeAcpPermission:", thisGrant.Permission);
+    if (thisGrant.Permission != readAcpPermission) {  // any besides READ_ACP are passed through
       newAcl['Grants'].push(thisGrant);
     }
 
@@ -29,7 +30,7 @@ module.exports = {
     this.transferOwner(oldAcl, newAcl);
 
     // now, act on any grants to all users - and just copy over any other grants
-    oldAcl.Grants.forEach(function (grant, i) { if (grant.Grantee.URI == allUsersURI) { that.remediateAllUsers(grant, newAcl) } else { newAcl['Grants'].push(grant) }; })
+    oldAcl.Grants.forEach(function (grant, i) { if (grant.Grantee.URI == allUsersURI) { that.removeAcpPermission(grant, newAcl) } else { newAcl['Grants'].push(grant) }; })
 
     return newAcl;
   }
