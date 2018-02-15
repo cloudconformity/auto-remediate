@@ -40,20 +40,59 @@ describe('S3 ACL Grant transfer to new ACL for READ_ACP grant for allUsersURI gr
 describe('S3 Bucket Owner entry is transferred to the new ACL', () => {
 
     test('S3 Owner entry is transferred to the new ACL', () => {
-        var aclNew = aclSkeleton;
-        const readAcl = JSON.parse('{ "Owner": { "DisplayName": "user_name", "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b" }, "Grants":[ { "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "READ" } ] }');
+        var newAcl = aclSkeleton;
+        const oldAcl = JSON.parse('{ "Owner": { "DisplayName": "user_name", "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b" }, "Grants":[ { "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "READ" } ] }');
 
-        expect(readAcl.Owner.DisplayName).toBe('user_name');
-        expect(readAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+        expect(oldAcl.Owner.DisplayName).toBe('user_name');
+        expect(oldAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
 
-        source.transferOwner(readAcl, aclNew);
-        expect(aclNew.Owner.DisplayName).toBe('user_name');
-        expect(aclNew.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+        source.transferOwner(oldAcl, newAcl);
+        expect(newAcl.Owner.DisplayName).toBe('user_name');
+        expect(newAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
     });
 });
 
 describe('S3 Bucket ACL is transferred to the new ACL, apart from allUsersURI && readAcpPermission', () => {
 
+    test('Complete ACL with allUsersURI and no readAcpPermission is transferred to new ACL', () => {
+        var newAcl = aclSkeleton;
+        const oldAcl = JSON.parse('{ \
+          "Owner": { "DisplayName": "user_name", "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b" }, \
+          "Grants":[ \
+            { "Grantee": { \
+                "Type": "Group", \
+                "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, \
+                "Permission": "READ" \
+            }, \
+            { "Grantee": { \
+                "DisplayName": "user_name", \
+                "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b", \
+                "Type": "CanonicalUser", \
+                "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, \
+                "Permission": "FULL_CONTROL" \
+            } \
+          ] \
+        }');
+
+        expect(oldAcl.Owner.DisplayName).toBe('user_name');
+        expect(oldAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+
+        source.transferAcl(oldAcl, newAcl);
+        expect(newAcl.Owner.DisplayName).toBe('user_name');
+        expect(newAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+    });
+
+    test('ACL with allUsersURI and readAcpPermission is transferred to new ACL without readAcpPermission', () => {
+        var newAcl = aclSkeleton;
+        const oldAcl = JSON.parse('{ "Owner": { "DisplayName": "user_name", "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b" }, "Grants":[ { "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "READ" } ] }');
+
+        expect(oldAcl.Owner.DisplayName).toBe('user_name');
+        expect(oldAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+
+        source.transferAcl(oldAcl, newAcl);
+        expect(newAcl.Owner.DisplayName).toBe('user_name');
+        expect(newAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+    });
 });
 
 /*
