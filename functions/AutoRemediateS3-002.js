@@ -25,10 +25,11 @@ module.exports = {
   },
 
   transferAcl: function (oldAcl, newAcl) {
+    var that = this;
     this.transferOwner(oldAcl, newAcl);
 
     // now, act on any grants to all users - and just copy over any other grants
-    oldAcl.Grants.forEach(function (grant, i) { if (grant.Grantee.URI == allUsersURI) { this.remediateAllUsers(grant, newAcl) } else { newAcl['Grants'].push(grant) }; })
+    oldAcl.Grants.forEach(function (grant, i) { if (grant.Grantee.URI == allUsersURI) { that.remediateAllUsers(grant, newAcl) } else { newAcl['Grants'].push(grant) }; })
 
     return newAcl;
   }
