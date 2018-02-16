@@ -11,7 +11,6 @@ const readAcpPermission = "READ_ACP"
 module.exports = {
 
   removeAcpPermission: function (thisGrant, newAcl) {
-    console.log("in removeAcpPermission:", thisGrant.Permission);
     if (thisGrant.Permission != readAcpPermission) {  // any besides READ_ACP are passed through
       newAcl['Grants'].push(thisGrant);
     }
