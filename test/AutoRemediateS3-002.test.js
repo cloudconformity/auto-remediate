@@ -11,8 +11,8 @@ const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers';
 const readAcpPermission = "READ_ACP";
 const aclSkeleton = '{"Owner":"", "Grants":[]}'; // skeleton for new permission grants
 
-describe('S3-002 auto-remediation', () => {
-    describe('S3 ACL Grants will transfer to new ACL except for READ_ACP grant', () => {
+describe('S3-002 READ_ACP auto-remediation', () => {
+    describe('S3 ACL Grants shall transfer to new ACL except for READ_ACP grant', () => {
         describe('S3 ACL with READ_ACP grant', () => {
             it('is not transfered to new ACL', () => {
                 var aclNew = JSON.parse(aclSkeleton);
@@ -58,37 +58,112 @@ describe('S3-002 auto-remediation', () => {
     });
 
     describe('S3 Bucket Owner entry will transfer to the new ACL', () => {
-        it('is transferred to the new ACL', () => {
-            var newAcl = JSON.parse(aclSkeleton);
-            const oldAcl = JSON.parse('{ "Owner": { "DisplayName": "user_name", "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b" }, "Grants":[ { "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "READ" } ] }');
+        describe('S3 Bucket Owner entry with DisplayName and ID', () => {
+            it('is transferred to the new ACL', () => {
+                var newAcl = JSON.parse(aclSkeleton);
+                const oldAcl = JSON.parse('{ "Owner": { "DisplayName": "user_name", "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b" }, "Grants":[ { "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "READ" } ] }');
 
-            expect(oldAcl.Owner.DisplayName).toBe('user_name');
-            expect(oldAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+                expect(oldAcl.Owner.DisplayName).toBe('user_name');
+                expect(oldAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
 
-            source.transferOwner(oldAcl, newAcl);
-            expect(newAcl.Owner.DisplayName).toBe('user_name');
-            expect(newAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+                source.transferOwner(oldAcl, newAcl);
+                expect(newAcl.Owner.DisplayName).toBe('user_name');
+                expect(newAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+            });
         });
     });
 
-    describe('S3 Bucket ACL shall transfer to the new ACL, apart from grant for allUsersURI &&  READ_ACP permission', () => {
-        describe('S3 Bucket ACL is transferred to the new ACL, apart from grant for allUsersURI && readAcpPermission', () => {
-            it('Complete ACL with allUsersURI and no readAcpPermission is transferred to new ACL', () => {
+    describe('S3 Bucket ACL shall transfer to the new ACL, apart from grant for allUsersURI && READ_ACP permission', () => {
+        describe('S3 Bucket ACL with grants for allUsersURI && READ, WRITE, WRITE_ACP, READ_ACP permission', () => {
+            it('is transferred to new ACL with grant for allUsersURI && READ, WRITE, WRITE_ACP permission but without allUsersURI && READ_ACP permission', () => {
                 var newAcl = JSON.parse(aclSkeleton);
                 const oldAcl = JSON.parse('{ \
                     "Owner": { "DisplayName": "user_name", "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b" }, \
                     "Grants":[ \
                         { "Grantee": { \
                             "Type": "Group", \
-                            "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, \
-                            "Permission": "READ" \
+                            "URI": "http://acs.amazonaws.com/groups/global/AllUsers" \
+                          }, \
+                          "Permission": "READ" \
+                        }, \
+                        { "Grantee": { \
+                            "Type": "Group", \
+                            "URI": "http://acs.amazonaws.com/groups/global/AllUsers" \
+                          }, \
+                          "Permission": "WRITE" \
+                        }, \
+                        { "Grantee": { \
+                            "Type": "Group", \
+                            "URI": "http://acs.amazonaws.com/groups/global/AllUsers" \
+                          }, \
+                          "Permission": "WRITE_ACP" \
+                        }, \
+                        { "Grantee": { \
+                            "Type": "Group", \
+                            "URI": "http://acs.amazonaws.com/groups/global/AllUsers" \
+                          }, \
+                          "Permission": "READ_ACP" \
+                        } \
+                    ] \
+                }');
+
+                expect(oldAcl.Owner.DisplayName).toBe('user_name');
+                expect(oldAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+
+                source.transferAcl(oldAcl, newAcl);
+                expect(newAcl.Owner.DisplayName).toBe('user_name');
+                expect(newAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+            });
+        });
+
+        describe('S3 Bucket ACL with grants for allUsersURI && READ_ACP permission and allUsersURI && READ permission', () => {
+            it('is transferred to new ACL with grant for allUsersURI && READ permission but without allUsersURI && READ_ACP permission', () => {
+                var newAcl = JSON.parse(aclSkeleton);
+                const oldAcl = JSON.parse('{ \
+                    "Owner": { "DisplayName": "user_name", "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b" }, \
+                    "Grants":[ \
+                        { "Grantee": { \
+                            "Type": "Group", \
+                            "URI": "http://acs.amazonaws.com/groups/global/AllUsers" \
+                          }, \
+                          "Permission": "READ" \
+                        }, \
+                        { "Grantee": { \
+                            "Type": "Group", \
+                            "URI": "http://acs.amazonaws.com/groups/global/AllUsers" \
+                          }, \
+                          "Permission": "READ_ACP" \
+                        } \
+                    ] \
+                }');
+
+                expect(oldAcl.Owner.DisplayName).toBe('user_name');
+                expect(oldAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+
+                source.transferAcl(oldAcl, newAcl);
+                expect(newAcl.Owner.DisplayName).toBe('user_name');
+                expect(newAcl.Owner.ID).toBe('2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b');
+            });
+        });
+
+        describe('S3 Bucket ACL with grants for CanonicalUser && READ_ACP permission and allUsersURI && READ permission', () => {
+            it('is transferred to new ACL with grants for CanonicalUser && READ_ACP permission and allUsersURI && READ permission', () => {
+                var newAcl = JSON.parse(aclSkeleton);
+                const oldAcl = JSON.parse('{ \
+                    "Owner": { "DisplayName": "user_name", "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b" }, \
+                    "Grants":[ \
+                        { "Grantee": { \
+                            "Type": "Group", \
+                            "URI": "http://acs.amazonaws.com/groups/global/AllUsers" \
+                          }, \
+                          "Permission": "READ" \
                         }, \
                         { "Grantee": { \
                             "DisplayName": "user_name", \
                             "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b", \
-                            "Type": "CanonicalUser", \
-                            "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, \
-                            "Permission": "FULL_CONTROL" \
+                            "Type": "CanonicalUser" \
+                          }, \
+                          "Permission": "READ_ACP" \
                         } \
                     ] \
                 }');
@@ -126,24 +201,6 @@ describe('S3-002 auto-remediation', () => {
 });
 
 /*
-// complete ACL is transferred, apart from allUsersURI && readAcpPermission, json is well-formed.
-function transferAcl(oldAcl, newAcl) {
-    transferOwner(oldAcl, newAcl);
-
-    // now, act on any grants to all users - and just copy over any other grants
-    aclWas.Grants.forEach(function (grant, i) {
-        if (grant.Grantee.URI == allUsersURI) {
-            remediateAllUsers(grant, aclNew)
-        }
-        else {
-            aclNew['Grants'].push(grant)
-        };
-
-    });
-
-    return newAcl;
-}
-
 // look for and remove S3BucketPublicReadAccess
 module.exports.handler = (event, context, callback) => {
     console.log('S3', CCRuleName, ' - Received event:', JSON.stringify(event, null, 2));
