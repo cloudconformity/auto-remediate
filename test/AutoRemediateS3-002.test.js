@@ -1,9 +1,10 @@
 "use strict";
 
 const source = require('../functions/AutoRemediateS3-002');
+var AWS = require('aws-sdk-mock');
 
 //const config = require('./config');
-const AWS = require("aws-sdk");
+//const AWS = require("aws-sdk");
 
 const CCRuleCode = 'S3-002';
 const CCRuleName = 'BucketPublicReadAcpAccess';
@@ -11,14 +12,45 @@ const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers';
 const readAcpPermission = "READ_ACP";
 const aclSkeleton = '{"Owner":"", "Grants":[]}'; // skeleton for new permission grants
 
+const event = '{"id": "ccc:HJzFMHchx:S3-001:S3:ap-southeast-2:test.datablaize.io", \
+  "organisationId": "HJdoJr9hx", \
+  "accountId": "HJzFMHchx", \
+  "ruleId": "S3-002", \
+  "ruleTitle": "S3 Bucket Public \'READ_ACP\' Access", \
+  "service": "S3", \
+  "region": "ap-southeast-2", \
+  "riskLevel": "VERY_HIGH", \
+  "categories": [ \
+    "security" \
+  ], \
+  "compliances": [ \
+    "AWAF" \
+  ], \
+  "message": "Bucket test.datablaize.io allows public \'READ_ACP\' access.", \
+  "resource": "test.datablaize.io", \
+  "status": "FAILURE", \
+  "statusRiskLevel": "FAILURE:1", \
+  "lastUpdatedDate": null, \
+  "lastUpdatedBy": "SYSTEM", \
+  "resolvedBy": "SYSTEM", \
+  "eventId": "Skzp7ra1WW", \
+  "ccrn": "ccrn:aws:HJzFMHchx:S3:global:test.datablaize.io", \
+  "tags": [], \
+  "cost": 0, \
+  "waste": 0, \
+  "lastModifiedDate": 1511060191925, \
+  "lastModifiedBy": "SYSTEM" }' ;
+
 function errorCallback(msg) {
   console.log(msg);
 }
 
  describe('call lambda', () => {
     it('tries to call lambda', () => {
+      AWS.mock('S3', 'getBucketAcl', "return from getBucketAcl");
+
       // handler = (event, context, callback)
-      source.handler("event", null, errorCallback);
+      source.handler(JSON.parse(event), null, errorCallback);
     });
  });
 
