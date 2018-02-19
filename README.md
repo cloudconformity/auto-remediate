@@ -97,3 +97,23 @@ You are welcome to contribute to "Cloud Conformity Auto Remediation"
 1. [Fork](https://help.github.com/articles/fork-a-repo/) the project
 2. Make a well commented and clean commit to the repository
 3. Create a [pull request](https://help.github.com/articles/about-pull-requests/)
+
+## Styleguide
+
+The styleguide used for this project is
+[Standard](https://standardjs.com/) forced by [eslint](https://github.com/eslint/eslint).
+To run eslint, you only need to run `npm run lint [filename]` or to
+run for the whole project, run `npm run lint '**/*.js'`.
+Refer to package.json for more info.
+
+The main rules are as follows:
+* 2 spaces – for indentation
+* Single quotes for strings – except to avoid escaping
+* No unused variables – this one catches tons of bugs!
+* No semicolons – It's fine. Really!
+* Never start a line with (, [, or `
+* Space after keywords if (condition) { ... }
+* Space after function name function name (arg) { ... }
+* Always use === instead of == – but obj == null is allowed to check null || undefined.
+* Always handle the node.js err function parameter
+* Always prefix browser globals with window – except document and navigator are okay
