@@ -95,10 +95,6 @@ provider:
         - redshift:ModifyCluster
       Resource: "*"
 
-    - Effect: Allow
-      Action:
-        - ec2:RevokeSecurityGroupIngress
-      Resource: "*"
 
 package:
   individually: true
@@ -223,6 +219,7 @@ functions:
     package:
       include:
         - functions/AutoRemediateEC-002.js
+    role: revokeSecurityGroupIngressRole
 
   AutoRemediateEC2-005:
     handler: functions/AutoRemediateEC-005.handler
@@ -236,3 +233,31 @@ functions:
     package:
       include:
         - functions/AutoRemediateEC-005.js
+    role: revokeSecurityGroupIngressRole
+
+resources:
+
+  Resources:
+
+    revokeSecurityGroupIngressRole:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: RevokeSecurityGroupIngressRole
+        AssumeRolePolicyDocument:
+          Version: '2018'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+      Policies:
+        - PolicyName: RevokeSecurityGroupIngressPolicy
+          PolicyDocument:
+            Version: '2018'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - ec2:RevokeSecurityGroupIngress
+                Resource: "*"
