@@ -11,6 +11,17 @@ const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers';
 const readAcpPermission = "READ_ACP";
 const aclSkeleton = '{"Owner":"", "Grants":[]}'; // skeleton for new permission grants
 
+function errorCallback(msg) {
+  console.log(msg);
+}
+
+ describe('call lambda', () => {
+    it('tries to call lambda', () => {
+      // handler = (event, context, callback)
+      source.handler("event", null, errorCallback);
+    });
+ });
+
 describe('S3-002 READ_ACP auto-remediation', () => {
 
     describe('S3 ACL Grants shall transfer to new ACL except for READ_ACP grant', () => {
