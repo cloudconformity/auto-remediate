@@ -76,4 +76,10 @@ module.exports.handler = (event, context, callback) => {
     })
 
   callback(null, 'Success');
+
+  function handleError (message) {
+    message = message || 'Failed to process request.'
+    return callback(new Error(message));
+  }
+
 };
