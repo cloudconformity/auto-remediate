@@ -25,7 +25,7 @@ module.exports = {
   },
 
   transferAcl: function (oldAcl, newAcl) {
-    var that = this;
+    var that = this;  // keep the reference for use within a local scope
     this.transferOwner(oldAcl, newAcl);
 
     // now, act on any grants to all users - and just copy over any other grants
@@ -56,7 +56,7 @@ module.exports.handler = (event, context, callback) => {
 
   getAclPromise
     .then((aclWas) => {
-      transferAcl(aclWas, aclNew);
+      module.exports.transferAcl(aclWas, aclNew);
     })
     .then(() => {
       const putAclParams = {
