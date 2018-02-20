@@ -1,13 +1,15 @@
 "use strict";
 
 const config = require('./config');
+const  utils = require('./S3_utils');
 const AWS = require("aws-sdk");
 
 const CCRuleCode = 'S3-002'
 const CCRuleName = 'BucketPublicReadAcpAccess'
-const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
-const readAcpPermission = "READ_ACP"
+//const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
+//const readAcpPermission = "READ_ACP"
 
+/*
 module.exports = {
 
   removeAcpPermission: function (thisGrant, newAcl) {
@@ -34,6 +36,7 @@ module.exports = {
     return newAcl;
   }
 }
+*/
 
 // look for and remove S3BucketPublicReadAccess
 module.exports.handler = (event, context, callback) => {
@@ -56,7 +59,7 @@ module.exports.handler = (event, context, callback) => {
 
   getAclPromise
     .then((aclWas) => {
-      module.exports.transferAcl(aclWas, aclNew);
+      utils.transferAcl(aclWas, aclNew);
     })
     .then(() => {
       const putAclParams = {
