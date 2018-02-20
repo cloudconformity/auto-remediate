@@ -58,31 +58,7 @@ provider:
 
     - Effect: Allow
       Action:
-        - config:Describe*
-        - config:Get*
-        - config:List*
-        - config:Put*
-      Resource: "*"
-
-    - Effect: Allow
-      Action:
         - sts:GetCallerIdentity
-      Resource: "*"
-
-    - Effect: Allow
-      Action:
-        - config:PutConfigurationRecorder
-        - config:PutDeliveryChannel
-        - config:StartConfigurationRecorder
-      Resource: "*"
-
-    - Effect: Allow
-      Action:
-        - iam:AttachRolePolicy
-        - iam:CreateRole
-        - iam:GetRole
-        - iam:PassRole
-        - iam:PutRolePolicy
       Resource: "*"
 
 package:
@@ -169,6 +145,7 @@ functions:
     package:
       include:
         - functions/AutoRemediateConfig-001.js
+    role: AutoRemediateConfig001Role
 
   AutoRemediateCFM-005:
     handler: functions/AutoRemediateCFM-005.handler
@@ -368,4 +345,49 @@ resources:
                 - Effect: Allow
                   Action:
                     - cloudformation:UpdateTerminationProtection
+                  Resource: "*"
+
+    AutoRemediateConfig001Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateConfig-001Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateConfig-001Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - config:PutConfigurationRecorder
+                    - config:PutDeliveryChannel
+                    - config:StartConfigurationRecorder
+                  Resource: "*"
+                - Effect: Allow
+                  Action:
+                    - iam:AttachRolePolicy
+                    - iam:CreateRole
+                    - iam:GetRole
+                    - iam:PassRole
+                    - iam:PutRolePolicy
                   Resource: "*"
