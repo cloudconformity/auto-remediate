@@ -55,7 +55,7 @@ function errorCallback(msg) {
     });
  });
 
-/*
+
 describe('S3-002 READ_ACP auto-remediation', () => {
 
     describe('S3 ACL Grants shall transfer to new ACL except for READ_ACP grant', () => {
@@ -233,7 +233,7 @@ describe('S3-002 READ_ACP auto-remediation', () => {
         });
     });
 });
-*/
+
 /*
 // look for and remove S3BucketPublicReadAccess
 module.exports.handler = (event, context, callback) => {
