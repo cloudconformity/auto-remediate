@@ -234,6 +234,44 @@ describe('S3-002 READ_ACP auto-remediation', () => {
     });
 });
 
+describe('S3-002#handler()', () => {
+    // TODO - create sample event
+    let sampleEvent = {
+        resource: 'foo',
+        ruleId: "S3-002"
+    }
+
+
+    let getBucketAclMock = jest.fn().mockImplementation( () => {
+
+        return {
+            // TODO - fill in expected S3 response
+        }
+
+    })
+
+    beforeEach( (done) => {
+        AWS.mock('S3', "getBucketAcl", getBucketAclMock)
+        const mockCallback = (err,data) => {
+            if(err){
+                done.fail()
+            }else{
+                done()
+            }
+        }
+        source.handler(sampleEvent, jest.fn(), mockCallback)
+    } )
+
+    afterEach( () => {
+        AWS.restore()
+    })
+
+    it('should get the correct bucket ACL from S3', () => {
+        expect(getBucketAclMock).toHaveBeenCalled()
+        fail('todo - check S3 service called as expected')
+    })
+})
+
 /*
 // look for and remove S3BucketPublicReadAccess
 module.exports.handler = (event, context, callback) => {
