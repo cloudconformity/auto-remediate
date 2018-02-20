@@ -90,11 +90,6 @@ provider:
         - cloudformation:UpdateTerminationProtection
       Resource: "*"
 
-    - Effect: Allow
-      Action:
-        - redshift:ModifyCluster
-      Resource: "*"
-
 package:
   individually: true
   exclude:
@@ -205,6 +200,7 @@ functions:
     package:
       include:
         - functions/AutoRemediateRS-001.js
+    role: AutoRemediateRS001Role
 
   AutoRemediateEC2-002:
     handler: functions/AutoRemediateEC2-002.handler
@@ -306,4 +302,39 @@ resources:
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
+                  Resource: "*"
+
+    AutoRemediateRS001Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateRS-001Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateRS-001Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - redshift:ModifyCluster
                   Resource: "*"
