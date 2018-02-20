@@ -22,12 +22,12 @@ module.exports = {
     return newAcl;
   },
 
-  transferAcl: function (oldAcl, newAcl) {
+  transferAclWithoutReadAcp: function (oldAcl, newAcl) {
     var that = this;  // keep the reference for use within a local scope
     this.transferOwner(oldAcl, newAcl);
 
-    console.log("from transferAcl:", JSON.stringify(oldAcl.Grants));
-    oldAcl.Grants.forEach(function (grant) { console.log(grant) } );
+//    console.log("from transferAcl:", JSON.stringify(oldAcl.Grants));
+//    oldAcl.Grants.forEach(function (grant) { console.log(grant) } );
 
 
     // now, act on any grants to all users - and just copy over any other grants
