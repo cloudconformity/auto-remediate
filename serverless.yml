@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs6.10
   stage: v1
-  region: ${opt:AWS_REGION}
+  region: us-east-1
   stackTags:
     service: auto-remediate
   iamRoleStatements:
