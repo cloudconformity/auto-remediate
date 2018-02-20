@@ -10,30 +10,6 @@ const CCRuleName = 'BucketPublicReadAcpAccess'
 //const readAcpPermission = "READ_ACP"
 
 
-const removeAcpPermission = function (thisGrant, newAcl) {
-  if (thisGrant.Permission != readAcpPermission) {  // any besides READ_ACP are passed through
-    newAcl['Grants'].push(thisGrant);
-  }
-
-  return newAcl;
-}
-
-const transferOwner = function (oldAcl, newAcl) {
-  newAcl.Owner = oldAcl.Owner; // transfer the existing bucket owner
-
-  return newAcl;
-}
-
-const transferAcl = function (oldAcl, newAcl) {
-  var that = this;  // keep the reference for use within a local scope
-  this.transferOwner(oldAcl, newAcl);
-
-  // now, act on any grants to all users - and just copy over any other grants
-  oldAcl.Grants.forEach(function (grant, i) { if (grant.Grantee.URI == allUsersURI) { that.removeAcpPermission(grant, newAcl) } else { newAcl['Grants'].push(grant) }; })
-
-  return newAcl;
-}
-
 // look for and remove S3BucketPublicReadAccess
 const handler = (event, context, callback) => {
 
@@ -55,7 +31,7 @@ const handler = (event, context, callback) => {
 
   getAclPromise
     .then((aclWas) => {
-      utils.transferAcl(aclWas, aclNew);
+      utils.transferAclWithoutReadAcp(aclWas, aclNew);
     })
     .then(() => {
       const putAclParams = {
@@ -84,8 +60,5 @@ const handler = (event, context, callback) => {
 };
 
 module.exports = {
-  removeAcpPermission: removeAcpPermission,
   handler: handler,
-  transferOwner: transferOwner,
-  transferAcl: transferAcl
 }
