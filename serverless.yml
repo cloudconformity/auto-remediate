@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs6.10
   stage: v1
-  region: ${opt:AWS_REGION}
+  region: us-east-1
   stackTags:
     service: auto-remediate
   iamRoleStatements:
@@ -93,11 +93,6 @@ provider:
     - Effect: Allow
       Action:
         - redshift:ModifyCluster
-      Resource: "*"
-
-    - Effect: Allow
-      Action:
-        - ec2:RevokeSecurityGroupIngress
       Resource: "*"
 
 package:
@@ -226,17 +221,18 @@ functions:
     role: AutoRemediateEC2002Role
 
   AutoRemediateEC2-005:
-    handler: functions/AutoRemediateEC-005.handler
+    handler: functions/AutoRemediateEC2-005.handler
     timeout: 120
     memorySize: 128
     tags:
-      Name: Auto Remediate EC-005
+      Name: Auto Remediate EC2-005
       Owner: CloudConformity
       Role: Auto Remediate
       Environment: Ops
     package:
       include:
-        - functions/AutoRemediateEC-005.js
+        - functions/AutoRemediateEC2-005.js
+    role: AutoRemediateEC2005Role
 
 resources:
 
@@ -247,6 +243,7 @@ resources:
       Properties:
         RoleName: AutoRemediateEC2-002Role
         AssumeRolePolicyDocument:
+          Version: '2012-10-17'
           Statement:
             - Effect: Allow
               Principal:
@@ -256,6 +253,41 @@ resources:
                 - sts:AssumeRole
         Policies:
           - PolicyName: AutoRemediateEC2-002Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - ec2:RevokeSecurityGroupIngress
+                  Resource: "*"
+
+    AutoRemediateEC2005Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateEC2-005Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateEC2-005Policy
             PolicyDocument:
               Statement:
                 - Effect: Allow
