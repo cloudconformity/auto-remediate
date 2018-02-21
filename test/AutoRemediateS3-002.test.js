@@ -13,37 +13,48 @@ const CCRuleName = 'BucketPublicReadAcpAccess';
 const readAcpPermission = "READ_ACP";
 const aclSkeleton = '{"Owner":"", "Grants":[]}'; // skeleton for new permission grants
 
-const eventString = '{"id": "ccc:HJzFMHchx:S3-001:S3:ap-southeast-2:test.datablaize.io", \
-  "organisationId": "HJdoJr9hx", \
-  "accountId": "HJzFMHchx", \
-  "ruleId": "S3-002", \
-  "ruleTitle": "S3 Bucket Public \'READ_ACP\' Access", \
-  "service": "S3", \
-  "region": "ap-southeast-2", \
-  "riskLevel": "VERY_HIGH", \
-  "categories": [ \
-    "security" \
-  ], \
-  "compliances": [ \
-    "AWAF" \
-  ], \
-  "message": "Bucket test.datablaize.io allows public \'READ_ACP\' access.", \
-  "resource": "test.datablaize.io", \
-  "status": "FAILURE", \
-  "statusRiskLevel": "FAILURE:1", \
-  "lastUpdatedDate": null, \
-  "lastUpdatedBy": "SYSTEM", \
-  "resolvedBy": "SYSTEM", \
-  "eventId": "Skzp7ra1WW", \
-  "ccrn": "ccrn:aws:HJzFMHchx:S3:global:test.datablaize.io", \
-  "tags": [], \
-  "cost": 0, \
-  "waste": 0, \
-  "lastModifiedDate": 1511060191925, \
-  "lastModifiedBy": "SYSTEM" }' ;
+const sampleEvent = {id: "ccc:HJzFMHchx:S3-001:S3:ap-southeast-2:sample-bucket", 
+  organisationId: "some-organisation", 
+  accountId: "abcdef", 
+  ruleId: "S3-002", 
+  ruleTitle: "S3 Bucket Public 'READ_ACP' Access", 
+  service: "S3", 
+  region: "ap-southeast-2", 
+  riskLevel: "VERY_HIGH", 
+  categories: [ 
+    "security" 
+  ], 
+  compliances: [ 
+    "AWAF" 
+  ], 
+  message: "Bucket sample-bucket allows public 'READ_ACP' access.", 
+  resource: "sample-bucket", 
+  status: "FAILURE", 
+  statusRiskLevel: "FAILURE:1", 
+  lastUpdatedDate: null, 
+  lastUpdatedBy: "SYSTEM", 
+  resolvedBy: "SYSTEM", 
+  eventId: "Skzp7ra1WW", 
+  ccrn: "ccrn:aws:HJzFMHchx:S3:global:sample-bucket", 
+  tags: [], 
+  cost: "0", 
+  waste: "0", 
+  lastModifiedDate: "1511060191925", 
+  lastModifiedBy: "SYSTEM" } 
 
 function errorCallback(msg) {
-  console.log(msg);
+    console.log(msg);
+}
+
+let awsMockCallback = (jestFn) => {
+    return function(params,callback){
+        try{
+            let result = jestFn(params, callback)
+            callback(null,result)
+        }catch(err){
+            callback(err) 
+        }
+    }
 }
 
 /*
@@ -58,39 +69,50 @@ function errorCallback(msg) {
 */
 
 describe('S3-002#handler()', () => {
-    // TODO - create sample event
-    let sampleEvent = {
-        resource: 'foo',
-        ruleId: "S3-002"
-    }
+    let getBucketAclMock
 
+    beforeEach((done) => {
+        getBucketAclMock = jest.fn().mockImplementation(() => {
+            console.log('returning stuff')
+            return {
+                Owner: {
+                    DisplayName: "user_name", ID: "account_user_id123455667890abcdef"
+                }, Grants: [
+                    {
+                        Grantee: {
+                            DisplayName: "user_name", ID: "account_user_id123455667890abcdef", Type: "CanonicalUser"
+                        }, Permission: "FULL_CONTROL"
+                    },
+                    {
+                        Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AllUsers" }, Permission: "READ_ACP"
+                    },
+                    {
+                        Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AllUsers" }, Permission: "READ"
+                    }
+                ]
+            }
+    
+        })
 
-    let getBucketAclMock = jest.fn().mockImplementation( () => {
-
-        return {
-            // TODO - fill in expected S3 response
-        }
-
-    })
-
-    beforeEach( (done) => {
-        AWS.mock('S3', "getBucketAcl", getBucketAclMock)
-        const mockCallback = (err,data) => {
-            if(err){
+        AWS.mock('S3', "getBucketAcl", awsMockCallback(getBucketAclMock))
+        const mockCallback = (err, data) => {
+            if (err) {
                 done.fail()
-            }else{
+            } else {
                 done()
             }
         }
         source.handler(sampleEvent, jest.fn(), mockCallback)
-    } )
+    })
 
-    afterEach( () => {
+    afterEach(() => {
         AWS.restore()
     })
 
     it('should get the correct bucket ACL from S3', () => {
-        expect(getBucketAclMock).toHaveBeenCalled()
-        fail('todo - check S3 service called as expected')
+        let expectedParams = {
+            Bucket: "sample-bucket"
+        }
+        expect(getBucketAclMock).toHaveBeenCalledWith(expectedParams, expect.any(Function))
     })
 });
