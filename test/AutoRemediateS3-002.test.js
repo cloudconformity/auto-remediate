@@ -57,18 +57,7 @@ let awsMockCallback = (jestFn) => {
     }
 }
 
-/*
- describe('call lambda', () => {
-    it('tries to call lambda', () => {
-      AWS.mock('S3', 'getBucketAcl', "return from getBucketAcl");
-
-      // handler = (event, context, callback)
-      source.handler(JSON.parse(eventString), null, errorCallback);
-    });
- });
-*/
-
-describe('S3-002#handler()', () => {
+describe('S3-002 AutoRemediation', () => {
     let getBucketAclMock
 
     beforeEach((done) => {
@@ -114,5 +103,9 @@ describe('S3-002#handler()', () => {
             Bucket: "sample-bucket"
         }
         expect(getBucketAclMock).toHaveBeenCalledWith(expectedParams, expect.any(Function))
+    })
+
+    it('should remove READ_ACP grants for AllUsers', ()=> {
+        // TODO
     })
 });
