@@ -1,10 +1,10 @@
 "use strict";
-
-const filterAclGrants = function (acl, grantToRemove) {
+const isEqual = require('lodash.isequal')
+const filterAclGrants = function( acl, grantToRemove) {
 
   return {
     Owner: acl.Owner,
-    Grants: acl.Grants.filter(grant => grant != grantToRemove)
+    Grants: acl.Grants.filter(grant => !isEqual(grant, grantToRemove) )
   }
 }
 

@@ -71,6 +71,7 @@ functions:
       include:
         - functions/AutoRemediateS3-002.js
         - utils/S3_utils.js
+        - node_modules/lodash.isequal
     role: AutoRemediateS3002Role
 
   AutoRemediateS3-012:
@@ -432,10 +433,10 @@ resources:
                     - cloudtrail:UpdateTrail
                   Resource: "*"
 
-    AutoRemediateS3001Role:
+    AutoRemediateS3002Role:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: AutoRemediateS3-001Role
+        RoleName: AutoRemediateS3-002Role
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -446,7 +447,7 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediateS3-001Policy
+          - PolicyName: AutoRemediateS3-002Policy
             PolicyDocument:
               Statement:
                 - Effect: Allow
@@ -468,10 +469,10 @@ resources:
                     - s3:PutBucketAcl
                   Resource: "*"
 
-    AutoRemediateS3002Role:
+    AutoRemediateS3001Role:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: AutoRemediateS3-002Role
+        RoleName: AutoRemediateS3-001Role
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -482,7 +483,7 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediateS3-002Policy
+          - PolicyName: AutoRemediateS3-001Policy
             PolicyDocument:
               Statement:
                 - Effect: Allow
