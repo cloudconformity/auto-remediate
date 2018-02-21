@@ -1,17 +1,7 @@
 "use strict";
 
 const source = require('../functions/AutoRemediateS3-002');
-//const  utils = require('../functions/S3_utils');
 var AWS = require('aws-sdk-mock');
-
-//const config = require('./config');
-//const AWS = require("aws-sdk");
-
-const CCRuleCode = 'S3-002';
-const CCRuleName = 'BucketPublicReadAcpAccess';
-//const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers';
-const readAcpPermission = "READ_ACP";
-const aclSkeleton = '{"Owner":"", "Grants":[]}'; // skeleton for new permission grants
 
 const sampleEvent = {
     id: "ccc:HJzFMHchx:S3-001:S3:ap-southeast-2:sample-bucket",
@@ -42,10 +32,6 @@ const sampleEvent = {
     waste: "0",
     lastModifiedDate: "1511060191925",
     lastModifiedBy: "SYSTEM"
-}
-
-function errorCallback(msg) {
-    console.log(msg);
 }
 
 let awsMockCallback = (jestFn) => {
