@@ -1,11 +1,7 @@
 "use strict";
 
 const config = require('./config');
-<<<<<<< HEAD
-const utils = require('./S3_utils');
-=======
 const  utils = require('../utils/S3_utils');
->>>>>>> Refactor S3-002 to use filterAclGrants
 const AWS = require("aws-sdk");
 
 const CCRuleCode = 'S3-002'
