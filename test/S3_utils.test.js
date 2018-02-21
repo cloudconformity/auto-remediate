@@ -65,11 +65,11 @@ const eventString = '{"id": "ccc:HJzFMHchx:S3-001:S3:ap-southeast-2:test.databla
   "lastModifiedBy": "SYSTEM" }' ;
 
 
-describe('S3-002 READ_ACP auto-remediation', () => {
+describe('S3_utils', () => {
 
-    describe('S3 ACL Grants shall transfer to new ACL except for READ_ACP grant', () => {
+    describe('#removeAcpPermission', () => {
 
-        describe('S3 ACL with READ_ACP grant', () => {
+        describe('when ACL grant contains READ_ACP permission', () => {
             it('is not transfered to new ACL', () => {
                 var aclNew = JSON.parse(aclSkeleton);
                 const readAcpGrant = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/SomeUsers" }, "Permission": "READ_ACP" }');
@@ -79,7 +79,7 @@ describe('S3-002 READ_ACP auto-remediation', () => {
             });
         });
 
-        describe('S3 ACL with READ grant', () => {
+        describe('when ACL grant contains READ permission', () => {
             it('is transfered to new ACL', () => {
                 var aclNew = JSON.parse(aclSkeleton);
                 const readGrant = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "READ" }');
@@ -90,7 +90,7 @@ describe('S3-002 READ_ACP auto-remediation', () => {
             });
         });
 
-        describe('S3 ACL with WRITE grant', () => {
+       describe('when ACL grant contains WRITE permission', () => {
             it('is transfered to new ACL', () => {
                 var aclNew = JSON.parse(aclSkeleton);
                 const readGrant = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "WRITE" }');
@@ -101,7 +101,7 @@ describe('S3-002 READ_ACP auto-remediation', () => {
             });
         });
 
-        describe('S3 ACL with WRITE_ACP grant', () => {
+      describe('when ACL grant contains WRITE_ACP permission', () => {
             it('is transfered to new ACL', () => {
                 var aclNew = JSON.parse(aclSkeleton);
                 const readGrant = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "WRITE_ACP" }');
@@ -113,8 +113,8 @@ describe('S3-002 READ_ACP auto-remediation', () => {
         });
     });
 
-    describe('S3 Bucket Owner entry will transfer to the new ACL', () => {
-        describe('S3 Bucket Owner entry with DisplayName and ID', () => {
+    describe('#transferOwner', () => {
+        describe('Bucket Owner entry', () => {
             it('is transferred to the new ACL', () => {
                 var newAcl = JSON.parse(aclSkeleton);
                 const oldAcl = JSON.parse('{ "Owner": { "DisplayName": "user_name", "ID": "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b" }, "Grants":[ { "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "READ" } ] }');
@@ -129,9 +129,9 @@ describe('S3-002 READ_ACP auto-remediation', () => {
         });
     });
 
-    describe('S3 Bucket ACL shall transfer to the new ACL, apart from grant for allUsersURI with READ_ACP permission', () => {
+    describe('#transferAclWithoutReadAcp', () => {
 
-        describe('S3 Bucket ACL with grants for allUsersURI with READ, WRITE, WRITE_ACP, READ_ACP permission', () => {
+        describe('ACL with grants for allUsersURI with READ, WRITE, WRITE_ACP, READ_ACP permission', () => {
             it('is transferred to new ACL with grant for allUsersURI with READ, WRITE, WRITE_ACP permission but without allUsersURI with READ_ACP permission', () => {
                 var newAcl = JSON.parse(aclSkeleton);
                 const oldAcl = JSON.parse('{ \
@@ -197,7 +197,7 @@ describe('S3-002 READ_ACP auto-remediation', () => {
             });
         });
 
-        describe('S3 Bucket ACL with grants for CanonicalUser with READ_ACP permission and allUsersURI with READ_ACP permission', () => {
+        describe('ACL with grants for CanonicalUser with READ_ACP permission and allUsersURI with READ_ACP permission', () => {
             it('is transferred to new ACL with grants for CanonicalUser with READ_ACP permission only', () => {
                 var newAcl = JSON.parse(aclSkeleton);
                 const oldAcl = JSON.parse('{ \
