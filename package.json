@@ -6,6 +6,7 @@
   "scripts": {
     "test": "./node_modules/.bin/mocha --recursive --reporter spec",
     "sls:package": "serverless package"
+    "lint": "./node_modules/.bin/eslint"
   },
   "author": "Mike Rahmati",
   "repository": {
@@ -21,6 +22,12 @@
     "bluebird": "^3.5.0",
     "chai": "^3.5.0",
     "dotenv": "^2.0.0",
+    "eslint": "^4.17.0",
+    "eslint-config-standard": "^11.0.0-beta.0",
+    "eslint-plugin-import": "^2.8.0",
+    "eslint-plugin-node": "^6.0.0",
+    "eslint-plugin-promise": "^3.6.0",
+    "eslint-plugin-standard": "^3.0.1",
     "mocha": "^3.3.0",
     "serverless": "^1.26.0"
   }
