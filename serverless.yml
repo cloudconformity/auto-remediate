@@ -149,7 +149,7 @@ functions:
       include:
         - functions/AutoRemediateS3-001.js
 
-  AutoRemediateS3-001:
+  AutoRemediateS3-002:
     handler: functions/AutoRemediateS3-002.handler
     memorySize: 128
     tags:
