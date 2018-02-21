@@ -2,7 +2,7 @@ const AWS = require('aws-sdk')
 
 function revokeSecurityGroupAccess (protocol, port, resource, region) {
   let params = {
-    GroupName: resource,
+    GroupId: resource,
     IpPermissions: [
       {
         FromPort: port,
