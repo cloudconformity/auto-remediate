@@ -1,8 +1,4 @@
 "use strict";
-
-const config = require('./config');
-const AWS = require("aws-sdk");
-
 const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
 const readAcpPermission = "READ_ACP"
 
@@ -30,6 +26,14 @@ module.exports = {
     oldAcl.Grants.forEach(function (grant, i) { if (grant.Grantee.URI == allUsersURI) { that.removeAcpPermission(grant, newAcl) } else { newAcl['Grants'].push(grant) }; });
 
     return newAcl;
+  },
+
+  filterAcpGrants: function( acl, grantToRemove) {
+
+    return {
+      Owner: acl.Owner,
+      Grants: acl.Grants.filter(grant => grant != grantToRemove)
+    }
   }
 }
 
