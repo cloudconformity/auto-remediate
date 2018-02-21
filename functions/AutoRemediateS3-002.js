@@ -1,11 +1,7 @@
 "use strict";
 
 const config = require('./config');
-<<<<<<< HEAD
-const utils = require('./S3_utils');
-=======
 const  utils = require('../utils/S3_utils');
->>>>>>> Refactor S3-002 to use filterAclGrants
 const AWS = require("aws-sdk");
 
 const CCRuleCode = 'S3-002'
@@ -32,32 +28,6 @@ const handler = (event, context, callback) => {
     console.log(err, err.stack);
     callback(err, 'failed to auto-remediate', CCRuleCode);
   })
-
-
-  // var getAclParams = {
-  //   Bucket: event.resource
-  // };
-  // let getAclPromise = s3.getBucketAcl(getAclParams).promise();
-
-  // getAclPromise
-  //   .then(acl => {
-  //     return utils.filterAclGrants(acl,readAcpAllUsers)
-  //   })
-  //   .then(filteredAcl => {
-  //     const putAclParams = {
-  //       Bucket: event.resource,
-  //       AccessControlPolicy: filteredAcl
-  //     };
-  //     return s3.putBucketAcl(putAclParams).promise();
-
-  //   }).then(putAclResponse => {
-  //     console.log('result>' + JSON.stringify(putAclResponse));
-  //     callback(null, 'Success');
-  //   })
-  //   .catch((err) => {
-  //     console.log(err, err.stack);
-  //     callback(err, 'failed to auto-remediate', CCRuleCode);
-  //   })
 
 };
 
