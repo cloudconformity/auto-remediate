@@ -1,19 +1,8 @@
 "use strict";
 
 const source = require('../functions/AutoRemediateS3-002');
-<<<<<<< HEAD
-
 var AWS = require('aws-sdk-mock');
 
-const CCRuleCode = 'S3-002';
-const CCRuleName = 'BucketPublicReadAcpAccess';
-const readAcpPermission = "READ_ACP";
-const aclSkeleton = '{"Owner":"", "Grants":[]}'; // skeleton for new permission grants
-
-=======
-var AWS = require('aws-sdk-mock');
-
->>>>>>> 77371f653e6fe934c009c5b2f8d104998cf33d0c
 const sampleEvent = {
     id: "ccc:HJzFMHchx:S3-001:S3:ap-southeast-2:sample-bucket",
     organisationId: "some-organisation",
