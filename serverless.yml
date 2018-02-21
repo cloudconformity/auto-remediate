@@ -56,11 +56,6 @@ provider:
       Action: cloudtrail:UpdateTrail
       Resource: "*"
 
-    - Effect: Allow
-      Action:
-        - sts:GetCallerIdentity
-      Resource: "*"
-
 package:
   individually: true
   exclude:
@@ -390,4 +385,8 @@ resources:
                     - iam:GetRole
                     - iam:PassRole
                     - iam:PutRolePolicy
+                  Resource: "*"
+                - Effect: Allow
+                  Action:
+                    - sts:GetCallerIdentity
                   Resource: "*"
