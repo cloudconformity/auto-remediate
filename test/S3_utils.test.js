@@ -1,34 +1,6 @@
-// TODO // imports
-//
-//// TODO - remove DELETEME comments - for info only
-//// DELETEME - describe the module under test
-//describe("S3_utils", () => {
-//
-//    // DELETEME - describe each EXPORTED function in turn
-//    describe("#removeAcpPermission()", () => {
-//        // DELETEME Describe different contexts for the function
-//        describe("When grant contains READ_ACP permission", () => {
-//            // DELETEME describe the examples
-//            // TODO - provide better textual descriptions for the spec.
-//            it('should do something')
-//        })
-//
-//        describe("When grant contains another permission", () => {
-//            // describe the examples
-//            it('should do something else')
-//        })
-//    })
-//
-//    describe("#transferOwner()", () => {
-//        // TODO - fill me in
-//    })
-//
-//    // TODO - test other exported functions
-//})
-
 "use strict";
 
-const  utils = require('../functions/S3_utils');
+const utils = require('../functions/S3_utils');
 
 const CCRuleCode = 'S3-002';
 const CCRuleName = 'BucketPublicReadAcpAccess';
@@ -60,7 +32,7 @@ describe('S3_utils', () => {
             });
         });
 
-       describe('when ACL grant contains WRITE permission', () => {
+        describe('when ACL grant contains WRITE permission', () => {
             it('is transfered to new ACL', () => {
                 var aclNew = JSON.parse(aclSkeleton);
                 const readGrant = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "WRITE" }');
@@ -71,7 +43,7 @@ describe('S3_utils', () => {
             });
         });
 
-      describe('when ACL grant contains WRITE_ACP permission', () => {
+        describe('when ACL grant contains WRITE_ACP permission', () => {
             it('is transfered to new ACL', () => {
                 var aclNew = JSON.parse(aclSkeleton);
                 const readGrant = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/AllUsers" }, "Permission": "WRITE_ACP" }');
@@ -212,4 +184,3 @@ describe('S3_utils', () => {
         });
     });
 });
-

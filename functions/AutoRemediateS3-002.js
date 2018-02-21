@@ -1,13 +1,11 @@
 "use strict";
 
 const config = require('./config');
-const  utils = require('./S3_utils');
+const utils = require('./S3_utils');
 const AWS = require("aws-sdk");
 
 const CCRuleCode = 'S3-002'
 const CCRuleName = 'BucketPublicReadAcpAccess'
-//const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
-//const readAcpPermission = "READ_ACP"
 
 
 // look for and remove S3BucketPublicReadAccess

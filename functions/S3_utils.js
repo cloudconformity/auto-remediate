@@ -26,10 +26,6 @@ module.exports = {
     var that = this;  // keep the reference for use within a local scope
     this.transferOwner(oldAcl, newAcl);
 
-//    console.log("from transferAcl:", JSON.stringify(oldAcl.Grants));
-//    oldAcl.Grants.forEach(function (grant) { console.log(grant) } );
-
-
     // now, act on any grants to all users - and just copy over any other grants
     oldAcl.Grants.forEach(function (grant, i) { if (grant.Grantee.URI == allUsersURI) { that.removeAcpPermission(grant, newAcl) } else { newAcl['Grants'].push(grant) }; });
 
