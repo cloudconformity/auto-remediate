@@ -1,16 +1,7 @@
 "use strict";
 
-<<<<<<< HEAD:test/S3_utils.test.js
-const utils = require('../functions/S3_utils');
-=======
 const  utils = require('../../utils/S3_utils');
 const clonedeep = require('lodash.clonedeep')
->>>>>>> Add #filterAcpGrants:test/utils/S3_utils.test.js
-
-const CCRuleCode = 'S3-002';
-const CCRuleName = 'BucketPublicReadAcpAccess';
-const readAcpPermission = "READ_ACP";
-const aclSkeleton = '{"Owner":"", "Grants":[]}'; // skeleton for new permission grants
 
 describe('S3_utils', () => {
 
@@ -24,73 +15,49 @@ describe('S3_utils', () => {
         Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AuthenticatedUsers" }, Permission: "READ_ACP"
     }
 
+    
     describe('#filterAclGrants', ()=> {
-        let sampleAcl = {
-            Owner: "",
-            Grants: [grantReadAcpAllUsers, grantReadAllUsers],
-        }
+        let sampleAcl
+        beforeEach( () => {
+            sampleAcl = {
+                Owner: { DisplayName: "user_name", ID: "2ce976687c4d75ad5a026cfc3c1f0397e39a0df116faf88c1fd90f2faa291c8b" },
+                Grants: [grantReadAcpAllUsers, grantReadAllUsers],
+            }
+        })
         it('should not mutate the input param', () =>{ 
             let original = clonedeep(sampleAcl)
             utils.filterAclGrants(sampleAcl, grantReadAcpAllUsers)
             expect(sampleAcl).toEqual(original)
         })
 
-        it('should return a copy', () =>{ 
-            let copy = clonedeep(sampleAcl)
-            let result = utils.filterAclGrants(sampleAcl, {})
-            expect(sampleAcl).toEqual(copy)
-            expect(result).not.toBe(sampleAcl)
+        it('should return a copy when grant is undefined', ()=> {
+            let result = utils.filterAclGrants(sampleAcl)
+            expect(result).toEqual(sampleAcl)
         })
-
+        
         it('should return a copy of the acl when no match exists', ()=> {
             let result = utils.filterAclGrants(sampleAcl, grantReadAcpAuthenticatedUsers)
             expect(result).toEqual(sampleAcl)
         })
 
-        it('should return a copy when grant is undefined', ()=> {
-            let result = utils.filterAclGrants(sampleAcl)
-            expect(result).toEqual(sampleAcl)
-        })
-
         it('should remove a single match', ()=> {
-            let sampleAcl = {
-                Owner: "",
-                Grants: [grantReadAcpAllUsers, grantReadAllUsers],
-            }
+            sampleAcl.Grants = [grantReadAcpAllUsers, grantReadAllUsers]
             let result = utils.filterAclGrants(sampleAcl, grantReadAcpAllUsers)
-            let expected = {
-                Owner: "",
-                Grants: [grantReadAllUsers],
-            }
-            expect(result).toEqual(expected)
+            expect(result.Grants).toEqual([grantReadAllUsers])
         })
 
         it('should remove multiple matches', ()=> {
-            let sampleAcl = {
-                Owner: "",
-                Grants: [grantReadAcpAllUsers, grantReadAllUsers, grantReadAcpAllUsers],
-            }
-            let expected = {
-                Owner: "",
-                Grants: [grantReadAllUsers],
-            }
+            sampleAcl.Grants = [grantReadAcpAllUsers, grantReadAllUsers, grantReadAcpAllUsers]
             let result = utils.filterAclGrants(sampleAcl, grantReadAcpAllUsers)
-            expect(result).toEqual(expected)
+            expect(result.Grants).toEqual([grantReadAllUsers])
         })
 
         it('should fail when acl is undefined', ()=> {
             let invalidCall = () => utils.filterAclGrants(undefined, grantReadAcpAllUsers)
             expect(invalidCall).toThrowError(expect.anything())
         })
-    })
 
-    describe('#removeAcpPermission', () => {
-
-        describe('when ACL grant contains READ_ACP permission', () => {
-            it('is not transfered to new ACL', () => {
-                var aclNew = JSON.parse(aclSkeleton);
-                const readAcpGrant = JSON.parse('{ "Grantee": { "Type": "Group", "URI": "http://acs.amazonaws.com/groups/global/SomeUsers" }, "Permission": "READ_ACP" }');
-
+<<<<<<< HEAD
                 expect(readAcpGrant.Permission).toBe('READ_ACP');
                 expect(utils.removeAcpPermission(readAcpGrant, aclNew)).toEqual(JSON.parse(aclSkeleton));
             });
@@ -258,4 +225,12 @@ describe('S3_utils', () => {
             });
         });
     });
+=======
+        it('should not match when Grantee differs', () => {
+            sampleAcl.Grants = [grantReadAcpAllUsers]
+            let result = utils.filterAclGrants(sampleAcl, grantReadAcpAuthenticatedUsers)
+            expect(result.Grants).toEqual([grantReadAcpAllUsers])
+        })
+    })
+>>>>>>> refactoring
 });

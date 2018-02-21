@@ -26,36 +26,38 @@ const handler = (event, context, callback) => {
 
   var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 
-  var getAclParams = {
-    Bucket: event.resource
-  };
-  let getAclPromise = s3.getBucketAcl(getAclParams).promise();
+  utils.filterAcl(s3, event.resource, readAcpAllUsers).then(() => {
+    callback(null, 'Success');
+  }).catch((err) => {
+    console.log(err, err.stack);
+    callback(err, 'failed to auto-remediate', CCRuleCode);
+  })
 
-  getAclPromise
-    .then(acl => {
-      return utils.filterAclGrants(acl,readAcpAllUsers)
-    })
-    .then(filteredAcl => {
-      const putAclParams = {
-        Bucket: event.resource,
-        AccessControlPolicy: filteredAcl
-      };
-      return s3.putBucketAcl(putAclParams).promise();
 
-    }).then(putAclResponse => {
-      console.log('result>' + JSON.stringify(putAclResponse));
-    })
-    .catch((err) => {
-      console.log(err, err.stack);
-      callback(err, 'failed to auto-remediate', CCRuleCode);
-    })
+  // var getAclParams = {
+  //   Bucket: event.resource
+  // };
+  // let getAclPromise = s3.getBucketAcl(getAclParams).promise();
 
-  callback(null, 'Success');
+  // getAclPromise
+  //   .then(acl => {
+  //     return utils.filterAclGrants(acl,readAcpAllUsers)
+  //   })
+  //   .then(filteredAcl => {
+  //     const putAclParams = {
+  //       Bucket: event.resource,
+  //       AccessControlPolicy: filteredAcl
+  //     };
+  //     return s3.putBucketAcl(putAclParams).promise();
 
-  function handleError(message) {
-    message = message || 'Failed to process request.'
-    return callback(new Error(message));
-  }
+  //   }).then(putAclResponse => {
+  //     console.log('result>' + JSON.stringify(putAclResponse));
+  //     callback(null, 'Success');
+  //   })
+  //   .catch((err) => {
+  //     console.log(err, err.stack);
+  //     callback(err, 'failed to auto-remediate', CCRuleCode);
+  //   })
 
 };
 

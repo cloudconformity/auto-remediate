@@ -1,39 +1,42 @@
 "use strict";
-const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
-const readAcpPermission = "READ_ACP"
+
+const filterAclGrants = function( acl, grantToRemove) {
+
+  return {
+    Owner: acl.Owner,
+    Grants: acl.Grants.filter(grant => grant != grantToRemove)
+  }
+}
+
+const getAcl = function(s3, bucketName) {
+  var getAclParams = {
+    Bucket: bucketName
+  };
+  return s3.getBucketAcl(getAclParams).promise();
+}
+
+const putAcl = function(s3, bucketName, acl){
+  const putAclParams = {
+    Bucket: bucketName,
+    AccessControlPolicy: acl
+  };
+  return s3.putBucketAcl(putAclParams).promise();
+}
+
+const filterAcl = function(s3, bucketName, grantToRemove) {
+  return getAcl(s3,bucketName)
+    .then(acl => {
+      return filterAclGrants(acl,grantToRemove)
+    })
+    .then(filteredAcl => {
+      return putAcl(s3, bucketName, filteredAcl)
+    }).then(putAclResponse => {
+      console.log('result>' + JSON.stringify(putAclResponse));
+    })
+}
 
 module.exports = {
-
-  removeAcpPermission: function (thisGrant, newAcl) {
-    if (thisGrant.Permission != readAcpPermission) {  // any besides READ_ACP are passed through
-      newAcl['Grants'].push(thisGrant);
-    }
-
-    return newAcl;
-  },
-
-  transferOwner: function (oldAcl, newAcl) {
-    newAcl.Owner = oldAcl.Owner; // transfer the existing bucket owner
-
-    return newAcl;
-  },
-
-  transferAclWithoutReadAcp: function (oldAcl, newAcl) {
-    var that = this;  // keep the reference for use within a local scope
-    this.transferOwner(oldAcl, newAcl);
-
-    // now, act on any grants to all users - and just copy over any other grants
-    oldAcl.Grants.forEach(function (grant, i) { if (grant.Grantee.URI == allUsersURI) { that.removeAcpPermission(grant, newAcl) } else { newAcl['Grants'].push(grant) }; });
-
-    return newAcl;
-  },
-
-  filterAclGrants: function( acl, grantToRemove) {
-
-    return {
-      Owner: acl.Owner,
-      Grants: acl.Grants.filter(grant => grant != grantToRemove)
-    }
-  }
+  filterAclGrants: filterAclGrants,
+  filterAcl: filterAcl
 }
 
