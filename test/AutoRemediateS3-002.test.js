@@ -69,8 +69,17 @@ describe('S3-002 AutoRemediation', () => {
     let grantReadAllUsers = {
         Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AllUsers" }, Permission: "READ"
     }
+    let grantWriteAcpAllUsers = {
+        Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AllUsers" }, Permission: "WRITE_ACP"
+    }
+    let grantWriteAllUsers = {
+        Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AllUsers" }, Permission: "WRITE"
+    }
     let grantReadAcpAuthenticatedUsers = {
         Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AuthenticatedUsers" }, Permission: "READ_ACP"
+    }
+    let grantFullControlCanonicalUser = {
+        Grantee: { "DisplayName": "user_name", "ID": "account_user_id123455667890abcdef", "Type": "CanonicalUser" }, Permission: "FULL_CONTROL"
     }
 
     beforeEach((done) => {
@@ -85,9 +94,12 @@ describe('S3-002 AutoRemediation', () => {
                             DisplayName: "user_name", ID: "account_user_id123455667890abcdef", Type: "CanonicalUser"
                         }, Permission: "FULL_CONTROL"
                     },
+                    grantReadAllUsers,
                     grantReadAcpAllUsers,
+                    grantWriteAllUsers,
+                    grantWriteAcpAllUsers,
                     grantReadAcpAuthenticatedUsers,
-                    grantReadAllUsers
+                    grantFullControlCanonicalUser
                 ]
             }
 
@@ -144,6 +156,36 @@ describe('S3-002 AutoRemediation', () => {
         let expectedGrant = {
             AccessControlPolicy: {
                 Grants: expect.arrayContaining([grantReadAllUsers]),
+                Owner: expect.any(Object)
+            },
+        }
+        expect(putBucketAclMock).toHaveBeenCalledWith(expect.objectContaining(expectedGrant), expect.any(Function))
+    })
+
+    it('should keep WRITE grants for All Users', () => {
+        let expectedGrant = {
+            AccessControlPolicy: {
+                Grants: expect.arrayContaining([grantWriteAllUsers]),
+                Owner: expect.any(Object)
+            },
+        }
+        expect(putBucketAclMock).toHaveBeenCalledWith(expect.objectContaining(expectedGrant), expect.any(Function))
+    })
+
+    it('should keep WRITE_ACP grants for All Users', () => {
+        let expectedGrant = {
+            AccessControlPolicy: {
+                Grants: expect.arrayContaining([grantWriteAcpAllUsers]),
+                Owner: expect.any(Object)
+            },
+        }
+        expect(putBucketAclMock).toHaveBeenCalledWith(expect.objectContaining(expectedGrant), expect.any(Function))
+    })
+
+    it('should keep FULL_CONTROL grants for Canonical User', () => {
+        let expectedGrant = {
+            AccessControlPolicy: {
+                Grants: expect.arrayContaining([grantFullControlCanonicalUser]),
                 Owner: expect.any(Object)
             },
         }
