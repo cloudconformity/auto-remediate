@@ -76,7 +76,6 @@ describe('S3-002 AutoRemediation', () => {
     beforeEach((done) => {
 
         getBucketAclMock = jest.fn().mockImplementation(() => {
-            console.log('returning stuff')
             return {
                 Owner: {
                     DisplayName: "user_name", ID: "account_user_id123455667890abcdef"
