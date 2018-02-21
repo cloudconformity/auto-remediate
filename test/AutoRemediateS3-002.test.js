@@ -13,54 +13,68 @@ const CCRuleName = 'BucketPublicReadAcpAccess';
 const readAcpPermission = "READ_ACP";
 const aclSkeleton = '{"Owner":"", "Grants":[]}'; // skeleton for new permission grants
 
-const sampleEvent = {id: "ccc:HJzFMHchx:S3-001:S3:ap-southeast-2:sample-bucket", 
-  organisationId: "some-organisation", 
-  accountId: "abcdef", 
-  ruleId: "S3-002", 
-  ruleTitle: "S3 Bucket Public 'READ_ACP' Access", 
-  service: "S3", 
-  region: "ap-southeast-2", 
-  riskLevel: "VERY_HIGH", 
-  categories: [ 
-    "security" 
-  ], 
-  compliances: [ 
-    "AWAF" 
-  ], 
-  message: "Bucket sample-bucket allows public 'READ_ACP' access.", 
-  resource: "sample-bucket", 
-  status: "FAILURE", 
-  statusRiskLevel: "FAILURE:1", 
-  lastUpdatedDate: null, 
-  lastUpdatedBy: "SYSTEM", 
-  resolvedBy: "SYSTEM", 
-  eventId: "Skzp7ra1WW", 
-  ccrn: "ccrn:aws:HJzFMHchx:S3:global:sample-bucket", 
-  tags: [], 
-  cost: "0", 
-  waste: "0", 
-  lastModifiedDate: "1511060191925", 
-  lastModifiedBy: "SYSTEM" } 
+const sampleEvent = {
+    id: "ccc:HJzFMHchx:S3-001:S3:ap-southeast-2:sample-bucket",
+    organisationId: "some-organisation",
+    accountId: "abcdef",
+    ruleId: "S3-002",
+    ruleTitle: "S3 Bucket Public 'READ_ACP' Access",
+    service: "S3",
+    region: "ap-southeast-2",
+    riskLevel: "VERY_HIGH",
+    categories: [
+        "security"
+    ],
+    compliances: [
+        "AWAF"
+    ],
+    message: "Bucket sample-bucket allows public 'READ_ACP' access.",
+    resource: "sample-bucket",
+    status: "FAILURE",
+    statusRiskLevel: "FAILURE:1",
+    lastUpdatedDate: null,
+    lastUpdatedBy: "SYSTEM",
+    resolvedBy: "SYSTEM",
+    eventId: "Skzp7ra1WW",
+    ccrn: "ccrn:aws:HJzFMHchx:S3:global:sample-bucket",
+    tags: [],
+    cost: "0",
+    waste: "0",
+    lastModifiedDate: "1511060191925",
+    lastModifiedBy: "SYSTEM"
+}
 
 function errorCallback(msg) {
     console.log(msg);
 }
 
 let awsMockCallback = (jestFn) => {
-    return function(params,callback){
-        try{
+    return function (params, callback) {
+        try {
             let result = jestFn(params, callback)
-            callback(null,result)
-        }catch(err){
-            callback(err) 
+            callback(null, result)
+        } catch (err) {
+            callback(err)
         }
     }
 }
 
 describe('S3-002 AutoRemediation', () => {
     let getBucketAclMock
+    let putBucketAclMock
+
+    let grantReadAcpAllUsers = {
+        Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AllUsers" }, Permission: "READ_ACP"
+    }
+    let grantReadAllUsers = {
+        Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AllUsers" }, Permission: "READ"
+    }
+    let grantReadAcpAuthenticatedUsers = {
+        Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AuthenticatedUsers" }, Permission: "READ_ACP"
+    }
 
     beforeEach((done) => {
+
         getBucketAclMock = jest.fn().mockImplementation(() => {
             console.log('returning stuff')
             return {
@@ -72,18 +86,17 @@ describe('S3-002 AutoRemediation', () => {
                             DisplayName: "user_name", ID: "account_user_id123455667890abcdef", Type: "CanonicalUser"
                         }, Permission: "FULL_CONTROL"
                     },
-                    {
-                        Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AllUsers" }, Permission: "READ_ACP"
-                    },
-                    {
-                        Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AllUsers" }, Permission: "READ"
-                    }
+                    grantReadAcpAllUsers,
+                    grantReadAcpAuthenticatedUsers,
+                    grantReadAllUsers
                 ]
             }
-    
+
         })
+        putBucketAclMock = jest.fn()
 
         AWS.mock('S3', "getBucketAcl", awsMockCallback(getBucketAclMock))
+        AWS.mock('S3', "putBucketAcl", awsMockCallback(putBucketAclMock))
         const mockCallback = (err, data) => {
             if (err) {
                 done.fail()
@@ -105,7 +118,37 @@ describe('S3-002 AutoRemediation', () => {
         expect(getBucketAclMock).toHaveBeenCalledWith(expectedParams, expect.any(Function))
     })
 
-    it('should remove READ_ACP grants for AllUsers', ()=> {
-        // TODO
+    it('should set a new ACL on the affected bucket', () => {
+        let expectedParams = {
+            Bucket: "sample-bucket",
+            AccessControlPolicy: expect.any(Object)
+        }
+        expect(putBucketAclMock).toHaveBeenCalled()
+        expect(putBucketAclMock).toHaveBeenCalledWith(expectedParams, expect.any(Function))
     })
+
+    it('should remove READ_ACP grants for AllUsers', () => {
+        expect(putBucketAclMock).not.toHaveBeenCalledWith(expect.objectContaining(grantReadAcpAllUsers), expect.any(Function))
+    })
+
+    it('should keep READ_ACP grants for other users', () => {
+        let expectedGrant = {
+            AccessControlPolicy: {
+                Grants: expect.arrayContaining([grantReadAcpAuthenticatedUsers]),
+                Owner: expect.any(Object)
+            },
+        }
+        expect(putBucketAclMock).toHaveBeenCalledWith(expect.objectContaining(expectedGrant), expect.any(Function))
+    })
+
+    it('should keep READ grants for All Users', () => {
+        let expectedGrant = {
+            AccessControlPolicy: {
+                Grants: expect.arrayContaining([grantReadAllUsers]),
+                Owner: expect.any(Object)
+            },
+        }
+        expect(putBucketAclMock).toHaveBeenCalledWith(expect.objectContaining(expectedGrant), expect.any(Function))
+    })
+
 });
