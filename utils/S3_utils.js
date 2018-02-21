@@ -28,7 +28,7 @@ module.exports = {
     return newAcl;
   },
 
-  filterAcpGrants: function( acl, grantToRemove) {
+  filterAclGrants: function( acl, grantToRemove) {
 
     return {
       Owner: acl.Owner,

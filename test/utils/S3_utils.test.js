@@ -24,31 +24,31 @@ describe('S3_utils', () => {
         Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AuthenticatedUsers" }, Permission: "READ_ACP"
     }
 
-    describe('#filterAcpGrants', ()=> {
+    describe('#filterAclGrants', ()=> {
         let sampleAcl = {
             Owner: "",
             Grants: [grantReadAcpAllUsers, grantReadAllUsers],
         }
         it('should not mutate the input param', () =>{ 
             let original = clonedeep(sampleAcl)
-            utils.filterAcpGrants(sampleAcl, grantReadAcpAllUsers)
+            utils.filterAclGrants(sampleAcl, grantReadAcpAllUsers)
             expect(sampleAcl).toEqual(original)
         })
 
         it('should return a copy', () =>{ 
             let copy = clonedeep(sampleAcl)
-            let result = utils.filterAcpGrants(sampleAcl, {})
+            let result = utils.filterAclGrants(sampleAcl, {})
             expect(sampleAcl).toEqual(copy)
             expect(result).not.toBe(sampleAcl)
         })
 
         it('should return a copy of the acl when no match exists', ()=> {
-            let result = utils.filterAcpGrants(sampleAcl, grantReadAcpAuthenticatedUsers)
+            let result = utils.filterAclGrants(sampleAcl, grantReadAcpAuthenticatedUsers)
             expect(result).toEqual(sampleAcl)
         })
 
         it('should return a copy when grant is undefined', ()=> {
-            let result = utils.filterAcpGrants(sampleAcl)
+            let result = utils.filterAclGrants(sampleAcl)
             expect(result).toEqual(sampleAcl)
         })
 
@@ -57,7 +57,7 @@ describe('S3_utils', () => {
                 Owner: "",
                 Grants: [grantReadAcpAllUsers, grantReadAllUsers],
             }
-            let result = utils.filterAcpGrants(sampleAcl, grantReadAcpAllUsers)
+            let result = utils.filterAclGrants(sampleAcl, grantReadAcpAllUsers)
             let expected = {
                 Owner: "",
                 Grants: [grantReadAllUsers],
@@ -74,12 +74,12 @@ describe('S3_utils', () => {
                 Owner: "",
                 Grants: [grantReadAllUsers],
             }
-            let result = utils.filterAcpGrants(sampleAcl, grantReadAcpAllUsers)
+            let result = utils.filterAclGrants(sampleAcl, grantReadAcpAllUsers)
             expect(result).toEqual(expected)
         })
 
         it('should fail when acl is undefined', ()=> {
-            let invalidCall = () => utils.filterAcpGrants(undefined, grantReadAcpAllUsers)
+            let invalidCall = () => utils.filterAclGrants(undefined, grantReadAcpAllUsers)
             expect(invalidCall).toThrowError(expect.anything())
         })
     })

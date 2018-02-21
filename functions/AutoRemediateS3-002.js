@@ -1,12 +1,19 @@
 "use strict";
 
 const config = require('./config');
+<<<<<<< HEAD
 const utils = require('./S3_utils');
+=======
+const  utils = require('../utils/S3_utils');
+>>>>>>> Refactor S3-002 to use filterAclGrants
 const AWS = require("aws-sdk");
 
 const CCRuleCode = 'S3-002'
 const CCRuleName = 'BucketPublicReadAcpAccess'
 
+const readAcpAllUsers = {
+  Grantee: { Type: "Group", URI: "http://acs.amazonaws.com/groups/global/AllUsers" }, Permission: "READ_ACP"
+}
 
 // look for and remove S3BucketPublicReadAccess
 const handler = (event, context, callback) => {
@@ -19,29 +26,24 @@ const handler = (event, context, callback) => {
 
   var s3 = new AWS.S3({ apiVersion: '2006-03-01' });
 
-  var aclWas;
-  var aclNew = JSON.parse('{"Owner":"", "Grants":[]}'); // skeleton for new permission grants
-
   var getAclParams = {
     Bucket: event.resource
   };
   let getAclPromise = s3.getBucketAcl(getAclParams).promise();
 
   getAclPromise
-    .then((aclWas) => {
-      utils.transferAclWithoutReadAcp(aclWas, aclNew);
+    .then(acl => {
+      return utils.filterAclGrants(acl,readAcpAllUsers)
     })
-    .then(() => {
+    .then(filteredAcl => {
       const putAclParams = {
         Bucket: event.resource,
-        AccessControlPolicy: aclNew
+        AccessControlPolicy: filteredAcl
       };
-      let putAclPromise = s3.putBucketAcl(putAclParams).promise();
+      return s3.putBucketAcl(putAclParams).promise();
 
-      putAclPromise
-        .then((result) => {
-          console.log('result>' + JSON.stringify(result));
-        })
+    }).then(putAclResponse => {
+      console.log('result>' + JSON.stringify(putAclResponse));
     })
     .catch((err) => {
       console.log(err, err.stack);
