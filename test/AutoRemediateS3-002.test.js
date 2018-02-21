@@ -1,15 +1,11 @@
 "use strict";
 
 const source = require('../functions/AutoRemediateS3-002');
-//const  utils = require('../functions/S3_utils');
-var AWS = require('aws-sdk-mock');
 
-//const config = require('./config');
-//const AWS = require("aws-sdk");
+var AWS = require('aws-sdk-mock');
 
 const CCRuleCode = 'S3-002';
 const CCRuleName = 'BucketPublicReadAcpAccess';
-//const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers';
 const readAcpPermission = "READ_ACP";
 const aclSkeleton = '{"Owner":"", "Grants":[]}'; // skeleton for new permission grants
 
