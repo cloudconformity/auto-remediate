@@ -41,13 +41,13 @@ describe('S3_utils', () => {
         })
 
         it('should remove a single match', ()=> {
-            sampleAcl.Grants = [grantReadAcpAllUsers, grantReadAllUsers]
+            sampleAcl.Grants = clonedeep([grantReadAcpAllUsers, grantReadAllUsers])
             let result = utils.filterAclGrants(sampleAcl, grantReadAcpAllUsers)
             expect(result.Grants).toEqual([grantReadAllUsers])
         })
 
         it('should remove multiple matches', ()=> {
-            sampleAcl.Grants = [grantReadAcpAllUsers, grantReadAllUsers, grantReadAcpAllUsers]
+            sampleAcl.Grants = clonedeep([grantReadAcpAllUsers, grantReadAllUsers, grantReadAcpAllUsers])
             let result = utils.filterAclGrants(sampleAcl, grantReadAcpAllUsers)
             expect(result.Grants).toEqual([grantReadAllUsers])
         })
@@ -58,7 +58,7 @@ describe('S3_utils', () => {
         })
 
         it('should not match when Grantee differs', () => {
-            sampleAcl.Grants = [grantReadAcpAllUsers]
+            sampleAcl.Grants = clonedeep([grantReadAcpAllUsers])
             let result = utils.filterAclGrants(sampleAcl, grantReadAcpAuthenticatedUsers)
             expect(result.Grants).toEqual([grantReadAcpAllUsers])
         })
