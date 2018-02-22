@@ -5,6 +5,7 @@ provider:
   runtime: nodejs6.10
   stage: v1
   region: ${opt:region, 'us-east-1'}
+  timeout: 10 # optional, in seconds, default is 6
   stackTags:
     service: auto-remediate
 
@@ -433,10 +434,10 @@ resources:
                     - cloudtrail:UpdateTrail
                   Resource: "*"
 
-    AutoRemediateS3002Role:
+    AutoRemediateS3001Role:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: AutoRemediateS3-002Role
+        RoleName: AutoRemediateS3-001Role
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -447,7 +448,7 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediateS3-002Policy
+          - PolicyName: AutoRemediateS3-001Policy
             PolicyDocument:
               Statement:
                 - Effect: Allow
@@ -469,10 +470,10 @@ resources:
                     - s3:PutBucketAcl
                   Resource: "*"
 
-    AutoRemediateS3001Role:
+    AutoRemediateS3002Role:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: AutoRemediateS3-001Role
+        RoleName: AutoRemediateS3-002Role
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -483,7 +484,7 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediateS3-001Policy
+          - PolicyName: AutoRemediateS3-002Policy
             PolicyDocument:
               Statement:
                 - Effect: Allow
