@@ -63,6 +63,7 @@ functions:
   AutoRemediateS3-002:
     handler: functions/AutoRemediateS3-002.handler
     memorySize: 128
+    timeout: 10
     tags:
       Name: Auto Remediate S3-002
       Owner: CloudConformity
@@ -72,7 +73,7 @@ functions:
       include:
         - functions/AutoRemediateS3-002.js
         - utils/S3_utils.js
-        - node_modules/lodash.isequal
+        - node_modules/lodash.isequal/**
     role: AutoRemediateS3002Role
 
   AutoRemediateS3-012:
