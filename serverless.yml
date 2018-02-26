@@ -76,6 +76,38 @@ functions:
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3002Role
 
+  AutoRemediateS3-003:
+    handler: functions/AutoRemediateS3-003.handler
+    memorySize: 128
+    timeout: 10
+    tags:
+      Name: Auto Remediate S3-003
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateS3-003.js
+        - utils/S3_utils.js
+        - node_modules/lodash.isequal/**
+    role: AutoRemediateS3003Role
+
+  AutoRemediateS3-004:
+    handler: functions/AutoRemediateS3-004.handler
+    memorySize: 128
+    timeout: 10
+    tags:
+      Name: Auto Remediate S3-004
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateS3-004.js
+        - utils/S3_utils.js
+        - node_modules/lodash.isequal/**
+    role: AutoRemediateS3004Role
+
   AutoRemediateS3-012:
     handler: functions/AutoRemediateS3-012.handler
     memorySize: 128
@@ -486,6 +518,78 @@ resources:
                 - sts:AssumeRole
         Policies:
           - PolicyName: AutoRemediateS3-002Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - s3:GetBucketAcl
+                    - s3:PutBucketAcl
+                  Resource: "*"
+
+    AutoRemediateS3003Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateS3-003Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateS3-003Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - s3:GetBucketAcl
+                    - s3:PutBucketAcl
+                  Resource: "*"
+
+    AutoRemediateS3004Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateS3-004Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateS3-004Policy
             PolicyDocument:
               Statement:
                 - Effect: Allow
