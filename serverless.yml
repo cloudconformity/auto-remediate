@@ -4,7 +4,7 @@ provider:
   name: aws
   runtime: nodejs6.10
   stage: v1
-  region: us-east-1
+  region: ${opt:region, 'us-east-1'}
   stackTags:
     service: auto-remediate
 
@@ -58,6 +58,22 @@ functions:
       include:
         - functions/AutoRemediateS3-001.js
     role: AutoRemediateS3001Role
+
+  AutoRemediateS3-002:
+    handler: functions/AutoRemediateS3-002.handler
+    memorySize: 128
+    timeout: 10
+    tags:
+      Name: Auto Remediate S3-002
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateS3-002.js
+        - utils/S3_utils.js
+        - node_modules/lodash.isequal/**
+    role: AutoRemediateS3002Role
 
   AutoRemediateS3-012:
     handler: functions/AutoRemediateS3-012.handler
@@ -417,7 +433,41 @@ resources:
                   Action:
                     - cloudtrail:UpdateTrail
                   Resource: "*"
-
+    AutoRemediateS3002Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateS3-002Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateS3-002Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - s3:GetBucketAcl
+                    - s3:PutBucketAcl
+                  Resource: "*"
     AutoRemediateS3001Role:
       Type: AWS::IAM::Role
       Properties:
