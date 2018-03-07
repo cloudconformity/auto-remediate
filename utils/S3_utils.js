@@ -8,14 +8,14 @@ const filterAclGrants = function( acl, grantToRemove) {
   }
 }
 
-const getAcl = function(s3, bucketName) {
+const getAcl = function (s3, bucketName) {
   var getAclParams = {
     Bucket: bucketName
   };
   return s3.getBucketAcl(getAclParams).promise();
 }
 
-const putAcl = function(s3, bucketName, acl){
+const putAcl = function (s3, bucketName, acl) {
   const putAclParams = {
     Bucket: bucketName,
     AccessControlPolicy: acl
@@ -23,10 +23,10 @@ const putAcl = function(s3, bucketName, acl){
   return s3.putBucketAcl(putAclParams).promise();
 }
 
-const filterAcl = function(s3, bucketName, grantToRemove) {
-  return getAcl(s3,bucketName)
+const filterAcl = function (s3, bucketName, grantToRemove) {
+  return getAcl(s3, bucketName)
     .then(acl => {
-      return filterAclGrants(acl,grantToRemove)
+      return filterAclGrants(acl, grantToRemove)
     })
     .then(filteredAcl => {
       return putAcl(s3, bucketName, filteredAcl)
