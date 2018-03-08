@@ -1,26 +1,25 @@
-"use strict";
+'use strict'
 const isEqual = require('lodash.isequal')
-const filterAclGrants = function( acl, grantToRemove) {
-
+const filterAclGrants = function (acl, grantToRemove) {
   return {
     Owner: acl.Owner,
-    Grants: acl.Grants.filter(grant => !isEqual(grant, grantToRemove) )
+    Grants: acl.Grants.filter(grant => !isEqual(grant, grantToRemove))
   }
 }
 
 const getAcl = function (s3, bucketName) {
   var getAclParams = {
     Bucket: bucketName
-  };
-  return s3.getBucketAcl(getAclParams).promise();
+  }
+  return s3.getBucketAcl(getAclParams).promise()
 }
 
 const putAcl = function (s3, bucketName, acl) {
   const putAclParams = {
     Bucket: bucketName,
     AccessControlPolicy: acl
-  };
-  return s3.putBucketAcl(putAclParams).promise();
+  }
+  return s3.putBucketAcl(putAclParams).promise()
 }
 
 const filterAcl = function (s3, bucketName, grantToRemove) {
@@ -31,7 +30,7 @@ const filterAcl = function (s3, bucketName, grantToRemove) {
     .then(filteredAcl => {
       return putAcl(s3, bucketName, filteredAcl)
     }).then(putAclResponse => {
-      console.log('result>' + JSON.stringify(putAclResponse));
+      console.log('result>' + JSON.stringify(putAclResponse))
     })
 }
 
@@ -39,4 +38,3 @@ module.exports = {
   filterAclGrants: filterAclGrants,
   filterAcl: filterAcl
 }
-
