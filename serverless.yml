@@ -76,21 +76,21 @@ functions:
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3002Role
 
-  AutoRemediateS3-004:
-    handler: functions/AutoRemediateS3-004.handler
+  AutoRemediateS3-010:
+    handler: functions/AutoRemediateS3-010.handler
     memorySize: 128
     timeout: 10
     tags:
-      Name: Auto Remediate S3-004
+      Name: Auto Remediate S3-010
       Owner: CloudConformity
       Role: Auto Remediate
       Environment: Ops
     package:
       include:
-        - functions/AutoRemediateS3-004.js
+        - functions/AutoRemediateS3-010.js
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
-    role: AutoRemediateS3004Role
+    role: AutoRemediateS3010Role
 
   AutoRemediateS3-012:
     handler: functions/AutoRemediateS3-012.handler
@@ -523,10 +523,10 @@ resources:
                     - s3:PutBucketAcl
                   Resource: "*"
 
-    AutoRemediateS3004Role:
+    AutoRemediateS3010Role:
       Type: AWS::IAM::Role
       Properties:
-        RoleName: AutoRemediateS3-004Role
+        RoleName: AutoRemediateS3-010Role
         AssumeRolePolicyDocument:
           Version: '2012-10-17'
           Statement:
@@ -537,7 +537,7 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediateS3-004Policy
+          - PolicyName: AutoRemediateS3-010Policy
             PolicyDocument:
               Statement:
                 - Effect: Allow
