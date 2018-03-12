@@ -80,6 +80,15 @@ The table below lists the supported auto auto-remediate functions:
 |  CloudFormation | [CFM-005](https://www.cloudconformity.com/conformity-rules/CloudFormation/stack-termination-protection.html)    | Ensure Termination Protection feature is enabled for your AWS CloudFormation stacks |
 |  Config | [Config-001](https://www.cloudconformity.com/conformity-rules/Config/aws-config-enabled.html)    | Ensure AWS Config is enabled in all regions |
 |  S3  | [S3-001](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-public-read-access.html) | Ensure S3 buckets do not allow public READ access |
+|  S3  | [S3-002](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-public-read-acp-access.html) | Ensure S3 buckets do not allow public READ_ACP access |
+|  S3  | [S3-003](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-public-write-access.html) | Ensure S3 buckets do not allow public WRITE access |
+|  S3  | [S3-004](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-public-write-acp-access.html) | Ensure S3 buckets do not allow public WRITE_ACP access |
+|  S3  | [S3-005](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-public-full-control-access.html) | Ensure S3 buckets do not allow public FULL_CONTROL access |
+|  S3  | [S3-006](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-authenticated-users-read-access.html) | Ensure S3 buckets do not allow authenticated users READ access |
+|  S3  | [S3-007](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-authenticated-users-read-acp-access.html) | Ensure S3 buckets do not allow authenticated users READ_ACP access |
+|  S3  | [S3-008](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-authenticated-users-write-access.html) | Ensure S3 buckets do not allow authenticated users WRITE access |
+|  S3  | [S3-009](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-authenticated-users-write-acp-access.html) | Ensure S3 buckets do not allow authenticated users WRITE_ACP access |
+|  S3  | [S3-010](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-authenticated-users-full-control-access.html) | Ensure S3 buckets do not allow authenticated users FULL_CONTROL access |
 |  S3  | [S3-012](https://www.cloudconformity.com/conformity-rules/S3/s3-bucket-versioning-enabled.html) | Enable versioning for AWS S3 buckets |
 |  RDS | [RDS-008](https://www.cloudconformity.com/conformity-rules/RDS/rds-publicly-accessible.html)    | Ensure RDS instances are not public facing to minimise security risks |
 |  CloudTrail | [CT-001](https://www.cloudconformity.com/conformity-rules/CloudTrail/cloudtrail-enabled.html)    | Ensure CloudTrail API logging is activated for all Regions |
