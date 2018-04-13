@@ -4,6 +4,11 @@ const AWS = require('aws-sdk')
 const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
 const readPermission = 'READ'
 
+const aclNew = {
+	'Owner': '',
+	'Grants': []
+}
+
 function remediateAllUsers (thisGrant, newAcl) {
   if (thisGrant.Permission !== readPermission) { // any besides READ are passed through
     newAcl['Grants'].push(thisGrant)
@@ -21,7 +26,6 @@ module.exports.handler = (event, context, callback) => {
   }
 
   var s3 = new AWS.S3({ apiVersion: '2006-03-01' })
-  var aclNew = JSON.parse("{'Owner':'', 'Grants':[]}") // skeleton for new permission grants
 
   var getAclParams = {
     Bucket: event.resource
