@@ -96,15 +96,7 @@ module.exports = {
   'AutoRemediateEC2-043': {
     'enabled': false
   },
-  
-  'AutoRemediateEC2-042': {
-    'enabled': false
-  },
-  
-  'AutoRemediateEC2-042b': {
-    'enabled': false
-  },
-  
+    
   'AutoRemediateEC2-045': {
     'enabled': false
   },
