@@ -80,6 +80,10 @@ module.exports = {
   'AutoRemediateEC2-003': {
     'enabled': false
   },
+  
+  'AutoRemediateEC2-004': {
+    'enabled': false
+  },
 
   'AutoRemediateEC2-005': {
     'enabled': false
@@ -93,19 +97,7 @@ module.exports = {
     'enabled': false
   },
   
-  'AutoRemediateEC2-043': {
-    'enabled': false
-  },
-    
-  'AutoRemediateEC2-045': {
-    'enabled': false
-  },
-  
-  'AutoRemediateEC2-040': {
-    'enabled': false
-  },
-  
-  'AutoRemediateEC2-004': {
+  'AutoRemediateEC2-038': {
     'enabled': false
   },
   
@@ -113,7 +105,15 @@ module.exports = {
     'enabled': false
   },
   
-  'AutoRemediateEC2-038': {
+  'AutoRemediateEC2-040': {
+    'enabled': false
+  },
+  
+  'AutoRemediateEC2-043': {
+    'enabled': false
+  },
+    
+  'AutoRemediateEC2-045': {
     'enabled': false
   }
 }
