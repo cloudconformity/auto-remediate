@@ -18,7 +18,7 @@ module.exports.handler = (event, context, callback) => {
   AccessRevoker.revoke(PROTOCOL, TCP_PSS_PORT, event.resource, event.region, function (err, result) {
     if (err) {
       console.log('Error', err)
-      return handleError(err.message ? err.message : 'removing postrgesql database access on port 5432 failed')
+      return handleError(err.message ? err.message : 'removing postgresql database access on port 5432 failed')
     }
     console.log('Result', result)
     return callback(null, 'Successfully processed event')
