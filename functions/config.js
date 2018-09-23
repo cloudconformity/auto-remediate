@@ -115,5 +115,10 @@ module.exports = {
     
   'AutoRemediateEC2-045': {
     'enabled': false
+  },
+
+  'AutoRemediateKinesis-001': {
+    'enabled': false,
+    'KmsKeyId': 'alias/aws/kinesis'
   }
 }
