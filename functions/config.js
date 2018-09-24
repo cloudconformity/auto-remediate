@@ -115,5 +115,10 @@ module.exports = {
     
   'AutoRemediateEC2-045': {
     'enabled': false
+  },
+
+  'AutoRemediateSQS-004': {
+    'enabled': false,
+    'KmsKeyId': 'alias/aws/sqs'
   }
 }
