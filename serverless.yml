@@ -1517,5 +1517,8 @@ resources:
                         - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
-                    - ec2:RevokeSecurityGroupIngress
+                    - "kms:ListKeys"
+                    - "kms:ListAliases"
+                    - "kms:DescribeKey"
+                    - "kinesis:StartStreamEncryption"
                   Resource: "*"
