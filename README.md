@@ -105,6 +105,9 @@ The table below lists the supported auto auto-remediate functions:
 |  EC2 | [EC2-040](https://www.cloudconformity.com/conformity-rules/EC2/unrestricted-rcp-access.html)    | Ensure that there is no unrestricted access through TCP port 135 (which is used client/server communication by Microsoft Message Queuing, as well as other Microsoft Windows/Windows Server software.) from the selected EC2 security group  |
 |  EC2 | [EC2-043](https://www.cloudconformity.com/conformity-rules/EC2/unrestricted-cifs-access.html)    | Ensure that there is no unrestricted access through TCP port 445 (which is used by CIFS for file/printer sharing and other network communications) from the selected EC2 security group  |
 |  EC2 | [EC2-045](https://www.cloudconformity.com/conformity-rules/EC2/unrestricted-mongodb-access.html)    | Ensure that there is no unrestricted access through TCP port 27017 (which is used by MongoDB database) from the selected EC2 security group  |
+|  RDS | [RDS-006](https://www.cloudconformity.com/conformity-rules/RDS/rds-auto-minor-version-upgrade.html)    | Ensure that your RDS database instances have the Auto Minor Version Upgrade flag enabled in order to receive automatically minor engine upgrades during the specified maintenance window  |
+
+
 
 
 For more information about `Rule Id`, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
