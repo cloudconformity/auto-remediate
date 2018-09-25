@@ -258,6 +258,20 @@ functions:
         - functions/AutoRemediateCFM-005.js
     role: AutoRemediateCFM005Role
 
+  AutoRemediateVPC-001:
+    handler: functions/AutoRemediateVPC-001.handler
+    timeout: 120
+    memorySize: 128
+    tags:
+      Name: Auto Remediate VPC-001
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateVPC-001.js
+    role: AutoRemediateVPC001Role
+
   AutoRemediateRS-001:
     handler: functions/AutoRemediateRS-001.handler
     timeout: 120
@@ -341,7 +355,7 @@ functions:
       include:
         - functions/AutoRemediateEC2-006.js
     role: AutoRemediateEC2006Role
-    
+  
   AutoRemediateEC2-008:
     handler: functions/AutoRemediateEC2-008.handler
     timeout: 120
@@ -1045,7 +1059,51 @@ resources:
                     - s3:GetBucketAcl
                     - s3:PutBucketAcl
                   Resource: "*"
+
+    AutoRemediateVPC001Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateVPC-001Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateVPC-001Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - iam:AttachRolePolicy
+                    - iam:CreateRole
+                    - iam:GetRole
+                    - iam:PassRole
+                    - iam:PutRolePolicy
+                  Resource: "*" 
                   
+                - Effect: Allow
+                  Action:
+                    - ec2:CreateFlowLogs
+                  Resource: "*" 
+                               
     AutoRemediateS3005Role:
       Type: AWS::IAM::Role
       Properties:
