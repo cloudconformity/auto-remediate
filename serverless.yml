@@ -187,7 +187,21 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3009Role
-    
+
+  AutoRemediateRDS-006:
+    handler: functions/AutoRemediateRDS-006.handler
+    timeout: 120
+    memorySize: 128
+    tags:
+      Name: Auto Remediate RDS-006
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateRDS-006.js
+    role: AutoRemediateRDS006Role
+        
   AutoRemediateS3-010:
     handler: functions/AutoRemediateS3-010.handler
     memorySize: 128
@@ -1045,7 +1059,77 @@ resources:
                     - s3:GetBucketAcl
                     - s3:PutBucketAcl
                   Resource: "*"
+       
+    AutoRemediateCT003Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateCT-003Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateCT-003Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - s3:PutBucketAcl
+                  Resource: "*"
                   
+    AutoRemediateRDS006Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateRDS-006Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateRDS-006Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - rds:ModifyDbInstance
+                  Resource: "*"
+                        
     AutoRemediateS3005Role:
       Type: AWS::IAM::Role
       Properties:
