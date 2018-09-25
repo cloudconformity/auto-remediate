@@ -3,12 +3,12 @@
 const AWS = require('aws-sdk')
 
 /**
- * Lambda function to disable access to EC2 AMI  publicly from the other AWS accounts 
+ * Lambda function to disable access to EC2 AMI that publicly shared with  other AWS accounts 
  *
  */
 
 module.exports.handler = (event, context, callback) => {
-  console.log('Remove Publicly Shared AMI - Received event:', JSON.stringify(event, null, 2))
+  console.log('Publicly Shared AMI  - Received event:', JSON.stringify(event, null, 2))
 
   if (!event ||  !event.resource || !event.region) {
     return handleError('Invalid event')
