@@ -187,7 +187,21 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3009Role
-    
+
+  AutoRemediateCT-003:
+    handler: functions/AutoRemediateCT-003.handler
+    timeout: 120
+    memorySize: 128
+    tags:
+      Name: Auto Remediate CT-003
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateCT-003.js
+    role: AutoRemediateCT003Role
+
   AutoRemediateS3-010:
     handler: functions/AutoRemediateS3-010.handler
     memorySize: 128
@@ -829,7 +843,7 @@ resources:
                     - s3:GetBucketAcl
                     - s3:PutBucketAcl
                   Resource: "*"
-
+    
     AutoRemediateS3002Role:
       Type: AWS::IAM::Role
       Properties:
@@ -1330,7 +1344,7 @@ resources:
                   Action:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
-                  
+                 
     AutoRemediateEC2038Role:
       Type: AWS::IAM::Role
       Properties:
@@ -1364,6 +1378,41 @@ resources:
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
+                  Resource: "*"
+       
+    AutoRemediateCT003Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateCT-003Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateCT-003Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - s3:PutBucketAcl
                   Resource: "*"
 
     AutoRemediateEC2040Role:
