@@ -22,7 +22,7 @@ module.exports.handler = (event, context, callback) => {
 
   }
 
-  let RDS = new AWS.RDS()
+  let RDS = new AWS.RDS({region: event.region})
 
   RDS.modifyDBSnapshotAttribute(params, function (err, result) {
     if (err) {
