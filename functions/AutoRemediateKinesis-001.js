@@ -24,7 +24,7 @@ module.exports.handler = (event, context, callback) => {
     StreamName: event.resource
   }
 
-  let Kinesis = new AWS.Kinesis();
+  let Kinesis = new AWS.Kinesis({region: event.region ,apiVersion: '2012-11-05'})
 
   Kinesis.startStreamEncryption(params, function (err, result) {
     if (err) {
