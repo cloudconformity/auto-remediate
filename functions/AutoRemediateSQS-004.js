@@ -20,7 +20,7 @@ const AWS = require('aws-sdk')
       },
     QueueUrl: event.resource
   }
-   let Sqs = new AWS.SQS();
+   let Sqs = new AWS.SQS({region: event.region ,apiVersion: '2012-11-05'})
    Sqs.setQueueAttributes(params, function (err, result) {
     if (err) {
       console.log('Error', err)
