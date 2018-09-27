@@ -106,6 +106,7 @@ The table below lists the supported auto auto-remediate functions:
 |  EC2 | [EC2-043](https://www.cloudconformity.com/conformity-rules/EC2/unrestricted-cifs-access.html)    | Ensure that there is no unrestricted access through TCP port 445 (which is used by CIFS for file/printer sharing and other network communications) from the selected EC2 security group  |
 |  EC2 | [EC2-045](https://www.cloudconformity.com/conformity-rules/EC2/unrestricted-mongodb-access.html)    | Ensure that there is no unrestricted access through TCP port 27017 (which is used by MongoDB database) from the selected EC2 security group  |
 |  TrustedAdvisor | [TrustedAdvisor-003](https://www.cloudconformity.com/conformity-rules/TrustedAdvisor/exposed-access-keys.html)    | Ensure that there is no any exposed Amazon IAM access keys in order to protect your AWS     resources against unapproved access |
+|  KMS | [KMS-002](https://www.cloudconformity.com/conformity-rules/KMS/key-rotation-enabled.html)    | Ensure that the KMS Key Rotation is Enabled which allows you to set an yearly rotation schedule for your CMK  |
 
 
 For more information about `Rule Id`, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
