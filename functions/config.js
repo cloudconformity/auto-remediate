@@ -119,5 +119,9 @@ module.exports = {
 
   'AutoRemediateTrustedAdvisor-003': {
     'enabled': false
+  },
+
+  'AutoRemediateKMS-002': {
+    'enabled': false
   }
 }
