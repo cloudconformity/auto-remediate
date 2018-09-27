@@ -115,5 +115,10 @@ module.exports = {
     
   'AutoRemediateEC2-045': {
     'enabled': false
+  },
+    
+  'AutoRemediateKMS-004': {
+    'enabled': false
   }
+  
 }
