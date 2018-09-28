@@ -108,7 +108,7 @@ functions:
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3004Role
     
-  AutoRemediateGD001:
+  AutoRemediateGD-001:
     handler: functions/AutoRemediateGD-001.handler
     memorySize: 128
     timeout: 10
