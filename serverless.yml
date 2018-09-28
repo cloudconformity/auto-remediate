@@ -369,6 +369,21 @@ functions:
       include:
         - functions/AutoRemediateEC2-043.js
     role: AutoRemediateEC2043Role
+      
+  AutoRemediateRS023:
+    handler: functions/AutoRemediateRS-023.handler
+    timeout: 120
+    memorySize: 128
+    tags:
+      Name: Auto Remediate RS-023
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateRS-023.js
+    role: AutoRemediateRS023Role
+    
     
   AutoRemediateEC2-045:
     handler: functions/AutoRemediateEC2-045.handler
@@ -1295,7 +1310,42 @@ resources:
                   Action:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
-                  
+
+    AutoRemediateRS023Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateRS-023Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateRS-023Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - redshift:ModifyClusterParameterGroup
+                  Resource: "*"
+               
     AutoRemediateEC2006Role:
       Type: AWS::IAM::Role
       Properties:
