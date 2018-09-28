@@ -108,6 +108,20 @@ functions:
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3004Role
     
+  AutoRemediateGD001:
+    handler: functions/AutoRemediateGD-001.handler
+    memorySize: 128
+    timeout: 10
+    tags:
+      Name: Auto Remediate GD-001
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateGD-001.js
+    role: AutoRemediateGD001Role
+      
   AutoRemediateS3-005:
     handler: functions/AutoRemediateS3-005.handler
     memorySize: 128
@@ -902,6 +916,41 @@ resources:
                     - s3:PutBucketAcl
                   Resource: "*"
 
+    AutoRemediateGD001Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateGD-001Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateGD-001Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - guardduty:CreateDetector
+                    - iam:CreateServiceLinkedRole
+                  Resource: "*"
 
 
     AutoRemediateS3009Role:
