@@ -370,7 +370,7 @@ functions:
         - functions/AutoRemediateEC2-043.js
     role: AutoRemediateEC2043Role
       
-  AutoRemediateRS023:
+  AutoRemediateRS-023:
     handler: functions/AutoRemediateRS-023.handler
     timeout: 120
     memorySize: 128
