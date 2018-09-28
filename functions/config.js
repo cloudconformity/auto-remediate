@@ -115,5 +115,11 @@ module.exports = {
     
   'AutoRemediateEC2-045': {
     'enabled': false
+  },
+  
+  'AutoRemediateGD-001': {
+    'enabled': false
   }
+
+
 }
