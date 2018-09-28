@@ -286,7 +286,7 @@ functions:
         - functions/AutoRemediateEC2-002.js
     role: AutoRemediateEC2002Role 
 
-  AutoRemediateRS019:
+  AutoRemediateRS-019:
     handler: functions/AutoRemediateRS-019.handler
     timeout: 120
     memorySize: 128
