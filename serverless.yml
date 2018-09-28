@@ -156,7 +156,7 @@ functions:
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3007Role
     
-  AutoRemediateKMS004:
+  AutoRemediateKMS-004:
     handler: functions/AutoRemediateKMS-004.handler
     timeout: 120
     memorySize: 128
