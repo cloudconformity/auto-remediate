@@ -115,5 +115,9 @@ module.exports = {
     
   'AutoRemediateEC2-045': {
     'enabled': false
+  },
+    
+  'AutoRemediateOrganizations-002': {
+    'enabled': false
   }
 }
