@@ -5,7 +5,6 @@ const AWS = require('aws-sdk')
 
 module.exports.handler = (event, context, callback) => {
   console.log('Received event: ', JSON.stringify(event, null, 2))
-  console.log('Environment settings: ', JSON.stringify(process.env, null, 2))
   console.log('Config settings: ', JSON.stringify(CONFIG, null, 2))
 
   if (!event || !event.Records[0] || !event.Records[0].Sns || !event.Records[0].Sns.Message) {
