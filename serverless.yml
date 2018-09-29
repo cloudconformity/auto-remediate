@@ -76,6 +76,21 @@ functions:
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3002Role
     
+    
+  AutoRemediateIAM-038:
+    handler: functions/AutoRemediateIAM-038.handler
+    memorySize: 128
+    timeout: 10
+    tags:
+      Name: Auto Remediate IAM-038
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateIAM-038.js
+    role: AutoRemediateIAM038Role
+    
   AutoRemediateS3-003:
     handler: functions/AutoRemediateS3-003.handler
     memorySize: 128
@@ -465,6 +480,41 @@ resources:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
                   
+    AutoRemediateIAM038Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateIAM-038Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateIAM-038Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - iam:UpdateAccessKey
+                  Resource: "*"
+
     AutoRemediateEC2003Role:
       Type: AWS::IAM::Role
       Properties:
@@ -499,7 +549,7 @@ resources:
                   Action:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
-
+                  
     AutoRemediateEC2005Role:
       Type: AWS::IAM::Role
       Properties:
