@@ -34,6 +34,19 @@ functions:
         - functions/AutoRemediateOrchestrator.js
     role: AutoRemediateOrchestratorRole
 
+  AutoRemediateS3-016:
+    handler: functions/AutoRemediateS3-016.handler
+    memorySize: 128
+    tags:
+      Name: Auto Remediate S3-016
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateS3-016.js
+    role: AutoRemediateS3016Role
+
   AutoRemediateCT-001:
     handler: functions/AutoRemediateCT-001.handler
     memorySize: 128
@@ -1225,7 +1238,43 @@ resources:
                     - s3:GetBucketAcl
                     - s3:PutBucketAcl
                   Resource: "*"
-    
+
+    AutoRemediateS3016Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateS3-016Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateS3-016Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - s3:GetBucketPolicy
+                    - s3:PutBucketPolicy
+                  Resource: "*"
+                  
     AutoRemediateEC2008Role:
       Type: AWS::IAM::Role
       Properties:
