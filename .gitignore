@@ -6,3 +6,4 @@ node_modules
 .idea
 coverage
 *.swp
+package-lock.json
