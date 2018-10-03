@@ -143,7 +143,11 @@ module.exports = {
 
   'AutoRemediateTrustedAdvisor-003': {
     'enabled': false
-  }
+  },
 
-
+  'AutoRemediateRS-019': {
+    'enabled': false,
+    'RetentionPeriod': 7
+  },
+  
 }

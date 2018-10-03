@@ -112,6 +112,7 @@ The table below lists the supported auto auto-remediate functions:
 |  S3 | [S3-016](https://www.cloudconformity.com/conformity-rules/S3/server-side-encryption.html)    | Ensure that your AWS S3 buckets are protecting their sensitive data at rest by enforcing Server-Side Encryption  |
 |  S3 | [S3-014](https://www.cloudconformity.com/conformity-rules/EC2/unrestricted-mongodb-access.html)    | Ensure that your AWS S3 buckets are not publicly accessible via bucket policies in order to protect against unauthorized access. |
 |  TrustedAdvisor | [TrustedAdvisor-003](https://www.cloudconformity.com/conformity-rules/TrustedAdvisor/exposed-access-keys.html)    | Ensure that there is no any exposed Amazon IAM access keys in order to protect your AWS     resources against unapproved access |
+|  RedShift | [RS-019](https://www.cloudconformity.com/conformity-rules/Redshift/automated-snapshot-retention-period.html)    | Ensure that the automated snapshot retention period set for your AWS Redshift clusters is a positive number, meaning that automated backups are enabled for the clusters |
 
 
 
