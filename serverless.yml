@@ -177,7 +177,22 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3004Role
-    
+   
+      
+  AutoRemediateRDS-023:
+    handler: functions/AutoRemediateRDS-023.handler
+    memorySize: 128
+    timeout: 10
+    tags:
+      Name: Auto Remediate RDS-023
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateRDS-023.js
+    role: AutoRemediateRDS023Role      
+      
   AutoRemediateGD-001:
     handler: functions/AutoRemediateGD-001.handler
     memorySize: 128
@@ -191,7 +206,7 @@ functions:
       include:
         - functions/AutoRemediateGD-001.js
     role: AutoRemediateGD001Role
-      
+ 
   AutoRemediateS3-005:
     handler: functions/AutoRemediateS3-005.handler
     memorySize: 128
@@ -1808,7 +1823,42 @@ resources:
                   Action:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
-                  
+              
+    AutoRemediateRDS023Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateRDS-023Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateRDS-023Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - rds:ModifyDBSnapshotAttribute
+                  Resource: "*"
+
     AutoRemediateEC2038Role:
       Type: AWS::IAM::Role
       Properties:

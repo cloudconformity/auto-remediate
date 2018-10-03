@@ -117,6 +117,10 @@ module.exports = {
     'enabled': false
   },
     
+  'AutoRemediateRDS-023': {
+    'enabled': false
+  }
+
   'AutoRemediateKMS-004': {
     'enabled': false
   }
