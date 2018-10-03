@@ -116,6 +116,23 @@ module.exports = {
   'AutoRemediateEC2-045': {
     'enabled': false
   },
+
+  'AutoRemediateKinesis-001': {
+    'enabled': false,
+    'KmsKeyId': 'alias/aws/kinesis'
+  },
+
+  'AutoRemediateVPC-001': {
+    'enabled': false,
+  },
+  
+  'AutoRemediateEC2-019': {
+    'enabled': false
+  },
+
+  'AutoRemediateCT-003': {
+    'enabled': false
+  },
     
   'AutoRemediateRds-006': {
     'enabled': false
@@ -127,11 +144,11 @@ module.exports = {
     
   'AutoRemediateRDS-023': {
     'enabled': false
-  }
+  },
 
   'AutoRemediateKMS-004': {
     'enabled': false
-  }
+  },
 
   'AutoRemediateRS-023': {
     'enabled': false
@@ -163,7 +180,7 @@ module.exports = {
 
   'AutoRemediateKMS-002': {
     'enabled': false
-  }
+  },
 
   'AutoRemediateRS-019': {
     'enabled': false,
