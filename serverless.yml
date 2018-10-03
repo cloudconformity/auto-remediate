@@ -47,6 +47,19 @@ functions:
         - functions/AutoRemediateS3-016.js
     role: AutoRemediateS3016Role
 
+  AutoRemediateIAM-001:
+    handler: functions/AutoRemediateIAM-001.handler
+      memorySize: 128
+      tags:
+        Name: Auto Remediate IAM-001
+        Owner: CloudConformity
+        Role: Auto Remediate
+        Environment: Ops
+      package:
+        include:
+          - functions/AutoRemediateIAM-001.js
+      role: AutoRemediateIAM001Role
+
   AutoRemediateCT-001:
     handler: functions/AutoRemediateCT-001.handler
     memorySize: 128
@@ -89,6 +102,21 @@ functions:
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3002Role
     
+
+  AutoRemediateS3-014:
+    handler: functions/AutoRemediateS3-014.handler
+    memorySize: 128
+    timeout: 10
+    tags:
+      Name: Auto Remediate S3-014
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateS3-014.js
+    role: AutoRemediateS3014Role
+
   AutoRemediateS3-003:
     handler: functions/AutoRemediateS3-003.handler
     memorySize: 128
@@ -438,6 +466,20 @@ functions:
       include:
         - functions/AutoRemediateEC2-039.js
     role: AutoRemediateEC2039Role
+    
+  TrustedAdvisor-003:
+    handler: functions/AutoRemediateTrustedAdvisor-003.handler
+    timeout: 120
+    memorySize: 128
+    tags:
+      Name: Auto Remediate TrustedAdvisor-003
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateTrustedAdvisor-003.js
+    role: AutoRemediateTrustedAdvisor003Role
 
 resources:
 
@@ -513,6 +555,43 @@ resources:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
 
+    AutoRemediateS3014Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateS3-014Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateS3-014Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - s3:GetBucketPolicy
+                    - s3:PutBucketPolicy
+                  Resource: "*"
+                 
+
     AutoRemediateEC2005Role:
       Type: AWS::IAM::Role
       Properties:
@@ -581,6 +660,41 @@ resources:
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
+                  Resource: "*"  
+                  
+    AutoRemediateIAM001Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateIAM-001Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateIAM-001Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - iam:UpdateAccessKey
                   Resource: "*"  
                   
     AutoRemediateEC2042Role:
@@ -1518,4 +1632,39 @@ resources:
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
+                  Resource: "*"
+
+    AutoRemediateTrustedAdvisor003Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateTrustedAdvisor-003Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateTrustedAdvisor-003Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - iam:UpdateAccessKey
                   Resource: "*"
