@@ -22,7 +22,7 @@
   "devDependencies": {
     "@types/chai": "^3.5.1",
     "@types/mocha": "^2.2.41",
-    "aws-sdk": "^2.126.0",
+    "aws-sdk": "^2.320.0",
     "aws-sdk-mock": "^1.7.0",
     "bluebird": "^3.5.0",
     "chai": "^3.5.0",
