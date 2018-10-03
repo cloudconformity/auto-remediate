@@ -425,6 +425,20 @@ functions:
       include:
         - functions/AutoRemediateEC2-039.js
     role: AutoRemediateEC2039Role
+    
+  TrustedAdvisor-003:
+    handler: functions/AutoRemediateTrustedAdvisor-003.handler
+    timeout: 120
+    memorySize: 128
+    tags:
+      Name: Auto Remediate TrustedAdvisor-003
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateTrustedAdvisor-003.js
+    role: AutoRemediateTrustedAdvisor003Role
 
 resources:
 
@@ -1470,3 +1484,39 @@ resources:
                   Action:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
+
+    AutoRemediateTrustedAdvisor003Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateTrustedAdvisor-003Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediateTrustedAdvisor-003Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - iam:UpdateAccessKey
+                  Resource: "*"
+
