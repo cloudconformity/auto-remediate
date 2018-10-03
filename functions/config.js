@@ -116,6 +116,10 @@ module.exports = {
   'AutoRemediateEC2-045': {
     'enabled': false
   },
+
+  'AutoRemediateRDS-006': {
+    'enabled': false
+  },
     
   'AutoRemediateRDS-023': {
     'enabled': false
