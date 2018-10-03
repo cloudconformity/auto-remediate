@@ -116,6 +116,30 @@ module.exports = {
   'AutoRemediateEC2-045': {
     'enabled': false
   },
+    
+  'AutoRemediateRS-023': {
+    'enabled': false
+  },
+  
+  'AutoRemediateGD-001': {
+    'enabled': false
+   },
+    
+  'AutoRemediateOrganizations-002': {
+    'enabled': false
+   },
+
+  'AutoRemediateLmabda-003': {
+    'enabled': false
+   },
+   
+  'AutoRemediateS3-016': {
+    'enabled': false
+  },    
+
+  'AutoRemediateS3-014': {
+    'enabled': false
+  },  
 
   'AutoRemediateTrustedAdvisor-003': {
     'enabled': false
@@ -124,4 +148,10 @@ module.exports = {
   'AutoRemediateKMS-002': {
     'enabled': false
   }
+
+  'AutoRemediateRS-019': {
+    'enabled': false,
+    'RetentionPeriod': 7
+  },
+  
 }
