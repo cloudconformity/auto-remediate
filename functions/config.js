@@ -119,5 +119,31 @@ module.exports = {
     
   'AutoRemediateRS-023': {
     'enabled': false
+  },
+  
+  'AutoRemediateGD-001': {
+    'enabled': false
+   },
+    
+  'AutoRemediateOrganizations-002': {
+    'enabled': false
+   },
+
+  'AutoRemediateLmabda-003': {
+    'enabled': false
+   },
+   
+  'AutoRemediateS3-016': {
+    'enabled': false
+  },    
+
+  'AutoRemediateS3-014': {
+    'enabled': false
+  },  
+
+  'AutoRemediateTrustedAdvisor-003': {
+    'enabled': false
   }
+
+
 }
