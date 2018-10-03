@@ -117,6 +117,10 @@ module.exports = {
     'enabled': false
   },
     
+  'AutoRemediateOrganizations-002': {
+    'enabled': false
+   },
+
   'AutoRemediateLmabda-003': {
     'enabled': false
    },
