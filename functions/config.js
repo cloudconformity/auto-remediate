@@ -117,6 +117,10 @@ module.exports = {
     'enabled': false
   },
     
+  'AutoRemediateKMS-004': {
+    'enabled': false
+  }
+
   'AutoRemediateRS-023': {
     'enabled': false
   },
@@ -152,6 +156,6 @@ module.exports = {
   'AutoRemediateRS-019': {
     'enabled': false,
     'RetentionPeriod': 7
-  },
+  }
   
 }
