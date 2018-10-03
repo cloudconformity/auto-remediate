@@ -116,6 +116,10 @@ module.exports = {
   'AutoRemediateEC2-045': {
     'enabled': false
   },
+  
+  'AutoRemediateGD-001': {
+    'enabled': false
+   },
     
   'AutoRemediateOrganizations-002': {
     'enabled': false
@@ -136,4 +140,6 @@ module.exports = {
   'AutoRemediateTrustedAdvisor-003': {
     'enabled': false
   }
+
+
 }
