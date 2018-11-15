@@ -1,4 +1,4 @@
-# Cloud Conformity Auto Remediation
+# [Cloud Conformity](https://www.cloudconformity.com/?utm_source=github) Auto Remediation
 
 ## Disclaimer
 This early "Auto Remediation" is subject to change. Cloud Conformity will use commercially reasonable efforts to support the previous version of the project.
