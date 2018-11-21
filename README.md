@@ -157,3 +157,7 @@ The main rules are as follows:
 * Always use === instead of == – but obj == null is allowed to check null || undefined.
 * Always handle the node.js err function parameter
 * Always prefix browser globals with window – except document and navigator are okay
+
+## About
+
+Protect, Detect, Correct. The most complete solution to avoid critical threats and vulnerabilities in your AWS environments. Awarded both AWS Cloud Management Tools Competency and Security Partner Competency, Cloud Conformity’s security and optimization platform delivers continuous assurance that your infrastructure is risk-free and compliant as your cloud presence grows.
