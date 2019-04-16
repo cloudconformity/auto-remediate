@@ -20,22 +20,22 @@
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {
-    "@types/chai": "^3.5.1",
-    "@types/mocha": "^2.2.41",
-    "aws-sdk": "^2.320.0",
-    "aws-sdk-mock": "^1.7.0",
-    "bluebird": "^3.5.0",
-    "chai": "^3.5.0",
-    "dotenv": "^2.0.0",
-    "eslint": "^4.17.0",
-    "eslint-config-standard": "^11.0.0-beta.0",
-    "eslint-plugin-import": "^2.8.0",
-    "eslint-plugin-jest": "^21.13.0",
-    "eslint-plugin-node": "^6.0.0",
-    "eslint-plugin-promise": "^3.6.0",
-    "eslint-plugin-standard": "^3.0.1",
-    "jest": "^22.3.0",
+    "@types/chai": "^4.1.7",
+    "@types/mocha": "^5.2.6",
+    "aws-sdk": "^2.437.0",
+    "aws-sdk-mock": "^4.4.0",
+    "bluebird": "^3.5.4",
+    "chai": "^4.2.0",
+    "dotenv": "^7.0.0",
+    "eslint": "^5.16.0",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.17.1",
+    "eslint-plugin-jest": "^22.4.1",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.1.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "jest": "^24.7.1",
     "lodash.clonedeep": "^4.5.0",
-    "mocha": "^3.3.0"
+    "mocha": "^5.2.0"
   }
 }

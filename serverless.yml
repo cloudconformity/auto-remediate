@@ -2,7 +2,7 @@ service: auto-remediate
 
 provider:
   name: aws
-  runtime: nodejs6.10
+  runtime: nodejs8.10
   stage: v1
   region: ${opt:region, 'us-east-1'}
   timeout: 10 # optional, in seconds, default is 6
