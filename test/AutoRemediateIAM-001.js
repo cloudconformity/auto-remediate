@@ -1,5 +1,5 @@
 let event = {
-  'resource': 'AKIAJRDQAM26ZHGO7VLA'
+  'resource': 'AKIA----------------'
 }
 
 let AutoRemediate = require('../functions/AutoRemediateIAM-001')
