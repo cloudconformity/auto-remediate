@@ -5,21 +5,20 @@ provider:
   runtime: nodejs8.10
   stage: v1
   region: ${opt:region, 'us-east-1'}
-  timeout: 10 # optional, in seconds, default is 6
+  timeout: 10
+  memorySize: 128
   stackTags:
     service: auto-remediate
 
-package:
-  individually: true
-  exclude:
-   - "node_modules/**"
+  environment:
+    LOGS_BUCKET: ""
+    SEND_EMAIL: false
 
 functions:
 
   AutoRemediateOrchestrator:
     handler: functions/AutoRemediateOrchestrator.handler
-    timeout: 10
-    memorySize: 128
+    timeout: 15
     events:
       - sns:
           topicName: CloudConformity
@@ -36,7 +35,6 @@ functions:
 
   AutoRemediateS3-016:
     handler: functions/AutoRemediateS3-016.handler
-    memorySize: 128
     tags:
       Name: Auto Remediate S3-016
       Owner: CloudConformity
@@ -49,7 +47,6 @@ functions:
 
   AutoRemediateIAM-001:
     handler: functions/AutoRemediateIAM-001.handler
-    memorySize: 128
     tags:
       Name: Auto Remediate IAM-001
       Owner: CloudConformity
@@ -62,7 +59,6 @@ functions:
 
   AutoRemediateCT-001:
     handler: functions/AutoRemediateCT-001.handler
-    memorySize: 128
     tags:
       Name: Auto Remediate CT-001
       Owner: CloudConformity
@@ -75,7 +71,6 @@ functions:
 
   AutoRemediateLambda-003:
     handler: functions/AutoRemediateLambda-003.handler
-    memorySize: 128
     tags:
       Name: Auto Remediate Lambda-003
       Owner: CloudConformity
@@ -88,7 +83,6 @@ functions:
 
   AutoRemediateS3-001:
     handler: functions/AutoRemediateS3-001.handler
-    memorySize: 128
     tags:
       Name: Auto Remediate S3-001
       Owner: CloudConformity
@@ -101,8 +95,6 @@ functions:
 
   AutoRemediateS3-002:
     handler: functions/AutoRemediateS3-002.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate S3-002
       Owner: CloudConformity
@@ -114,12 +106,10 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3002Role
-    
-    
+
+
   AutoRemediateIAM-038:
     handler: functions/AutoRemediateIAM-038.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate IAM-038
       Owner: CloudConformity
@@ -132,8 +122,6 @@ functions:
 
   AutoRemediateS3-014:
     handler: functions/AutoRemediateS3-014.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate S3-014
       Owner: CloudConformity
@@ -146,8 +134,6 @@ functions:
 
   AutoRemediateS3-003:
     handler: functions/AutoRemediateS3-003.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate S3-003
       Owner: CloudConformity
@@ -159,11 +145,9 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3003Role
-    
+
   AutoRemediateKMS-002:
     handler: functions/AutoRemediateKMS-002.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate KMS-002
       Owner: CloudConformity
@@ -173,13 +157,9 @@ functions:
       include:
         - functions/AutoRemediateKMS-002.js
     role: AutoRemediateKMS002Role
-    
-    
-    
+
   AutoRemediateS3-004:
     handler: functions/AutoRemediateS3-004.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate S3-004
       Owner: CloudConformity
@@ -191,12 +171,10 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3004Role
-   
-      
+
+
   AutoRemediateRDS-023:
     handler: functions/AutoRemediateRDS-023.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate RDS-023
       Owner: CloudConformity
@@ -205,12 +183,10 @@ functions:
     package:
       include:
         - functions/AutoRemediateRDS-023.js
-    role: AutoRemediateRDS023Role      
-      
+    role: AutoRemediateRDS023Role
+
   AutoRemediateGD-001:
     handler: functions/AutoRemediateGD-001.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate GD-001
       Owner: CloudConformity
@@ -220,11 +196,9 @@ functions:
       include:
         - functions/AutoRemediateGD-001.js
     role: AutoRemediateGD001Role
- 
+
   AutoRemediateS3-005:
     handler: functions/AutoRemediateS3-005.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate S3-005
       Owner: CloudConformity
@@ -236,11 +210,9 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3005Role
-    
+
   AutoRemediateS3-006:
     handler: functions/AutoRemediateS3-006.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate S3-006
       Owner: CloudConformity
@@ -252,11 +224,9 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3006Role
-    
+
   AutoRemediateS3-007:
     handler: functions/AutoRemediateS3-007.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate S3-007
       Owner: CloudConformity
@@ -268,12 +238,10 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3007Role
-    
+
 
   AutoRemediateKMS-004:
     handler: functions/AutoRemediateKMS-004.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate KMS-004
       Owner: CloudConformity
@@ -287,8 +255,6 @@ functions:
 
   AutoRemediateOrganizations-002:
     handler: functions/AutoRemediateOrganizations-002.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate Organizations-002
       Owner: CloudConformity
@@ -298,11 +264,9 @@ functions:
       include:
         - functions/AutoRemediateOrganizations-002.js
     role: AutoRemediateOrganizations002Role
-    
+
   AutoRemediateS3-008:
     handler: functions/AutoRemediateS3-008.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate S3-008
       Owner: CloudConformity
@@ -314,11 +278,9 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3008Role
-    
+
   AutoRemediateS3-009:
     handler: functions/AutoRemediateS3-009.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate S3-009
       Owner: CloudConformity
@@ -333,8 +295,6 @@ functions:
 
   AutoRemediateCT-003:
     handler: functions/AutoRemediateCT-003.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate CT-003
       Owner: CloudConformity
@@ -347,8 +307,6 @@ functions:
 
   AutoRemediateRDS-006:
     handler: functions/AutoRemediateRDS-006.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate RDS-006
       Owner: CloudConformity
@@ -358,11 +316,9 @@ functions:
       include:
         - functions/AutoRemediateRDS-006.js
     role: AutoRemediateRDS006Role
-        
+
   AutoRemediateS3-010:
     handler: functions/AutoRemediateS3-010.handler
-    memorySize: 128
-    timeout: 10
     tags:
       Name: Auto Remediate S3-010
       Owner: CloudConformity
@@ -377,7 +333,6 @@ functions:
 
   AutoRemediateS3-012:
     handler: functions/AutoRemediateS3-012.handler
-    memorySize: 128
     tags:
       Name: Auto Remediate S3-012
       Owner: CloudConformity
@@ -390,8 +345,6 @@ functions:
 
   AutoRemediateSQS-004:
     handler: functions/AutoRemediateSQS-004.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate SQS-004
       Owner: CloudConformity
@@ -403,7 +356,6 @@ functions:
     role: AutoRemediateSQS004Role
   AutoRemediateRDS-008:
     handler: functions/AutoRemediateRDS-008.handler
-    memorySize: 128
     tags:
       Name: Auto Remediate RDS-008
       Owner: CloudConformity
@@ -416,8 +368,6 @@ functions:
 
   AutoRemediateConfig-001:
     handler: functions/AutoRemediateConfig-001.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate Config-001
       Owner: CloudConformity
@@ -430,8 +380,6 @@ functions:
 
   AutoRemediateCFM-005:
     handler: functions/AutoRemediateCFM-005.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate CFM-005
       Owner: CloudConformity
@@ -444,8 +392,6 @@ functions:
 
   AutoRemediateVPC-001:
     handler: functions/AutoRemediateVPC-001.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate VPC-001
       Owner: CloudConformity
@@ -455,11 +401,9 @@ functions:
       include:
         - functions/AutoRemediateVPC-001.js
     role: AutoRemediateVPC001Role
-  
+
   AutoRemediateEBS-009:
     handler: functions/AutoRemediateEBS-009.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EBS-009
       Owner: CloudConformity
@@ -469,12 +413,10 @@ functions:
       include:
         - functions/AutoRemediateEBS-009.js
     role: AutoRemediateEBS009Role
-        
-      
+
+
   AutoRemediateRS-001:
     handler: functions/AutoRemediateRS-001.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate RS-001
       Owner: CloudConformity
@@ -487,8 +429,6 @@ functions:
 
   AutoRemediateEC2-002:
     handler: functions/AutoRemediateEC2-002.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-002
       Owner: CloudConformity
@@ -497,12 +437,10 @@ functions:
     package:
       include:
         - functions/AutoRemediateEC2-002.js
-    role: AutoRemediateEC2002Role 
+    role: AutoRemediateEC2002Role
 
   AutoRemediateRS-019:
     handler: functions/AutoRemediateRS-019.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate RS-019
       Owner: CloudConformity
@@ -512,11 +450,9 @@ functions:
       include:
         - functions/AutoRemediateRS-019.js
     role: AutoRemediateRS019Role
-    
+
   AutoRemediateEC2-003:
     handler: functions/AutoRemediateEC2-003.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-003
       Owner: CloudConformity
@@ -529,8 +465,6 @@ functions:
 
   AutoRemediateEC2-005:
     handler: functions/AutoRemediateEC2-005.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-005
       Owner: CloudConformity
@@ -540,11 +474,9 @@ functions:
       include:
         - functions/AutoRemediateEC2-005.js
     role: AutoRemediateEC2005Role
-    
+
   AutoRemediateEC2-019:
     handler: functions/AutoRemediateEC2-019.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-019
       Owner: CloudConformity
@@ -557,8 +489,6 @@ functions:
 
   AutoRemediateEC2-004:
     handler: functions/AutoRemediateEC2-004.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-004
       Owner: CloudConformity
@@ -571,8 +501,6 @@ functions:
 
   AutoRemediateEC2-006:
     handler: functions/AutoRemediateEC2-006.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-006
       Owner: CloudConformity
@@ -582,11 +510,9 @@ functions:
       include:
         - functions/AutoRemediateEC2-006.js
     role: AutoRemediateEC2006Role
-  
+
   AutoRemediateEC2-008:
     handler: functions/AutoRemediateEC2-008.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-008
       Owner: CloudConformity
@@ -596,11 +522,9 @@ functions:
       include:
         - functions/AutoRemediateEC2-008.js
     role: AutoRemediateEC2008Role
-    
+
   AutoRemediateEC2-043:
     handler: functions/AutoRemediateEC2-043.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-043
       Owner: CloudConformity
@@ -610,11 +534,9 @@ functions:
       include:
         - functions/AutoRemediateEC2-043.js
     role: AutoRemediateEC2043Role
-      
+
   AutoRemediateRS-023:
     handler: functions/AutoRemediateRS-023.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate RS-023
       Owner: CloudConformity
@@ -624,12 +546,10 @@ functions:
       include:
         - functions/AutoRemediateRS-023.js
     role: AutoRemediateRS023Role
-    
-    
+
+
   AutoRemediateEC2-045:
     handler: functions/AutoRemediateEC2-045.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-045
       Owner: CloudConformity
@@ -639,11 +559,9 @@ functions:
       include:
         - functions/AutoRemediateEC2-045.js
     role: AutoRemediateEC2045Role
-    
+
   AutoRemediateEC2-038:
     handler: functions/AutoRemediateEC2-038.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-038
       Owner: CloudConformity
@@ -656,8 +574,6 @@ functions:
 
   AutoRemediateEC2-040:
     handler: functions/AutoRemediateEC2-040.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-040
       Owner: CloudConformity
@@ -667,11 +583,9 @@ functions:
       include:
         - functions/AutoRemediateEC2-040.js
     role: AutoRemediateEC2040Role
-    
+
   AutoRemediateEC2-039:
     handler: functions/AutoRemediateEC2-039.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate EC2-039
       Owner: CloudConformity
@@ -681,11 +595,9 @@ functions:
       include:
         - functions/AutoRemediateEC2-039.js
     role: AutoRemediateEC2039Role
-    
+
   TrustedAdvisor-003:
     handler: functions/AutoRemediateTrustedAdvisor-003.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate TrustedAdvisor-003
       Owner: CloudConformity
@@ -698,8 +610,6 @@ functions:
 
   AutoRemediateKinesis-001:
     handler: functions/AutoRemediateKinesis-001.handler
-    timeout: 120
-    memorySize: 128
     tags:
       Name: Auto Remediate Kinesis-001
       Owner: CloudConformity
@@ -747,7 +657,7 @@ resources:
                   Action:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
-                  
+
     AutoRemediateEC2003Role:
       Type: AWS::IAM::Role
       Properties:
@@ -818,7 +728,7 @@ resources:
                     - s3:GetBucketPolicy
                     - s3:PutBucketPolicy
                   Resource: "*"
-                 
+
 
     AutoRemediateEC2005Role:
       Type: AWS::IAM::Role
@@ -892,7 +802,7 @@ resources:
                     - iam:AttachRolePolicy
 
                   Resource: "*"
-                      
+
     AutoRemediateEC2043Role:
       Type: AWS::IAM::Role
       Properties:
@@ -926,8 +836,8 @@ resources:
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
-                  Resource: "*"  
-                  
+                  Resource: "*"
+
     AutoRemediateIAM001Role:
       Type: AWS::IAM::Role
       Properties:
@@ -961,8 +871,8 @@ resources:
                 - Effect: Allow
                   Action:
                     - iam:UpdateAccessKey
-                  Resource: "*"  
-                  
+                  Resource: "*"
+
     AutoRemediateEC2042Role:
       Type: AWS::IAM::Role
       Properties:
@@ -996,7 +906,7 @@ resources:
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
-                  Resource: "*"  
+                  Resource: "*"
 
     AutoRemediateRS001Role:
       Type: AWS::IAM::Role
@@ -1328,7 +1238,7 @@ resources:
                     - s3:GetBucketAcl
                     - s3:PutBucketAcl
                   Resource: "*"
-                  
+
     AutoRemediateS3003Role:
       Type: AWS::IAM::Role
       Properties:
@@ -1436,7 +1346,7 @@ resources:
                     - s3:GetBucketAcl
                     - s3:PutBucketAcl
                   Resource: "*"
-                  
+
     AutoRemediateIAM038Role:
       Type: AWS::IAM::Role
       Properties:
@@ -1506,7 +1416,7 @@ resources:
                   Action:
                     - s3:PutBucketVersioning
                   Resource: "*"
-                  
+
 
     AutoRemediateOrganizations002Role:
       Type: AWS::IAM::Role
@@ -1540,7 +1450,7 @@ resources:
                         - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
-                    - organizations:EnableAllFeatures 
+                    - organizations:EnableAllFeatures
                   Resource: "*"
 
     AutoRemediateOrchestratorRole:
@@ -1577,7 +1487,13 @@ resources:
                   Action:
                     - lambda:InvokeFunction
                   Resource: "*"
-                  
+                - Effect: Allow
+                  Action:
+                    - s3:PutObject
+                    - s3:PutBucketAcl
+                  Resource:
+                    - arn:aws:s3:::${self:provider.environment.LOGS_BUCKET}/*
+
     AutoRemediateS3004Role:
       Type: AWS::IAM::Role
       Properties:
@@ -1613,7 +1529,7 @@ resources:
                     - s3:GetBucketAcl
                     - s3:PutBucketAcl
                   Resource: "*"
-                      
+
     AutoRemediateEBS009Role:
       Type: AWS::IAM::Role
       Properties:
@@ -1648,7 +1564,7 @@ resources:
                   Action:
                     - ec2:ModifySnapshotAttribute
                   Resource: "*"
-              
+
     AutoRemediateS3005Role:
       Type: AWS::IAM::Role
       Properties:
@@ -1755,8 +1671,8 @@ resources:
                   Action:
                     - s3:GetBucketAcl
                     - s3:PutBucketAcl
-                  Resource: "*"                              
-  
+                  Resource: "*"
+
     AutoRemediateEC2019Role:
       Type: AWS::IAM::Role
       Properties:
@@ -1828,7 +1744,7 @@ resources:
                     - s3:GetBucketAcl
                     - s3:PutBucketAcl
                   Resource: "*"
-                  
+
     AutoRemediateS3010Role:
       Type: AWS::IAM::Role
       Properties:
@@ -1899,7 +1815,7 @@ resources:
                   Action:
                     - rds:ModifyDbInstance
                   Resource: "*"
-                        
+
     AutoRemediateS3016Role:
       Type: AWS::IAM::Role
       Properties:
@@ -1973,12 +1889,12 @@ resources:
                     - iam:GetRole
                     - iam:PassRole
                     - iam:PutRolePolicy
-                  Resource: "*" 
+                  Resource: "*"
                 - Effect: Allow
                   Action:
                     - ec2:CreateFlowLogs
-                  Resource: "*" 
-                               
+                  Resource: "*"
+
     AutoRemediateEC2008Role:
       Type: AWS::IAM::Role
       Properties:
@@ -2013,7 +1929,7 @@ resources:
                   Action:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
-                  
+
     AutoRemediateEC2045Role:
       Type: AWS::IAM::Role
       Properties:
@@ -2083,7 +1999,7 @@ resources:
                   Action:
                     - redshift:ModifyClusterParameterGroup
                   Resource: "*"
-               
+
     AutoRemediateEC2006Role:
       Type: AWS::IAM::Role
       Properties:
@@ -2118,7 +2034,7 @@ resources:
                   Action:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
-              
+
     AutoRemediateRDS023Role:
       Type: AWS::IAM::Role
       Properties:
@@ -2188,7 +2104,7 @@ resources:
                   Action:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
-                 
+
 
     AutoRemediateEC2040Role:
       Type: AWS::IAM::Role
@@ -2224,7 +2140,7 @@ resources:
                   Action:
                     - ec2:RevokeSecurityGroupIngress
                   Resource: "*"
-       
+
     AutoRemediateCT003Role:
       Type: AWS::IAM::Role
       Properties:
@@ -2294,7 +2210,7 @@ resources:
                   Action:
                     - kms:CancelKeyDeletion
                   Resource: "*"
-                  
+
     AutoRemediateEC2004Role:
       Type: AWS::IAM::Role
       Properties:
@@ -2399,8 +2315,8 @@ resources:
                   Action:
                     - iam:UpdateAccessKey
                   Resource: "*"
-                  
-    AutoRemediateSQS004Role:  
+
+    AutoRemediateSQS004Role:
       Type: AWS::IAM::Role
       Properties:
         RoleName: AutoRemediateSQS-004Role
@@ -2437,8 +2353,8 @@ resources:
                     - "kms:DescribeKey"
                     - "sqs:SetQueueAttributes"
                   Resource: "*"
-                  
-    AutoRemediateKinesis001Role:  
+
+    AutoRemediateKinesis001Role:
       Type: AWS::IAM::Role
       Properties:
         RoleName: AutoRemediateKinesis-001Role

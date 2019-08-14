@@ -14,7 +14,7 @@ module.exports.handler = (event, context, callback) => {
   }
 
   let params = {
-   
+
   }
 
   let Organizations = new AWS.Organizations({region: event.region})
