@@ -58,7 +58,7 @@ module.exports = (() => {
 		})
 	};
 
-	const getCheckDetails = (ccCheckId) => {
+	const getCheckDetails = async (ccCheckId) => {
 
 		let params = {
 		  Name: 'CLOUDCONFORMITY_API_KEY', /* required */
@@ -77,8 +77,8 @@ module.exports = (() => {
 		let options = {
 			method: 'GET',
 			headers: {
-				"Content-Type: application/vnd.api+json",
-				"Authorization: ApiKey " + CLOUDCONFORMITY_API_KEY
+				"Content-Type": "application/vnd.api+json",
+				"Authorization": "ApiKey " + CLOUDCONFORMITY_API_KEY
 			}
 		}
 
@@ -111,7 +111,7 @@ module.exports = (() => {
 
 		let dynamicEmail;
 
-		if (checkDetails.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);) {
+		if (checkDetails.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi)) {
 			dynamicEmail = checkDetails.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
 		}
 
