@@ -1,6 +1,8 @@
 const AWS = require('aws-sdk');
 const S3 = new AWS.S3();
 const nodemailer = require("nodemailer");
+const SSM = new AWS.SSM();
+const fetch = require('node-fetch');
 
 module.exports = (() => {
 
@@ -56,7 +58,72 @@ module.exports = (() => {
 		})
 	};
 
+	const getCheckDetails = (ccCheckId) => {
+
+		let params = {
+		  Name: 'CLOUDCONFORMITY_API_KEY', /* required */
+		  WithDecryption: true
+		};
+
+		const CLOUDCONFORMITY_API_KEY = await SSM.getParameter(params, function(err, data) {
+		    if (err) console.log(err, err.stack); // an error occurred
+		    else {
+				console.log(data);
+				return data;           // successful response
+		    }
+	  	});
+
+		let url = "https://"+ process.env.REGION_OF_SERVICE + "-api.cloudconformity.com/v1/checks/" + ccCheckId;
+		let options = {
+			method: 'GET',
+			headers: {
+				"Content-Type: application/vnd.api+json",
+				"Authorization: ApiKey " + CLOUDCONFORMITY_API_KEY
+			}
+		}
+
+		const getData = async url => {
+			try {
+				const response = await fetch(url, options);
+				const json = await response.json();
+				console.log(json);
+				return json;
+			} catch (error) {
+				console.log(error);
+				return error;
+			}
+		}
+
+		return getData(url);
+	};
+
+
 	const handleError = async (FunctionName, message, error) => {
+
+		let checkDetails;
+
+		if (process.env.REGION_OF_SERVICE && process.env.LOGS_BUCKET || process.env.SEND_EMAIL) {
+			checkDetails = await getCheckDetails(message.id)
+		}
+
+		console.log(this);
+		console.log(message, error);
+
+		let dynamicEmail;
+
+		if (checkDetails.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);) {
+			dynamicEmail = checkDetails.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
+		}
+
+		if (dynamicEmail && process.env.SEND_EMAIL) {
+			console.log("sending email to:", dynamicEmail);
+			await sendEmail(dynamicEmail, "Error autoremediating", {
+				message,
+				FunctionName,
+				error
+			});
+		}
+
 		if (process.env.LOGS_BUCKET) {
 			await logToS3(FunctionName, message, null, error);
 		}
@@ -75,10 +142,36 @@ module.exports = (() => {
 	};
 
 	const handleSuccess = async (FunctionName, message, result) => {
+
+		let checkDetails;
+
+		if (process.env.REGION_OF_SERVICE && process.env.LOGS_BUCKET || process.env.SEND_EMAIL) {
+			checkDetails = await getCheckDetails(message.id)
+		}
+
+		console.log(this);
+		console.log(message, error);
+
+		let dynamicEmail;
+
+		if (checkDetails.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);) {
+			dynamicEmail = checkDetails.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
+		}
+
+		if (dynamicEmail && process.env.SEND_EMAIL) {
+			console.log("sending email to:", dynamicEmail);
+			await sendEmail(dynamicEmail, "Autoremediation successfull", {
+				message,
+				FunctionName,
+				error
+			});
+		}
+
 		if (process.env.LOGS_BUCKET) {
 			await logToS3(FunctionName, message, result);
 		}
 		if (process.env.SEND_EMAIL) {
+
 			await sendEmail("test@test.com", "Autoremediation successfull", {
 				message,
 				FunctionName,
@@ -87,6 +180,8 @@ module.exports = (() => {
 		}
 		return Promise.resolve();
 	};
+
+
 
 	return {
 		getAccountId,

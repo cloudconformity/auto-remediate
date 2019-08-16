@@ -11,8 +11,9 @@ provider:
     service: auto-remediate
 
   environment:
-    LOGS_BUCKET: ""
-    SEND_EMAIL: false
+    LOGS_BUCKET: "autoremediate-logs-bucket"
+    SEND_EMAIL: true
+    REGION_OF_SERVICE: eu-west-1
 
 functions:
 
