@@ -17,6 +17,7 @@
   },
   "license": "MIT",
   "dependencies": {
+    "node-fetch": "^2.6.0",
     "nodemailer": "^6.3.0"
   },
   "devDependencies": {

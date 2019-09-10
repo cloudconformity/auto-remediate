@@ -35,10 +35,10 @@ module.exports = (() => {
 		// 		pass: process.env.pass // generated ethereal password
 		// 	}
 		// });
-
+		//
 		// // send mail with defined transport object
 		// let info = await transporter.sendMail({
-		// 	from: '"Fred Foo 👻" <foo@example.com>', // sender address
+			// from: '"Fred Foo 👻" <foo@example.com>', // sender address
 		// 	to: "bar@example.com, baz@example.com", // list of receivers
 		// 	subject: "Hello ✔", // Subject line
 		// 	text: "Hello world?", // plain text body
@@ -65,13 +65,15 @@ module.exports = (() => {
 		  WithDecryption: true
 		};
 
-		const CLOUDCONFORMITY_API_KEY = await SSM.getParameter(params, function(err, data) {
-		    if (err) console.log(err, err.stack); // an error occurred
-		    else {
-				console.log(data);
-				return data;           // successful response
-		    }
-	  	});
+		const CLOUDCONFORMITY_API_KEY = await SSM.getParameter(params).promise().then(function(data) {
+
+			console.log("Successfully got SSM data", data);
+			return data.Parameter.Value;           // successful response
+
+	  	}).catch((err) => {
+			console.log(err, err.stack); // an error occurred
+		});
+		console.log("My CC API Key is", CLOUDCONFORMITY_API_KEY);
 
 		let url = "https://"+ process.env.REGION_OF_SERVICE + "-api.cloudconformity.com/v1/checks/" + ccCheckId;
 		let options = {
@@ -83,13 +85,15 @@ module.exports = (() => {
 		}
 
 		const getData = async url => {
+			console.log("my url", url);
+			console.log("my options", options);
 			try {
 				const response = await fetch(url, options);
 				const json = await response.json();
-				console.log(json);
+				console.log("Got a response from CC Check API", json);
 				return json;
 			} catch (error) {
-				console.log(error);
+				console.log("Got an error from CC Check API", error);
 				return error;
 			}
 		}
@@ -97,27 +101,38 @@ module.exports = (() => {
 		return getData(url);
 	};
 
+	const getDynamicEmail = async (message) => {
+
+		let dynamicEmail;
+		let checkDetails;
+
+		if (process.env.REGION_OF_SERVICE) {
+			checkDetails = await getCheckDetails(message.id);
+			message.checkDetails = checkDetails;
+		}
+
+		console.log("Stringifying");
+		let stringifiedMessage = JSON.stringify(message);
+		console.log("matching...");
+		if (stringifiedMessage.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi)) {
+			dynamicEmail = stringifiedMessage.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
+			console.log("email(s) found:", dynamicEmail);
+		}
+
+		return {dynamicEmail, message};
+	};
 
 	const handleError = async (FunctionName, message, error) => {
 
-		let checkDetails;
+		let getDynamicEmailResponse = await getDynamicEmail(message);
 
-		if (process.env.REGION_OF_SERVICE && process.env.LOGS_BUCKET || process.env.SEND_EMAIL) {
-			checkDetails = await getCheckDetails(message.id)
-		}
+		let dynamicEmail = getDynamicEmailResponse.dynamicEmail;
+		message = getDynamicEmailResponse.message;
 
-		console.log(this);
-		console.log(message, error);
-
-		let dynamicEmail;
-
-		if (checkDetails.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi)) {
-			dynamicEmail = checkDetails.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
-		}
-
-		if (dynamicEmail && process.env.SEND_EMAIL) {
-			console.log("sending email to:", dynamicEmail);
-			await sendEmail(dynamicEmail, "Error autoremediating", {
+		if (dynamicEmail[0] && process.env.SEND_EMAIL) {
+			let emails = dynamicEmail.join(", ");
+			console.log("sending email to:", emails);
+			await sendEmail(emails, "Error autoremediating", {
 				message,
 				FunctionName,
 				error
@@ -128,11 +143,8 @@ module.exports = (() => {
 			await logToS3(FunctionName, message, null, error);
 		}
 
-		console.log(this);
-		console.log(message, error);
-
-		if (process.env.SEND_EMAIL) {
-			await sendEmail("test@test.com", "Error autoremediating", {
+		if (process.env.SEND_EMAIL && process.env.ADMIN_EMAIL) {
+			await sendEmail(process.env.ADMIN_EMAIL, "Error autoremediating", {
 				message,
 				FunctionName,
 				error
@@ -143,24 +155,15 @@ module.exports = (() => {
 
 	const handleSuccess = async (FunctionName, message, result) => {
 
-		let checkDetails;
+		let getDynamicEmailResponse = await getDynamicEmail(message);
 
-		if (process.env.REGION_OF_SERVICE && process.env.LOGS_BUCKET || process.env.SEND_EMAIL) {
-			checkDetails = await getCheckDetails(message.id)
-		}
+		let dynamicEmail = getDynamicEmailResponse.dynamicEmail;
+		message = getDynamicEmailResponse.message;
 
-		console.log(this);
-		console.log(message, error);
-
-		let dynamicEmail;
-
-		if (checkDetails.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);) {
-			dynamicEmail = checkDetails.match(/([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi);
-		}
-
-		if (dynamicEmail && process.env.SEND_EMAIL) {
-			console.log("sending email to:", dynamicEmail);
-			await sendEmail(dynamicEmail, "Autoremediation successfull", {
+		if (dynamicEmail[0] && process.env.SEND_EMAIL) {
+			let emails = dynamicEmail.join(", ");
+			console.log("sending email to:", emails);
+			await sendEmail(emails, "Autoremediation successful", {
 				message,
 				FunctionName,
 				error
@@ -170,9 +173,9 @@ module.exports = (() => {
 		if (process.env.LOGS_BUCKET) {
 			await logToS3(FunctionName, message, result);
 		}
-		if (process.env.SEND_EMAIL) {
 
-			await sendEmail("test@test.com", "Autoremediation successfull", {
+		if (process.env.SEND_EMAIL && process.env.ADMIN_EMAIL) {
+			await sendEmail(process.env.ADMIN_EMAIL, "Autoremediation successful", {
 				message,
 				FunctionName,
 				result

@@ -1,63 +1,63 @@
 module.exports = {
   'AutoRemediateRDS-008': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-001': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-002': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-003': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-004': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-005': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-006': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-007': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-008': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-009': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-010': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-012': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateConfig-001': {
-    'enabled': false,
+    'enabled': true,
     'S3BucketName': ''
   },
 
   'AutoRemediateCFM-005': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateCT-001': {
-    'enabled': false,
+    'enabled': true,
     'Name': 'GlobalTrail',
     'S3BucketName': '',
     'IncludeGlobalServiceEvents': true,
@@ -66,128 +66,128 @@ module.exports = {
   },
 
   'AutoRemediateRS-001': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateIAM-001': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateEC2-002': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateEC2-003': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateEC2-004': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateEC2-005': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateEC2-006': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateEC2-008': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateEC2-038': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateEC2-039': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateEC2-040': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateEC2-043': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateEC2-045': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateIAM-038': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateKinesis-001': {
-    'enabled': false,
+    'enabled': true,
     'KmsKeyId': 'alias/aws/kinesis'
   },
 
   'AutoRemediateVPC-001': {
-    'enabled': false,
+    'enabled': true,
   },
 
   'AutoRemediateEC2-019': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateCT-003': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateRds-006': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateRDS-006': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateRDS-023': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateKMS-004': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateRS-023': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateGD-001': {
-    'enabled': false
+    'enabled': true
    },
 
   'AutoRemediateOrganizations-002': {
-    'enabled': false
+    'enabled': true
    },
 
   'AutoRemediateLmabda-003': {
-    'enabled': false
+    'enabled': true
    },
 
   'AutoRemediateS3-016': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateS3-014': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateTrustedAdvisor-003': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateKMS-002': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateRS-019': {
-    'enabled': false,
+    'enabled': true,
     'RetentionPeriod': 7
   }
 
