@@ -11,10 +11,10 @@ provider:
     service: auto-remediate
 
   environment:
-    LOGS_BUCKET: "autoremediate-logs-bucket" # where should the logs of actions taken by auto-remediate be stored?
-    SEND_EMAIL: true # should emails be sent notifying users of actions taken by auto-remediate?
-    REGION_OF_SERVICE: eu-west-1 # set as eu-west-1, us-west-2, or ap-southeast-2
-    ADMIN_EMAIL: "paul+3@cloudconformity.com" # replace with your email address or a DL
+    LOGS_BUCKET: # where should the logs of actions taken by auto-remediate be stored?
+    SEND_EMAIL: false # should emails be sent notifying users of actions taken by auto-remediate?
+    REGION_OF_SERVICE: # set as eu-west-1, us-west-2, or ap-southeast-2
+    ADMIN_EMAIL: # replace with your email address or a DL
 
 functions:
 
