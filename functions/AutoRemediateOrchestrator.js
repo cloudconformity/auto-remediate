@@ -10,6 +10,7 @@ module.exports.handler = async event => {
   console.log("Config settings: ", JSON.stringify(CONFIG, null, 2));
   console.log("is email sending enabled: ", process.env.SEND_EMAIL);
   console.log("S3 Bucket configured: ", process.env.LOGS_BUCKET);
+  console.log("Region of service configured: ", process.env.REGION_OF_SERVICE);
 
   if (!event || !event.Records[0] || !event.Records[0].Sns || !event.Records[0].Sns.Message) {
     throw new Error("No event specified");
