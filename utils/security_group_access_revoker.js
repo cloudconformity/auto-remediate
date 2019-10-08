@@ -1,6 +1,8 @@
-const AWS = require('aws-sdk')
+const AWS = require("aws-sdk");
 
-function revokeSecurityGroupAccess (protocol, port, resource, region) {
+const revokeSecurityGroupAccess = (protocol, port, resource, region, callback) => {
+  let ec2 = new AWS.EC2({ region: region });
+
   let params = {
     GroupId: resource,
     IpPermissions: [
@@ -8,27 +10,48 @@ function revokeSecurityGroupAccess (protocol, port, resource, region) {
         FromPort: port,
         ToPort: port,
         IpProtocol: protocol,
-        IpRanges: [{ CidrIp: '0.0.0.0/0' }]
-      },
-      {
-        FromPort: port,
-        ToPort: port,
-        IpProtocol: protocol,
-        Ipv6Ranges: [{ CidrIpv6: '::/0' }]
+        IpRanges: [{ CidrIp: "0.0.0.0/0" }]
       }
     ]
-  }
+  };
 
-  let ec2 = new AWS.EC2({ region: region })
+  return ec2
+    .revokeSecurityGroupIngress(params)
+    .promise()
+    .then(data => {
+      console.log("Revoking %s, %s on 0.0.0.0/0 succeeded");
+      console.log(data);
+    })
+    .catch(err => {
+      console.log("Revoking %s, %s on 0.0.0.0/0 failed");
+      console.error(err);
+    })
+    .then(() => {
+      let params = {
+        GroupId: resource,
+        IpPermissions: [
+          {
+            FromPort: port,
+            ToPort: port,
+            IpProtocol: protocol,
+            IpRanges: [{ CidrIp: "::/0" }]
+          }
+        ]
+      };
 
-  ec2.revokeSecurityGroupIngress(params, function (err, result) {
-    if (err) {
-      throw err
-    }
+      return ec2.revokeSecurityGroupIngress(params).promise();
+    })
+    .then(data => {
+      console.log("Revoking %s, %s on ::/0 succeeded");
+      console.log(data);
+    })
+    .catch(err => {
+      console.log("Revoking %s, %s on ::/0 failed");
+      console.error(err);
+    })
+    .then(() => {
+      callback(null, "done");
+    });
+};
 
-    console.log('Result', result)
-    return result
-  })
-}
-
-exports.revoke = revokeSecurityGroupAccess
+exports.revoke = revokeSecurityGroupAccess;
