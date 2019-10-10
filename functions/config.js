@@ -166,7 +166,7 @@ module.exports = {
     'enabled': false
    },
 
-  'AutoRemediateLmabda-003': {
+  'AutoRemediateLambda-003': {
     'enabled': false
    },
    
