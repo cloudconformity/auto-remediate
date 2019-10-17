@@ -9,11 +9,6 @@ provider:
   stackTags:
     service: auto-remediate
 
-package:
-  # individually: true
-  exclude:
-   - "node_modules/**"
-
 functions:
 
   AutoRemediateOrchestrator:
