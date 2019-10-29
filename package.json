@@ -17,14 +17,14 @@
   },
   "license": "MIT",
   "dependencies": {
-    "lodash.isequal": "^4.5.0"
+    "lodash.isequal": "^4.5.0",
+    "bluebird": "^3.5.5"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",
     "@types/mocha": "^5.2.7",
     "aws-sdk": "^2.498.0",
     "aws-sdk-mock": "^4.5.0",
-    "bluebird": "^3.5.5",
     "chai": "^4.2.0",
     "dotenv": "^8.0.0",
     "eslint": "^6.1.0",

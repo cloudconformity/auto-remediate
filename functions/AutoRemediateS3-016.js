@@ -1,6 +1,7 @@
 'use strict'
 
-const AWS = require('aws-sdk')
+const AWS = require('aws-sdk');
+const Promise = require('bluebird');
 
 AWS.config.update({
   maxRetries: 10
@@ -17,7 +18,7 @@ AWS.events.on('retry', function (resp) {
 AWS.config.setPromisesDependency(null)
 
 /**
- * Enable Server-Side Encryption for AWS S3 buckets 
+ * Enable Server-Side Encryption for AWS S3 buckets
  */
 module.exports.handler = (event, context, callback) => {
   console.log('S3 Server Side Encryption - Received event:', JSON.stringify(event, null, 2))
@@ -27,11 +28,36 @@ module.exports.handler = (event, context, callback) => {
   }
 
   let S3Bucket = event.resource
+  let retries = 5;
 
-  return UpdateBucketPolicy(S3Bucket).then(function () {
+  const retryable = function(S3Bucket) {
+
+    return UpdateBucketPolicy(S3Bucket).catch(function(err) {
+
+      console.log("Error found:");
+      console.error(err);
+      console.log("%d attempts remaining, retrying...", retries);
+
+      if (retries <= 0) {
+        throw err;
+      }
+
+      retries--;
+
+      return Promise.delay(1000).then(function() {
+
+        return UpdateBucketPolicy(S3Bucket);
+
+      });
+
+    });
+
+  };
+
+  return retryable(S3Bucket).then(function () {
     console.log('SES is Enabled for bucket ', event.resource)
     return callback(null, 'Successfully processed event')
-  })
+  });
 
   function UpdateBucketPolicy (S3Bucket) {
     let S3 = new AWS.S3()
