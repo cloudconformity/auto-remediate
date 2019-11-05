@@ -20,7 +20,7 @@ functions:
 
   AutoRemediateOrchestrator:
     handler: functions/AutoRemediateOrchestrator.handler
-    timeout: 15
+    timeout: 45
     events:
       - sns:
           topicName: CloudConformity
@@ -30,11 +30,29 @@ functions:
       Owner: CloudConformity
       Role: Auto Remediate
       Environment: Ops
-      Version: 0.4
+      Version: 0.2
     package:
       include:
         - functions/AutoRemediateOrchestrator.js
     role: AutoRemediateOrchestratorRole
+
+  AutoRemediateVerifier:
+    handler: functions/AutoRemediateVerifier.handler
+    timeout: 45
+    events:
+      - sns:
+          topicName: CloudConformity
+          displayName: CloudConformity topic
+    tags:
+      Name: Auto Remediate Verifier
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+      Version: 0.2
+    package:
+      include:
+        - functions/AutoRemediateVerifier.js
+    role: AutoRemediateVerifierRole
 
   AutoRemediateS3-016:
     handler: functions/AutoRemediateS3-016.handler
@@ -1510,6 +1528,14 @@ resources:
                     - s3:PutBucketAcl
                   Resource:
                     - arn:aws:s3:::${self:provider.environment.LOGS_BUCKET}/*
+
+    AutoRemediateVerifierRole:
+      Type: AWS::IAM::Role
+      Properties:
+        Path: /
+        RoleName: AutoRemediateVerifierRole
+        AssumeRolePolicyDocument: ${file(./lambdaRoles.yml):AssumeRolePolicyDocument}
+        Policies: ${file(./lambdaRoles.yml):AutoRemediateVerifierPolicy}
 
     AutoRemediateS3004Role:
       Type: AWS::IAM::Role

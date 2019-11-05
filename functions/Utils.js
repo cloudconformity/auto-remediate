@@ -85,12 +85,10 @@ module.exports = (() => {
 		}
 
 		const getData = async url => {
-			console.log("my url", url);
-			console.log("my options", options);
+
 			try {
 				const response = await fetch(url, options);
 				const json = await response.json();
-				console.log("Got a response from CC Check API", json);
 				return json;
 			} catch (error) {
 				console.log("Got an error from CC Check API", error);
