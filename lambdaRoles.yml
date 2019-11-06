@@ -49,3 +49,7 @@ AutoRemediateVerifierPolicy:
                 - Ref: 'AWS::Region'
                 - Ref: 'AWS::AccountId'
                 - 'log-group:/aws/lambda/*:*:*'
+        - Effect: Allow
+          Action:
+            - lambda:InvokeFunction
+          Resource: "*"

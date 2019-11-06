@@ -13,7 +13,7 @@ provider:
   environment:
     LOGS_BUCKET: "" # where should the logs of actions taken by auto-remediate be stored?
     SEND_EMAIL: false # should emails be sent notifying users of actions taken by auto-remediate?
-    REGION_OF_SERVICE: false # set as eu-west-1, us-west-2, or ap-southeast-2
+    REGION_OF_SERVICE: "eu-west-1" # set as eu-west-1, us-west-2, or ap-southeast-2
     ADMIN_EMAIL: false # replace with your email address or a DL
     CC_ACCOUNT_ID: "TSTj_KlH"
 

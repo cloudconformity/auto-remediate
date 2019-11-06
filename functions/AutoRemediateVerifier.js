@@ -25,6 +25,8 @@ module.exports.handler = async event => {
   	return rulesList;
 }, '');
 
+  rules = rules.substring(1, rules.length)
+
   console.log("rules");
   console.log(rules);
 
@@ -37,6 +39,14 @@ module.exports.handler = async event => {
   try {
 
     checks = await utils.getRecentlyModifiedChecks(rulesFilter);
+	checks.map(check => {
+		Lambda.invoke({
+	      "AutoRemediateOrchestrator",
+	      check
+	  });
+
+	})
+
 
   } catch (error) {
     console.log("Error occurred while fetching recently modified checks");

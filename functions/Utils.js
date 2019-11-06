@@ -98,9 +98,38 @@ module.exports = (() => {
 			}
 		}
 
-		let data = getData(url);
-		console.log("duh data");
-		console.log(data);
+		return getData(url).then(checks =>{
+
+			console.log("duh checks");
+			console.log(JSON.stringify(checks));
+
+			const FOUR_HOURS = 1000*60*60*4;
+			const timestamp = Date.now();
+			const since = timestamp - FOUR_HOURS;
+
+			const recentChecks = checks.data.filter(check => {
+			  return check.attributes['last-modified-date'] > since
+			})
+
+			return recentChecks.map(recentCheck => {
+			  const message = {
+			    id: recentCheck.id,
+			    ...recentCheck.attributes
+			  };
+
+
+			  return {
+			    Records: [
+			      {
+			        Sns: {
+			          Message: JSON.stringify(message)
+			        },
+			      },
+			    ],
+			  };
+			});
+
+		})
 	};
 
 	const getCheckDetails = async (ccCheckId) => {
@@ -234,6 +263,7 @@ module.exports = (() => {
 	return {
 		getAccountId,
 		handleError,
-		handleSuccess
+		handleSuccess,
+		getRecentlyModifiedChecks
 	};
 })();
