@@ -35,4 +35,17 @@ AutoRemediateVerifierPolicy:
                 - 'arn:aws:sns'
                 - Ref: 'AWS::Region'
                 - Ref: 'AWS::AccountId'
-                - 'topic/CLOUDCONFORMITY_API_KEY'
+                - 'CloudConformity'
+        - Effect: Allow
+          Action:
+            - logs:CreateLogGroup
+            - logs:CreateLogStream
+            - logs:PutLogEvents
+          Resource:
+            - 'Fn::Join':
+              - ':'
+              -
+                - 'arn:aws:logs'
+                - Ref: 'AWS::Region'
+                - Ref: 'AWS::AccountId'
+                - 'log-group:/aws/lambda/*:*:*'

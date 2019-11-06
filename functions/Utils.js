@@ -58,6 +58,51 @@ module.exports = (() => {
 		})
 	};
 
+	const getRecentlyModifiedChecks = async (rulesFilter) => {
+
+		let params = {
+		  Name: 'CLOUDCONFORMITY_API_KEY', /* required */
+		  WithDecryption: true
+		};
+
+		const CLOUDCONFORMITY_API_KEY = await SSM.getParameter(params).promise().then(function(data) {
+
+			console.log("Successfully got SSM data", data);
+			return data.Parameter.Value;           // successful response
+
+	  	}).catch((err) => {
+			console.log(err, err.stack); // an error occurred
+		});
+
+
+		let url = "https://"+ process.env.REGION_OF_SERVICE + "-api.cloudconformity.com/v1/checks/" + rulesFilter;
+		let options = {
+			method: 'GET',
+			headers: {
+				"Content-Type": "application/vnd.api+json",
+				"Authorization": "ApiKey " + CLOUDCONFORMITY_API_KEY
+			}
+		}
+
+		const getData = async url => {
+			console.log("my url", url);
+			console.log("my options", options);
+			try {
+				const response = await fetch(url, options);
+				const json = await response.json();
+				console.log("Got a response from CC Check API", json);
+				return json;
+			} catch (error) {
+				console.log("Got an error from CC Check API", error);
+				return error;
+			}
+		}
+
+		let data = getData(url);
+		console.log("duh data");
+		console.log(data);
+	};
+
 	const getCheckDetails = async (ccCheckId) => {
 
 		let params = {
@@ -73,7 +118,7 @@ module.exports = (() => {
 	  	}).catch((err) => {
 			console.log(err, err.stack); // an error occurred
 		});
-		console.log("My CC API Key is", CLOUDCONFORMITY_API_KEY);
+
 
 		let url = "https://"+ process.env.REGION_OF_SERVICE + "-api.cloudconformity.com/v1/checks/" + ccCheckId;
 		let options = {
@@ -85,10 +130,12 @@ module.exports = (() => {
 		}
 
 		const getData = async url => {
-
+			console.log("my url", url);
+			console.log("my options", options);
 			try {
 				const response = await fetch(url, options);
 				const json = await response.json();
+				console.log("Got a response from CC Check API", json);
 				return json;
 			} catch (error) {
 				console.log("Got an error from CC Check API", error);

@@ -8,60 +8,44 @@ const Lambda = new AWS.Lambda({ apiVersion: "2015-03-31" });
 module.exports.handler = async event => {
   console.log("Received event: ", JSON.stringify(event, null, 2));
   console.log("Config settings: ", JSON.stringify(CONFIG, null, 2));
-  console.log("Frequency of execution", process.env.SEND_EMAIL);
-  console.log("S3 Bucket configured: ", process.env.LOGS_BUCKET);
-  console.log("Region of service configured: ", process.env.REGION_OF_SERVICE);
+  console.log("Cloud Conformity Account ID: ", process.env.CC_ACCOUNT_ID);
 
-  if (!event || !event.Records[0] || !event.Records[0].Sns || !event.Records[0].Sns.Message) {
-    throw new Error("No event specified");
-  }
+  let rules = [];
 
-  const message = JSON.parse(event.Records[0].Sns.Message);
-  const AutoRemediate = "AutoRemediate" + message.ruleId;
+  rules = Object.keys(CONFIG).reduce((rulesList, ruleName, index) => {
+	  if (CONFIG[ruleName].enabled) {
 
-  if (!CONFIG[AutoRemediate]) {
-    console.log("The %s is not supported. Exiting gracefully ...", AutoRemediate);
-    return;
-  }
+	    const ruleId = ruleName.replace('AutoRemediate', '');
+	    if (index === 0) {
+			return ruleId;
+		}
+	    return `${rulesList},${ruleId}`;
+  	}
 
-  if (!CONFIG[AutoRemediate]["enabled"]) {
-    console.log("The %s is not enabled. Exiting gracefully ...", AutoRemediate);
-    return;
-  }
+  	return rulesList;
+}, '');
 
-  let FunctionName =
-    process.env["AWS_LAMBDA_FUNCTION_NAME"].substring(
-      0,
-      process.env["AWS_LAMBDA_FUNCTION_NAME"].lastIndexOf("-") + 1
-    ) + AutoRemediate;
+  console.log("rules");
+  console.log(rules);
 
-  console.log(`Invoking ${FunctionName} ...`);
+  let rulesFilter = "?accountIds=" + process.env.CC_ACCOUNT_ID + "&filter[ruleIds]=" + rules + "&filter[statuses]=FAILURE";
+  console.log("my filter");
+  console.log(rulesFilter);
 
-  const Payload = JSON.stringify(message, null, 2);
+  let checks;
 
-  let result;
   try {
-    result = await Lambda.invoke({
-      FunctionName,
-      Payload
-    }).promise();
+
+    checks = await utils.getRecentlyModifiedChecks(rulesFilter);
+
   } catch (error) {
-    console.log("Error occurred while invoking", FunctionName);
+    console.log("Error occurred while fetching recently modified checks");
     console.log(error);
-    await utils.handleError(FunctionName, message, error);
     throw error;
-  }
+}
 
-  if (!result.Payload.includes("Success")) {
-    await utils.handleError(FunctionName, message, result);
-    throw result.payload;
-  }
-
-  await utils.handleSuccess(FunctionName, message, result);
 
   console.log(
-    "Successfully invoked %s with result %s",
-    FunctionName,
     JSON.stringify(result, null, 2)
   );
   return "done";
