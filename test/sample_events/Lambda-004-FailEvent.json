@@ -1,0 +1,41 @@
+{
+    "id": "ccc:oZX1TUZ6p:Lambda-004:Lambda:ca-central-1:Lambda-004",
+    "organisationId": "9bZA_h76p",
+    "accountId": "oZX1TUZ6p",
+    "ruleId": "Lambda-004",
+    "ruleTitle": "Function Exposed",
+    "link": "https://ca-central-1.console.aws.amazon.com/lambda/home?region=ca-central-1#/functions/Lambda-004",
+    "service": "Lambda",
+    "region": "ca-central-1",
+    "riskLevel": "HIGH",
+    "categories": [
+        "security"
+    ],
+    "compliances": [
+        "PCI",
+        "GDPR",
+        "APRA",
+        "MAS",
+        "AWAF"
+    ],
+    "message": "Lambda Function Lambda-004 has [lambda:Invoke] permissions granted to everyone",
+    "resource": "Lambda-004",
+    "descriptorType": "lambda-function",
+    "resourceName": "Lambda Function",
+    "status": "FAILURE",
+    "lastUpdatedDate": 1561232578000,
+    "lastUpdatedBy": null,
+    "failureDiscoveryDate": 1561233332308,
+    "failureIntroducedBy": null,
+    "lastStatusUpdateDate": 1561233332308,
+    "eventId": "MENbTDa0EFCvPTbRS-P",
+    "ccrn": "ccrn:aws:oZX1TUZ6p:Lambda:ca-central-1:Lambda-004",
+    "tags": [],
+    "cost": 0,
+    "waste": 0,
+    "lastModifiedDate": 1561233332308,
+    "lastModifiedBy": "SYSTEM",
+    "createdDate": 1561232615293,
+    "createdBy": "SYSTEM",
+    "resolutionPageURL": "https://www.cloudconformity.com/conformity-rules/Lambda/function-exposed.html#9bZA_h76p"
+}

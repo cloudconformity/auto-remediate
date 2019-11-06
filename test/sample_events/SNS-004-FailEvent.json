@@ -1,0 +1,35 @@
+{
+    "id": "ccc:oZX1TUZ6p:SNS-004:SNS:ca-central-1:testSNS",
+    "organisationId": "9bZA_h76p",
+    "accountId": "oZX1TUZ6p",
+    "ruleId": "SNS-004",
+    "ruleTitle": "SNS Topic Accessible For Publishing",
+    "link": "https://ca-central-1.console.aws.amazon.com/sns/v2/home?region=ca-central-1#/topics/arn:aws:sns:ca-central-1:784770667506:testSNS",
+    "service": "SNS",
+    "region": "ca-central-1",
+    "riskLevel": "MEDIUM",
+    "categories": [
+        "security"
+    ],
+    "compliances": [
+        "PCI",
+        "GDPR"
+    ],
+    "message": "Topic [testSNS] allows 'Everyone' to publish",
+    "resource": "testSNS",
+    "descriptorType": "sns-topic",
+    "resourceName": "SNS Topic",
+    "status": "FAILURE",
+    "lastUpdatedDate": null,
+    "failureDiscoveryDate": 1561330412396,
+    "lastStatusUpdateDate": 1561330412396,
+    "ccrn": "ccrn:aws:oZX1TUZ6p:SNS:ca-central-1:testSNS",
+    "tags": [],
+    "cost": 0,
+    "waste": 0,
+    "lastModifiedDate": 1561330412396,
+    "lastModifiedBy": "SYSTEM",
+    "createdDate": 1561330412396,
+    "createdBy": "SYSTEM",
+    "resolutionPageURL": "https://www.cloudconformity.com/conformity-rules/SNS/topics-everyone-publish.html#9bZA_h76p"
+}

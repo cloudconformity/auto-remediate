@@ -1,0 +1,34 @@
+{
+    "id": "ccc:oZX1TUZ6p:Lambda-005:Lambda:ca-central-1:PranaysOpenLambda",
+    "organisationId": "9bZA_h76p",
+    "accountId": "oZX1TUZ6p",
+    "ruleId": "Lambda-005",
+    "ruleTitle": "Lambda Function With Admin Privileges",
+    "service": "Lambda",
+    "region": "ca-central-1",
+    "riskLevel": "MEDIUM",
+    "categories": [
+        "security"
+    ],
+    "compliances": [
+        "PCI",
+        "APRA",
+        "MAS",
+        "AWAF",
+        "NIST4"
+    ],
+    "message": "Lambda Function PranaysOpenLambda does not have full admin privileges",
+    "resource": "PranaysOpenLambda",
+    "status": "SUCCESS",
+    "notScored": false,
+    "lastStatusUpdateDate": 1561226215539,
+    "ccrn": "ccrn:aws:oZX1TUZ6p:Lambda:ca-central-1:PranaysOpenLambda",
+    "tags": [],
+    "cost": 0,
+    "waste": 0,
+    "lastModifiedDate": 1561226215539,
+    "lastModifiedBy": "SYSTEM",
+    "createdDate": 1561226215539,
+    "createdBy": "SYSTEM",
+    "resolutionPageURL": "https://www.cloudconformity.com/conformity-rules/Lambda/function-with-admin-privileges.html#9bZA_h76p"
+}

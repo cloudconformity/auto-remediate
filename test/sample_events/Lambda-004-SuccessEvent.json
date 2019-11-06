@@ -1,0 +1,37 @@
+{
+    "id": "ccc:oZX1TUZ6p:Lambda-004:Lambda:ca-central-1:auto-remediate-v1-AutoRemediateLambda-002",
+    "organisationId": "9bZA_h76p",
+    "accountId": "oZX1TUZ6p",
+    "ruleId": "Lambda-004",
+    "ruleTitle": "Function Exposed",
+    "link": "https://ca-central-1.console.aws.amazon.com/lambda/home?region=ca-central-1#/functions/auto-remediate-v1-AutoRemediateLambda-002",
+    "service": "Lambda",
+    "region": "ca-central-1",
+    "riskLevel": "HIGH",
+    "categories": [
+        "security"
+    ],
+    "compliances": [
+        "PCI",
+        "GDPR",
+        "APRA",
+        "MAS",
+        "AWAF"
+    ],
+    "message": "Lambda Function auto-remediate-v1-AutoRemediateLambda-002 is not exposed to everyone",
+    "resource": "auto-remediate-v1-AutoRemediateLambda-002",
+    "descriptorType": "lambda-function",
+    "resourceName": "Lambda Function",
+    "status": "SUCCESS",
+    "lastStatusUpdateDate": 1561245568439,
+    "eventId": "jcxkW9YswCwh_fbJy-aH",
+    "ccrn": "ccrn:aws:oZX1TUZ6p:Lambda:ca-central-1:auto-remediate-v1-AutoRemediateLambda-002",
+    "tags": [],
+    "cost": null,
+    "waste": null,
+    "lastModifiedDate": 1561245577401,
+    "lastModifiedBy": "SYSTEM",
+    "createdDate": 1561245568439,
+    "createdBy": "SYSTEM",
+    "resolutionPageURL": "https://www.cloudconformity.com/conformity-rules/Lambda/function-exposed.html#9bZA_h76p"
+}

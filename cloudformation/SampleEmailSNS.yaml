@@ -1,0 +1,13 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Create a basic SNS topic which would be used to push emails out."
+Parameters: 
+  SNSTopicName:
+    Type: String
+    Default: "email_lambda_autoremediate_alarm"
+    Description: "Name of the lambda to be created"
+Resources:
+  SNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: !Ref SNSTopicName
+      TopicName: !Ref SNSTopicName

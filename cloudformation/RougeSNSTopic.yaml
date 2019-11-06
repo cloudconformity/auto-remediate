@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: 2010-09-09
+Description: "Create a rouge SNS topic which would be used to push emails out."
+Parameters: 
+  SNSTopicName:
+    Type: String
+    Default: "rouge_sns_topic"
+    Description: "Name of the lambda to be created"
+Resources:
+  SNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      DisplayName: !Ref SNSTopicName
+      TopicName: !Ref SNSTopicName
+  SNSTopicPolicy:
+    Type: AWS::SNS::TopicPolicy
+    Properties:
+      PolicyDocument:
+        Id: "Id1"
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Action: lambda:Invoke
+            Allow: "*"
+            Resource: "*"
+      Topics:
+        - !Ref SNSTopic

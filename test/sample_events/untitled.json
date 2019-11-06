@@ -1,0 +1,48 @@
+{
+  "Version": "2008-10-17",
+  "Id": "__default_policy_ID",
+  "Statement": [
+    {
+      "Sid": "__default_statement_ID",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": [
+        "SNS:Publish",
+        "SNS:RemovePermission",
+        "SNS:SetTopicAttributes",
+        "SNS:DeleteTopic",
+        "SNS:ListSubscriptionsByTopic",
+        "SNS:GetTopicAttributes",
+        "SNS:Receive",
+        "SNS:AddPermission",
+        "SNS:Subscribe"
+      ],
+      "Resource": "arn:aws:sns:ca-central-1:936214665790:testSNS",
+      "Condition": {
+        "StringEquals": {
+          "AWS:SourceOwner": "936214665790"
+        }
+      }
+    },
+    {
+      "Sid": "pranays-public-write",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "SNS:Publish",
+      "Resource": "arn:aws:sns:ca-central-1:936214665790:testSNS"
+    },
+    {
+      "Sid": "pranays-public-read",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "*"
+      },
+      "Action": "SNS:Receive",
+      "Resource": "arn:aws:sns:ca-central-1:936214665790:testSNS"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+    "id": "ccc:oZX1TUZ6p:Lambda-005:Lambda:ca-central-1:Lambda-004",
+    "organisationId": "9bZA_h76p",
+    "accountId": "oZX1TUZ6p",
+    "ruleId": "Lambda-005",
+    "ruleTitle": "Lambda Function With Admin Privileges",
+    "service": "Lambda",
+    "region": "ca-central-1",
+    "riskLevel": "MEDIUM",
+    "categories": [
+        "security"
+    ],
+    "compliances": [
+        "PCI",
+        "APRA",
+        "MAS",
+        "AWAF",
+        "NIST4"
+    ],
+    "message": "Lambda Function Lambda-004 has full admin privileges",
+    "resource": "Lambda-004",
+    "status": "FAILURE",
+    "notScored": false,
+    "failureDiscoveryDate": 1561233492557,
+    "lastStatusUpdateDate": 1561233492557,
+    "ccrn": "ccrn:aws:oZX1TUZ6p:Lambda:ca-central-1:Lambda-004",
+    "tags": [],
+    "cost": 0,
+    "waste": 0,
+    "lastModifiedDate": 1561233492557,
+    "lastModifiedBy": "SYSTEM",
+    "createdDate": 1561233492557,
+    "createdBy": "SYSTEM",
+    "resolutionPageURL": "https://www.cloudconformity.com/conformity-rules/Lambda/function-with-admin-privileges.html#9bZA_h76p"
+}
