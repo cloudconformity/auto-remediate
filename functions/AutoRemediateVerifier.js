@@ -27,12 +27,10 @@ module.exports.handler = async event => {
 
   rules = rules.substring(1, rules.length)
 
-  console.log("rules");
-  console.log(rules);
+  // console.log("rules");
+  // console.log(rules);
 
   let rulesFilter = "?accountIds=" + process.env.CC_ACCOUNT_ID + "&filter[ruleIds]=" + rules + "&filter[statuses]=FAILURE";
-  console.log("my filter");
-  console.log(rulesFilter);
 
   let checks;
 
@@ -41,8 +39,8 @@ module.exports.handler = async event => {
     checks = await utils.getRecentlyModifiedChecks(rulesFilter);
 	checks.map(check => {
 		Lambda.invoke({
-	      "AutoRemediateOrchestrator",
-	      check
+	      Function: "AutoRemediateOrchestrator",
+	      Payload: check
 	  });
 
 	})
@@ -54,9 +52,5 @@ module.exports.handler = async event => {
     throw error;
 }
 
-
-  console.log(
-    JSON.stringify(result, null, 2)
-  );
   return "done";
 };

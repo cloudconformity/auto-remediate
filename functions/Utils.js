@@ -100,7 +100,6 @@ module.exports = (() => {
 
 		return getData(url).then(checks =>{
 
-			console.log("duh checks");
 			console.log(JSON.stringify(checks));
 
 			const FOUR_HOURS = 1000*60*60*4;
