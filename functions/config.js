@@ -4,47 +4,47 @@ module.exports = {
   },
 
   'AutoRemediateS3-001': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateS3-002': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateS3-003': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateS3-004': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateS3-005': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateS3-006': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateS3-007': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateS3-008': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateS3-009': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateS3-010': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateS3-012': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateConfig-001': {
@@ -74,7 +74,7 @@ module.exports = {
   },
 
   'AutoRemediateEC2-002': {
-    'enabled': true
+    'enabled': false
   },
 
   'AutoRemediateEC2-003': {
