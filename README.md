@@ -33,13 +33,19 @@ git clone https://github.com/cloudconformity/auto-remediate.git
 cd auto-remediate
 ```
 4. `IMPORTANT` Update `functions/config.js` with required configurations. Please note that all the rules in config file are disabled by default to prevent unwanted changed. User needs to enabled the ones they need manually.
-5. `IMPORTANT` Make any other necessary adjustments before deployment.
-6. Run `npm install` before deploying so that the node_modules folder would be available to AWS
+5. `OPTIONAL` Configure the following parameters in `Serverless.yml`
+     `LOGS_BUCKET` In which S3 bucket should the logs of actions taken by auto-remediate be stored?
+     `SEND_EMAIL` Boolean. Should emails be sent notifying users of actions taken by auto-remediate? Requires SMTP details.
+     `REGION_OF_SERVICE` Your Cloud Conformity region of service.
+     `ADMIN_EMAIL` Which email should receive the logs of actions taken by auto-remediate
+     `CC_ACCOUNT_ID` The Cloud Conformity account ID of the AWS account you will be deploying into.
+6. `IMPORTANT` Make any other necessary adjustments before deployment.
+7. Run `npm install` before deploying so that the node_modules folder would be available to AWS
 
 ```bash
 npm install
 ```
-7. Finally deploy
+8. Finally deploy
 
 ```bash
 serverless deploy --region us-west-2
