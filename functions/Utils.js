@@ -67,7 +67,7 @@ module.exports = (() => {
 
 		const CLOUDCONFORMITY_API_KEY = await SSM.getParameter(params).promise().then(function(data) {
 
-			console.log("Successfully got SSM data", data);
+			console.log("Successfully got SSM data");
 			return data.Parameter.Value;           // successful response
 
 	  	}).catch((err) => {
