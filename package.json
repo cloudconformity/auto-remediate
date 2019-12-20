@@ -1,9 +1,6 @@
 {
   "name": "auto-remediate",
   "version": "1.0.0",
-  "engines": {
-    "node": ">= 12.13.0"
-  },
   "description": "Auto Remediate",
   "main": "Orchestrator.js",
   "scripts": {
@@ -40,5 +37,8 @@
     "jest": "^24.8.0",
     "lodash.clonedeep": "^4.5.0",
     "mocha": "^6.2.0"
+  },
+  "engines": {
+    "node": ">= 12.13.0"
   }
 }
