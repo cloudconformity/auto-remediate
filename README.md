@@ -124,7 +124,8 @@ The table below lists the supported auto auto-remediate functions:
 |  S3 | [S3-014](https://www.cloudconformity.com/conformity-rules/EC2/unrestricted-mongodb-access.html)    | Ensure that your AWS S3 buckets are not publicly accessible via bucket policies in order to protect against unauthorized access. |
 |  TrustedAdvisor | [TrustedAdvisor-003](https://www.cloudconformity.com/conformity-rules/TrustedAdvisor/exposed-access-keys.html)    | Ensure that there are not any exposed Amazon IAM access keys in order to protect your AWS     resources against unapproved access |
 |  KMS | [KMS-002](https://www.cloudconformity.com/conformity-rules/KMS/key-rotation-enabled.html)    | Ensure that the KMS Key Rotation is Enabled which allows you to set an yearly rotation schedule for your CMK  |
-|  RedShift | [RS-019](https://www.cloudconformity.com/conformity-rules/Redshift/automated-snapshot-retention-period.html)    | Ensure that the automated snapshot retention period set for your AWS Redshift clusters is a positive number, meaning that automated backups are enabled for the clusters |
+|  RedShift | [RS-019](https://www.cloudconformity.com/conformity-rules/Redshift/automated-snapshot-retention-period.html)    | Ensure that the automated snapshot retention period set for your AWS Redshift clusters is a positive number, meaning that automated backups are enabled for the clusters 
+|  EKS | [EKS-001](https://www.cloudconformity.com/knowledge-base/aws/EKS/endpoint-access.html)  | Ensure that your Amazon EKS cluster's Kubernetes API server endpoint is not publicly accessible from the Internet in order to avoid exposing private data and minimizing security risks. |
 
 
 
