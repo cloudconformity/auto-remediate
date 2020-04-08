@@ -117,6 +117,9 @@ module.exports = {
     'enabled': false
   },
     
+  'AutoRemediateEKS-001': {
+    'enabled': true
+  },
   'AutoRemediateIAM-038': {
     'enabled': false
   },
