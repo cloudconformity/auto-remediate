@@ -722,6 +722,12 @@ resources:
 
   Resources:
 
+    AutoRemediateQUEUE:
+      Type: AWS::SQS::Queue
+      Properties: 
+        MessageRetentionPeriod: 7200 #2 Hours
+        QueueName: CloudConformityAutoRemediate
+
     AutoRemediateEC2002Role:
       Type: AWS::IAM::Role
       Properties:
@@ -1582,6 +1588,14 @@ resources:
                         - Ref: 'AWS::Region'
                         - Ref: 'AWS::AccountId'
                         - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - sqs:SendMessage
+                    - sqs:ReceiveMessage
+                    - sqs:DeleteMessage
+                    - sqs:GetQueueAttributes
+                  Resource: 
+                    Fn::GetAtt: [ AutoRemediateQUEUE, Arn ]
                 - Effect: Allow
                   Action:
                     - lambda:InvokeFunction

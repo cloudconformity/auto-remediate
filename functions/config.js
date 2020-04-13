@@ -118,7 +118,9 @@ module.exports = {
   },
     
   'AutoRemediateEKS-001': {
-    'enabled': true
+    'enabled': true,
+    'delayedExecution': true,
+    'delay' : 300
   },
   'AutoRemediateIAM-038': {
     'enabled': false
@@ -182,7 +184,7 @@ module.exports = {
   },  
 
   'AutoRemediateTrustedAdvisor-003': {
-    'enabled': false
+    'enabled': true
   },
 
   'AutoRemediateKMS-002': {

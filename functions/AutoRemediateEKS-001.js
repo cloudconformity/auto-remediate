@@ -10,10 +10,10 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  console.log('Info', event.resource)
+  const clustername=event.resource.split('/')[1];
 
   let params = {
-    name: event.resource, 
+    name: clustername, 
     resourcesVpcConfig: {
       endpointPrivateAccess: true ,
       endpointPublicAccess: false,
