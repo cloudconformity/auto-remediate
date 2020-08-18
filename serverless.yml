@@ -794,6 +794,7 @@ resources:
       Properties:
         QueueName: ${self:service}-${self:provider.stage}-queue
         VisibilityTimeout: 10
+        DelaySeconds: 3
         RedrivePolicy:
           deadLetterTargetArn: !GetAtt
             - AutoRemediateQueueDLQ
