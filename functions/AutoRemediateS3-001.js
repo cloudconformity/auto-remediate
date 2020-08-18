@@ -5,8 +5,8 @@ const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
 const readPermission = 'READ'
 
 const aclNew = {
-	'Owner': '',
-	'Grants': []
+  'Owner': '',
+  'Grants': []
 }
 
 function remediateAllUsers (thisGrant, newAcl) {
@@ -45,20 +45,20 @@ module.exports.handler = (event, context, callback) => {
         }
       })
     }).then(() => {
-      var putAclParams = {
-        Bucket: event.resource,
-        AccessControlPolicy: aclNew
-      }
-      let putAclPromise = s3.putBucketAcl(putAclParams).promise()
+    var putAclParams = {
+      Bucket: event.resource,
+      AccessControlPolicy: aclNew
+    }
+    let putAclPromise = s3.putBucketAcl(putAclParams).promise()
 
-      putAclPromise
-        .then((result) => {
-          console.log('result>' + JSON.stringify(result))
-        })
-    }).catch((err) => {
-      console.log(err, err.stack)
-      callback(err, 'failed to auto-remediate s3-001')
-    })
+    putAclPromise
+      .then((result) => {
+        console.log('result>' + JSON.stringify(result))
+      })
+  }).catch((err) => {
+    console.log(err, err.stack)
+    callback(err, 'failed to auto-remediate s3-001')
+  })
 
   callback(null, 'Success')
 }
