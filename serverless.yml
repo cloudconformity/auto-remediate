@@ -1,5 +1,9 @@
 service: auto-remediate
 
+plugins:
+  - serverless-pseudo-parameters
+  - serverless-plugin-split-stacks
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -9,6 +13,12 @@ provider:
   stackTags:
     service: auto-remediate
 
+custom:
+  splitStacks:
+    perFunction: false
+    perType: true
+    perGroupFunction: false
+
 functions:
 
   AutoRemediateOrchestrator:
@@ -16,9 +26,11 @@ functions:
     timeout: 10
     memorySize: 128
     events:
-      - sns:
-          topicName: CloudConformity
-          displayName: CloudConformity topic
+      - sqs:
+          arn: !GetAtt
+            - AutoRemediateQueue
+            - Arn
+          batchSize: 1
     tags:
       Name: Auto Remediate Orchestrator
       Owner: CloudConformity
@@ -707,6 +719,140 @@ functions:
 resources:
 
   Resources:
+    KmsKeySqsQueueFromSns:
+      Type: "AWS::KMS::Key"
+      Properties:
+        Description: "Encrypts messages publishes to an SQS queue from an SNS topic"
+        KeyPolicy: '
+                  {
+                    "Version": "2012-10-17",
+                    "Id": "Conformity-SNS-to-SQS-Key-${self:provider.region}",
+                    "Statement":[
+                      {
+                        "Sid": "Enable IAM User Permissions",
+                        "Effect": "Allow",
+                        "Principal": {
+                          "AWS": [ "arn:aws:iam::#{AWS::AccountId}:root"]
+                        },
+                        "Action": "kms:*",
+                        "Resource": "*"
+                      },
+                      {
+                        "Sid": "Allow SQS",
+                        "Effect": "Allow",
+                        "Principal": {
+                          "Service": "sqs.amazonaws.com"
+                        },
+                        "Action": [
+                          "kms:GenerateDataKey",
+                          "kms:Decrypt",
+                          "kms:Encrypt"
+                        ],
+                        "Resource": "*"
+                      },
+                      {
+                        "Sid": "Allow SNS",
+                        "Effect": "Allow",
+                        "Principal": {
+                          "Service": "sns.amazonaws.com"
+                        },
+                        "Action": [
+                          "kms:GenerateDataKey",
+                          "kms:Decrypt",
+                          "kms:Encrypt"
+                        ],
+                        "Resource": "*"
+                      }
+                    ]
+                  }'
+
+    KeyAlias:
+      Type: AWS::KMS::Alias
+      Properties:
+        AliasName: alias/SNS-to-SQS-Key-${self:provider.region}
+        TargetKeyId:
+          Fn::GetAtt:
+            - KmsKeySqsQueueFromSns
+            - Arn
+
+    SNSTopicAutoRemediate:
+      Type: AWS::SNS::Topic
+      Properties:
+        DisplayName: CloudConformity Topic
+        KmsMasterKeyId: alias/aws/sns
+        TopicName: CloudConformity
+        Tags:
+          - Key: Service
+            Value: ${self:service}
+          - Key: Name
+            Value: CloudConformity
+          - Key: Owner
+            Value: CloudConformity
+
+    AutoRemediateQueue:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:provider.stage}-queue
+        VisibilityTimeout: 10
+        RedrivePolicy:
+          deadLetterTargetArn: !GetAtt
+            - AutoRemediateQueueDLQ
+            - Arn
+          maxReceiveCount: 3
+        KmsMasterKeyId: !GetAtt
+          - KmsKeySqsQueueFromSns
+          - Arn
+        Tags:
+          - Key: Service
+            Value: ${self:service}
+          - Key: Name
+            Value: AutoRemediateQueue
+          - Key: Owner
+            Value: CloudConformity
+
+    AutoRemediateQueueDLQ:
+      Type: AWS::SQS::Queue
+      Properties:
+        QueueName: ${self:service}-${self:provider.stage}-queue-dlq
+        KmsMasterKeyId: !GetAtt
+          - KmsKeySqsQueueFromSns
+          - Arn
+        Tags:
+          - Key: Service
+            Value: ${self:service}
+          - Key: Name
+            Value: AutoRemediateQueueDLQ
+          - Key: Owner
+            Value: CloudConformity
+
+    SNSToAutoRemediateQueueSqsPolicy:
+      Type: AWS::SQS::QueuePolicy
+      Properties:
+        PolicyDocument:
+          Version: "2012-10-17"
+          Statement:
+            - Sid: "allow-sns-messages"
+              Effect: Allow
+              Principal: "*"
+              Resource: !GetAtt
+                - AutoRemediateQueue
+                - Arn
+              Action: "SQS:SendMessage"
+              Condition:
+                ArnEquals:
+                  "aws:SourceArn": !Ref SNSTopicAutoRemediate
+        Queues:
+          - Ref: AutoRemediateQueue
+
+    AutoRemediateQueueSubscription:
+      Type: AWS::SNS::Subscription
+      Properties:
+        TopicArn: !Ref SNSTopicAutoRemediate
+        Endpoint: !GetAtt
+          - AutoRemediateQueue
+          - Arn
+        Protocol: sqs
+        RawMessageDelivery: "true"
 
     AutoRemediateEC2002Role:
       Type: AWS::IAM::Role
@@ -1572,6 +1718,23 @@ resources:
                   Action:
                     - lambda:InvokeFunction
                   Resource: "*"
+                - Effect: Allow
+                  Action:
+                    - kms:Decrypt
+                    - kms:GenerateDataKey
+                  Resource: !GetAtt
+                    - KmsKeySqsQueueFromSns
+                    - Arn
+                - Effect: Allow
+                  Action:
+                    - sqs:SendMessage
+                    - sqs:ReceiveMessage
+                    - sqs:DeleteMessage
+                    - sqs:ListQueues*
+                    - sqs:GetQueueAttributes
+                  Resource: !GetAtt
+                    - AutoRemediateQueue
+                    - Arn
 
     AutoRemediateS3004Role:
       Type: AWS::IAM::Role
