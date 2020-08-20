@@ -15,8 +15,8 @@ provider:
 
 custom:
   splitStacks:
-    perFunction: false
-    perType: true
+    perFunction: true
+    perType: false
     perGroupFunction: false
 
 functions:
