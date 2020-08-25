@@ -1,41 +1,41 @@
+"use strict";
 
-'use strict'
-
-const AWS = require('aws-sdk')
-const CONFIG = require('./config')['AutoRemediateRS-019']
+const AWS = require("aws-sdk");
+const CONFIG = require("./config")["AutoRemediateRS-019"];
 
 /**
- * Lambda function to Enable Automated Snapshot Retention Period for AWS Redshift 
+ * Lambda function to Enable Automated Snapshot Retention Period for AWS Redshift
  */
 
 module.exports.handler = (event, context, callback) => {
-  console.log('AWS Redshift Automated Snapshot Retention Period - Received event:', JSON.stringify(event, null, 2))
+	console.log(
+		"AWS Redshift Automated Snapshot Retention Period - Received event:",
+		JSON.stringify(event, null, 2)
+	);
 
-  if (!event || !event.resource) {
-    return handleError('Invalid event')
-  }
+	if (!event || !event.resource) {
+		return handleError("Invalid event");
+	}
 
+	const params = {
+		ClusterIdentifier: event.resource,
+		AutomatedSnapshotRetentionPeriod: CONFIG["RetentionPeriod"]
+	};
 
-  let params = {
-    ClusterIdentifier : event.resource,
-    AutomatedSnapshotRetentionPeriod: CONFIG['RetentionPeriod'],
+	const Redshift = new AWS.Redshift({ region: event.region });
 
-  }
+	Redshift.modifyCluster(params, function (err, result) {
+		if (err) {
+			console.log("Error", err);
+			return handleError(err.message ? err.message : "Modify Cluster failed");
+		}
 
-  let Redshift = new AWS.Redshift({region: event.region})
+		console.log("Result", result);
+		return callback(null, "Successfully processed event");
+	});
 
-  Redshift.modifyCluster(params, function (err, result) {
-    if (err) {
-      console.log('Error', err)
-      return handleError(err.message ? err.message : 'Modify Cluster failed')
-    }
-
-    console.log('Result', result)
-    return callback(null, 'Successfully processed event')
-  })
-
-  function handleError (message) {
-    message = message || 'Failed to process request.'
-    return callback(new Error(message))
-  }
-}
+	function handleError(message) {
+		message = message || "Failed to process request.";
+		return callback(new Error(message));
+	}
+};

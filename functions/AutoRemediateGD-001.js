@@ -1,6 +1,6 @@
-'use strict'
+"use strict";
 
-const AWS = require('aws-sdk')
+const AWS = require("aws-sdk");
 
 /**
  * Lambda function to make Amazon GuardDuty service is currently enabled in order to protect your AWS environment and infrastructure
@@ -8,30 +8,30 @@ const AWS = require('aws-sdk')
  */
 
 module.exports.handler = (event, context, callback) => {
-  console.log('GuardDuty In Use - Received event:', JSON.stringify(event, null, 2))
+	console.log("GuardDuty In Use - Received event:", JSON.stringify(event, null, 2));
 
-  if (!event  || !event.region) {
-    return handleError('Invalid event')
-  }
+	if (!event || !event.region) {
+		return handleError("Invalid event");
+	}
 
-  let params = {
-    Enable: true
-  };
+	const params = {
+		Enable: true
+	};
 
-  let GuardDuty = new AWS.GuardDuty({region: event.region})
+	const GuardDuty = new AWS.GuardDuty({ region: event.region });
 
-  GuardDuty.createDetector(params, function (err, result) {
-    if (err) {
-        console.log('Error', err)
-        return handleError(err.message ? err.message : 'Failed to enable GuardDuty')
-      }
-  
-      console.log('Result', result)
-      return callback(null, 'Successfully processed event')
-    });
+	GuardDuty.createDetector(params, function (err, result) {
+		if (err) {
+			console.log("Error", err);
+			return handleError(err.message ? err.message : "Failed to enable GuardDuty");
+		}
 
-  function handleError (message) {
-    message = message || 'Failed to process request.'
-    return callback(new Error(message))
-  }
-}
+		console.log("Result", result);
+		return callback(null, "Successfully processed event");
+	});
+
+	function handleError(message) {
+		message = message || "Failed to process request.";
+		return callback(new Error(message));
+	}
+};
