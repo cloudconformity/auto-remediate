@@ -13,6 +13,9 @@
     "sls:deploy": "npm prune --production && serverless deploy --force"
   },
   "author": "Mike Rahmati",
+  "contributors": [
+    "Edmund Cong"
+  ],
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:cloudconformity/auto-remediate"
