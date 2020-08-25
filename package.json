@@ -4,10 +4,12 @@
   "description": "Auto Remediate",
   "main": "Orchestrator.js",
   "scripts": {
-    "test": "jest",
-    "test:watch": "jest --watch",
-    "test:mocha": "./node_modules/.bin/mocha --recursive --reporter spec",
-    "lint": "./node_modules/.bin/eslint",
+    "check": "npm run lint && npm run coverage",
+    "coverage": "npm run test -- --coverage --silent",
+    "test": "jest --passWithNoTests",
+    "test:watch": "npm test -- --watch",
+    "lint": "eslint '**/*.js' --ignore-path .gitignore",
+    "lint:fix": "npm run lint -- --fix",
     "sls:deploy": "npm prune --production && serverless deploy --force"
   },
   "author": "Mike Rahmati",
@@ -17,28 +19,47 @@
   },
   "license": "MIT",
   "dependencies": {
+    "bluebird": "^3.7.2",
     "lodash.isequal": "^4.5.0",
-    "bluebird": "^3.5.5"
+    "utils": "github:cloudconformity/utils#v1.2.0"
   },
   "devDependencies": {
-    "@types/chai": "^4.1.7",
+    "@types/chai": "^4.2.12",
+    "@types/jest": "^26.0.7",
     "@types/mocha": "^5.2.7",
-    "aws-sdk": "^2.498.0",
+    "aws-sdk": "^2.739.0",
     "aws-sdk-mock": "^4.5.0",
     "chai": "^4.2.0",
-    "dotenv": "^8.0.0",
-    "eslint": "^6.1.0",
+    "dotenv": "^8.2.0",
+    "eslint": "^6.8.0",
+    "eslint-config-prettier": "^6.11.0",
     "eslint-config-standard": "^13.0.1",
-    "eslint-plugin-import": "^2.18.2",
-    "eslint-plugin-jest": "^22.13.6",
-    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-import": "^2.22.0",
+    "eslint-plugin-jest": "^22.21.0",
+    "eslint-plugin-node": "^9.2.0",
+    "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-promise": "^4.2.1",
-    "eslint-plugin-standard": "^4.0.0",
-    "jest": "^24.8.0",
+    "eslint-plugin-security": "^1.4.0",
+    "eslint-plugin-standard": "^4.0.1",
+    "husky": "^4.2.5",
+    "jest": "^24.9.0",
+    "lint-staged": "^10.2.11",
     "lodash.clonedeep": "^4.5.0",
-    "mocha": "^6.2.0"
+    "mocha": "^6.2.3",
+    "prettier": "^2.0.5"
   },
   "engines": {
     "node": ">= 12.13.0"
+  },
+  "lint-staged": {
+    "*.js": [
+      "eslint --fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run check"
+    }
   }
 }
