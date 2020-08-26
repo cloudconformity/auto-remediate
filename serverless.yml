@@ -88,11 +88,11 @@ functions:
       include:
         - functions/AutoRemediateOrchestrator.js
     role: AutoRemediateOrchestratorRole
-      vpc:
-        securityGroupIds:
-          ${self:custom.vpcConfig.securityGroupIds}
-        subnetIds:
-          ${self:custom.vpcConfig.subnetIds}
+    vpc:
+      securityGroupIds:
+        ${self:custom.vpcConfig.securityGroupIds}
+      subnetIds:
+        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-016:
     handler: functions/AutoRemediateS3-016.handler
