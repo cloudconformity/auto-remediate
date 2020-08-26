@@ -1,5 +1,63 @@
 service: auto-remediate
 
+plugins:
+  - serverless-plugin-ifelse
+
+custom:
+  vpcConfig: ${file(./functions/config.js):vpc}
+  attachVpc: ${opt:attachVpc, false}
+  serverlessIfElse:
+    - If: '"${self:custom.attachVpc}" == false'
+      Exclude:
+        - functions.AutoRemediateOrchestrator.vpc
+        - functions.AutoRemediateS3-016.vpc
+        - functions.AutoRemediateIAM-001.vpc
+        - functions.AutoRemediateCT-001.vpc
+        - functions.AutoRemediateLambda-003.vpc
+        - functions.AutoRemediateS3-001.vpc
+        - functions.AutoRemediateS3-002.vpc
+        - functions.AutoRemediateIAM-038.vpc
+        - functions.AutoRemediateS3-014.vpc
+        - functions.AutoRemediateS3-003.vpc
+        - functions.AutoRemediateKMS-002.vpc
+        - functions.AutoRemediateS3-004.vpc
+        - functions.AutoRemediateRDS-023.vpc
+        - functions.AutoRemediateGD-001.vpc
+        - functions.AutoRemediateS3-005.vpc
+        - functions.AutoRemediateS3-006.vpc
+        - functions.AutoRemediateS3-007.vpc
+        - functions.AutoRemediateKMS-004.vpc
+        - functions.AutoRemediateOrganizations-002.vpc
+        - functions.AutoRemediateS3-008.vpc
+        - functions.AutoRemediateS3-009.vpc
+        - functions.AutoRemediateCT-003.vpc
+        - functions.AutoRemediateRDS-006.vpc
+        - functions.AutoRemediateS3-010.vpc
+        - functions.AutoRemediateS3-012.vpc
+        - functions.AutoRemediateSQS-004.vpc
+        - functions.AutoRemediateRDS-008.vpc
+        - functions.AutoRemediateConfig-001.vpc
+        - functions.AutoRemediateCFM-005.vpc
+        - functions.AutoRemediateVPC-001.vpc
+        - functions.AutoRemediateEBS-009.vpc
+        - functions.AutoRemediateRS-001.vpc
+        - functions.AutoRemediateEC2-002.vpc
+        - functions.AutoRemediateRS-019.vpc
+        - functions.AutoRemediateEC2-003.vpc
+        - functions.AutoRemediateEC2-005.vpc
+        - functions.AutoRemediateEC2-019.vpc
+        - functions.AutoRemediateEC2-004.vpc
+        - functions.AutoRemediateEC2-006.vpc
+        - functions.AutoRemediateEC2-008.vpc
+        - functions.AutoRemediateEC2-043.vpc
+        - functions.AutoRemediateRS-023.vpc
+        - functions.AutoRemediateEC2-045.vpc
+        - functions.AutoRemediateEC2-038.vpc
+        - functions.AutoRemediateEC2-040.vpc
+        - functions.AutoRemediateEC2-039.vpc
+        - functions.TrustedAdvisor-003.vpc
+        - functions.AutoRemediateKinesis-001.vpc
+
 provider:
   name: aws
   runtime: nodejs12.x
@@ -30,6 +88,11 @@ functions:
       include:
         - functions/AutoRemediateOrchestrator.js
     role: AutoRemediateOrchestratorRole
+      vpc:
+        securityGroupIds:
+          ${self:custom.vpcConfig.securityGroupIds}
+        subnetIds:
+          ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-016:
     handler: functions/AutoRemediateS3-016.handler
@@ -734,12 +797,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -769,12 +832,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -804,12 +867,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketPolicy
@@ -841,12 +904,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -876,12 +939,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - lambda:UpdateFunctionConfiguration
@@ -914,12 +977,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -949,12 +1012,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - iam:UpdateAccessKey
@@ -984,12 +1047,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -1019,12 +1082,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - redshift:ModifyCluster
@@ -1054,12 +1117,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - kms:EnableKeyRotation
@@ -1089,12 +1152,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - cloudformation:UpdateTerminationProtection
@@ -1124,12 +1187,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - redshift:ModifyCluster
@@ -1159,12 +1222,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - config:PutConfigurationRecorder
@@ -1208,12 +1271,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - rds:ModifyDBInstance
@@ -1243,12 +1306,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - cloudtrail:UpdateTrail
@@ -1278,12 +1341,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -1314,12 +1377,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -1350,12 +1413,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -1386,12 +1449,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - guardduty:CreateDetector
@@ -1422,12 +1485,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -1458,12 +1521,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - iam:UpdateAccessKey
@@ -1493,12 +1556,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:PutBucketVersioning
@@ -1529,12 +1592,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - organizations:EnableAllFeatures
@@ -1564,12 +1627,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - lambda:InvokeFunction
@@ -1599,12 +1662,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -1635,12 +1698,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:ModifySnapshotAttribute
@@ -1670,12 +1733,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -1706,12 +1769,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -1742,12 +1805,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -1778,12 +1841,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:ModifyImageAttribute
@@ -1814,12 +1877,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -1850,12 +1913,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -1886,12 +1949,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - rds:ModifyDbInstance
@@ -1921,12 +1984,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketPolicy
@@ -1957,12 +2020,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - iam:AttachRolePolicy
@@ -2000,12 +2063,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -2035,12 +2098,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -2070,12 +2133,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - redshift:ModifyClusterParameterGroup
@@ -2105,12 +2168,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -2140,12 +2203,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - rds:ModifyDBSnapshotAttribute
@@ -2175,12 +2238,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -2211,12 +2274,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -2246,12 +2309,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:PutBucketAcl
@@ -2281,12 +2344,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - kms:CancelKeyDeletion
@@ -2316,12 +2379,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -2351,12 +2414,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -2386,12 +2449,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - iam:UpdateAccessKey
@@ -2421,12 +2484,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - "kms:ListKeys"
@@ -2459,12 +2522,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:logs'
-                        - Ref: 'AWS::Region'
-                        - Ref: 'AWS::AccountId'
-                        - 'log-group:/aws/lambda/*:*:*'
+                        - ':'
+                        -
+                          - 'arn:aws:logs'
+                          - Ref: 'AWS::Region'
+                          - Ref: 'AWS::AccountId'
+                          - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - "kms:ListKeys"
