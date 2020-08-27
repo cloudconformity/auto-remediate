@@ -7,9 +7,7 @@ plugins:
 
 custom:
   splitStacks:
-    perFunction: false
-    perType: true
-    perGroupFunction: false
+    custom: stacks-map.js
   vpcConfig: ${file(./functions/config.js):vpc}
   vpc: ${opt:vpc, "false"}
   serverlessIfElse:
