@@ -1,7 +1,13 @@
 module.exports = {
+  /*
+    Enter the Security Group Ids and the Subnet Ids of the VPC you want to attach the Lambdas to
+    for example:
+        securityGroupIds: ["sg-0e12345b6ca7e89d0"],
+        subnetIds: ["subnet-0010d2034f56ec789", "subnet-0b1bc234bda567fba"]
+   */
   vpc: {
-    securityGroupIds: ["sg-0e34069b6ca3e73d2"],
-    subnetIds: ["subnet-0080d4025f76ec827", "subnet-0b4bc799bda796fba"]
+    securityGroupIds: [""],
+    subnetIds: [""]
   },
 
   function: {
