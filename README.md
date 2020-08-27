@@ -33,18 +33,24 @@ git clone https://github.com/cloudconformity/auto-remediate.git
 cd auto-remediate
 ```
 4. `IMPORTANT` Update `functions/config.js` with required configurations. Please note that all the rules in config file are disabled by default to prevent unwanted changed. User needs to enabled the ones they need manually.
-5. `IMPORTANT` Make any other necessary adjustments before deployment.
-6. Run `npm install` before deploying so that the node_modules folder would be available to AWS
+5. `IMPORTANT` To avoid failing [Lambda-007 (VPC Access for AWS Lambda Functions)](https://www.cloudconformity.com/knowledge-base/aws/Lambda/function-in-vpc.html) we suggest configuring the `securityGroupIds` and `subnetIds` fields within `functions/config.js` 
+6. `IMPORTANT` Make any other necessary adjustments before deployment.
+7. Run `npm install` before deploying so that the node_modules folder would be available to AWS
 
 ```bash
 npm install
 ```
-7. Finally deploy
+8. Finally deploy
 
 ```bash
 serverless deploy --region us-west-2
 ```
 
+Or if you've configured your VPC
+
+```bash
+serverless deploy --region us-west-2 vpc=true
+```
 
 ## Message Format
 
