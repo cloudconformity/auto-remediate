@@ -1,5 +1,5 @@
 'use strict'
-const CONFIG = require('./config').function
+const CONFIG = require('./config')
 const AWS = require('aws-sdk')
  /**
  * Lambda function to enable Amazon Simple Queue Service (SQS) queues' message encryption using Server-Side Encryption (SSE) 
