@@ -15,9 +15,7 @@ provider:
 
 custom:
   splitStacks:
-    perFunction: false
-    perType: true
-    perGroupFunction: false
+    custom: stacks-map.js
 
 functions:
 
