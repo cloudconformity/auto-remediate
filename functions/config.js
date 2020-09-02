@@ -12,64 +12,64 @@ module.exports = {
 
   function: {
     "AutoRemediateRDS-008": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-001": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-002": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-003": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-004": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-005": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-006": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-007": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-008": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-009": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-010": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-012": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateConfig-001": {
-      enabled: true,
+      enabled: false,
       S3BucketName: ""
     },
 
     "AutoRemediateCFM-005": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateCT-001": {
-      enabled: true,
+      enabled: false,
       Name: "GlobalTrail",
       S3BucketName: "",
       IncludeGlobalServiceEvents: true,
@@ -78,128 +78,128 @@ module.exports = {
     },
 
     "AutoRemediateRS-001": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateIAM-001": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-002": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-003": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-004": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-005": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-006": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-008": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-038": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-039": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-040": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-043": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-045": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateIAM-038": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateKinesis-001": {
-      enabled: true,
+      enabled: false,
       KmsKeyId: "alias/aws/kinesis"
     },
 
     "AutoRemediateVPC-001": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateEC2-019": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateCT-003": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateRds-006": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateRDS-006": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateRDS-023": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateKMS-004": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateRS-023": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateGD-001": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateOrganizations-002": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateLambda-003": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-016": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateS3-014": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateTrustedAdvisor-003": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateKMS-002": {
-      enabled: true
+      enabled: false
     },
 
     "AutoRemediateRS-019": {
-      enabled: true,
+      enabled: false,
       RetentionPeriod: 7
     }
   }
