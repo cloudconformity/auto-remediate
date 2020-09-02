@@ -49,7 +49,7 @@ serverless deploy --region us-west-2
 Or if you've configured your VPC
 
 ```bash
-serverless deploy --region us-west-2 vpc=true
+serverless deploy --region us-west-2 --vpc=true
 ```
 
 ## Message Format
