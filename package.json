@@ -11,6 +11,9 @@
     "sls:deploy": "npm prune --production && serverless deploy --force"
   },
   "author": "Mike Rahmati",
+  "contributors": [
+    "Edmund Cong"
+  ],
   "repository": {
     "type": "git",
     "url": "ssh://git@github.com:cloudconformity/auto-remediate"
@@ -18,7 +21,8 @@
   "license": "MIT",
   "dependencies": {
     "lodash.isequal": "^4.5.0",
-    "bluebird": "^3.5.5"
+    "bluebird": "^3.5.5",
+    "serverless-plugin-ifelse": "^1.0.5"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",

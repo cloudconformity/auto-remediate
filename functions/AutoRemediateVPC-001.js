@@ -1,6 +1,6 @@
 'use strict'
 
-const CONFIG = require('./config')
+const CONFIG = require('./config').function
 const AWS = require('aws-sdk')
 
 AWS.config.update({
