@@ -7,7 +7,7 @@ plugins:
 
 custom:
   splitStacks:
-    custom: stacks-map.js
+    custom: splitter.js
   vpcConfig: ${file(./functions/config.js):vpc}
   vpc: ${opt:vpc, "false"}
   serverlessIfElse:
