@@ -129,6 +129,7 @@ functions:
     handler: functions/AutoRemediateOrchestrator.handler
     timeout: 10
     memorySize: 128
+    reservedConcurrency: 1
     events:
       - sqs:
           arn: !GetAtt
