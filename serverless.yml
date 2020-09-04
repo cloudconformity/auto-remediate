@@ -15,7 +15,7 @@ provider:
 
 custom:
   splitStacks:
-    custom: stacks-map.js
+    custom: splitter.js
 
 functions:
 
