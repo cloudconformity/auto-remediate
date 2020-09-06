@@ -1,6 +1,6 @@
 {
   "name": "auto-remediate",
-  "version": "1.0.1",
+  "version": "2.0.0",
   "description": "Auto Remediate",
   "main": "Orchestrator.js",
   "scripts": {
