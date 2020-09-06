@@ -7,12 +7,12 @@ module.exports.handler = (event, context, callback) => {
   console.log('Received event: ', JSON.stringify(event, null, 2))
   console.log('Config settings: ', JSON.stringify(CONFIG, null, 2))
 
-  if (!event || !event.Records[0] || !event.Records[0].Sns || !event.Records[0].Sns.Message) {
+  if (!event || !event.Records[0] || !event.Records[0].body) {
     callback(new Error('No event specified'))
     return
   }
 
-  let message = JSON.parse(event.Records[0].Sns.Message)
+  let message = JSON.parse(event.Records[0].body)
   let AutoRemediate = 'AutoRemediate' + message.ruleId
 
   if (!CONFIG[`${AutoRemediate}`]) {

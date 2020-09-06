@@ -40,7 +40,9 @@
     "eslint-plugin-standard": "^4.0.0",
     "jest": "^24.8.0",
     "lodash.clonedeep": "^4.5.0",
-    "mocha": "^6.2.0"
+    "mocha": "^6.2.0",
+    "serverless-plugin-split-stacks": "^1.9.3",
+    "serverless-pseudo-parameters": "^2.5.0"
   },
   "engines": {
     "node": ">= 12.13.0"

@@ -22,6 +22,8 @@ Here's an example:
 
 
 ## Installation
+Note that you need to follow the [Deleting a stack on the AWS CloudFormation console](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-delete-stack.html) to delete the current stack if you plan to update to the latest version.
+
 1. Go to the official [Serverless Framework](https://serverless.com/framework/docs/providers/aws/guide/installation/)  and follow the instructions to install the framework
 2. Create a working copy of "Cloud Conformity Auto Remediation" repository by running the following command:
 ```bash
