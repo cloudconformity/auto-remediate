@@ -7,7 +7,9 @@ plugins:
 
 custom:
   splitStacks:
-    custom: splitter.js
+    perFunction: false
+    perType: true
+    perGroupFunction: false
   vpcConfig: ${file(./functions/config.js):vpc}
   vpc: ${opt:vpc, "false"}
   serverlessIfElse:
