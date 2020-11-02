@@ -3,6 +3,7 @@ service: auto-remediate
 plugins:
   - serverless-pseudo-parameters
   - serverless-plugin-split-stacks
+  - serverless-stack-termination-protection
 
 custom:
   splitStacks:
