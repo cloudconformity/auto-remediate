@@ -3,115 +3,12 @@ service: auto-remediate
 plugins:
   - serverless-pseudo-parameters
   - serverless-plugin-split-stacks
-  - serverless-plugin-ifelse
 
 custom:
   splitStacks:
     perFunction: false
     perType: true
     perGroupFunction: false
-  vpcConfig: ${file(./functions/config.js):vpc}
-  vpc: ${opt:vpc, "false"}
-  serverlessIfElse:
-    - If: '"${self:custom.vpc}" == "false"'
-      Exclude:
-        - functions.AutoRemediateOrchestrator.vpc
-        - functions.AutoRemediateS3-016.vpc
-        - functions.AutoRemediateIAM-001.vpc
-        - functions.AutoRemediateCT-001.vpc
-        - functions.AutoRemediateLambda-003.vpc
-        - functions.AutoRemediateS3-001.vpc
-        - functions.AutoRemediateS3-002.vpc
-        - functions.AutoRemediateIAM-038.vpc
-        - functions.AutoRemediateS3-014.vpc
-        - functions.AutoRemediateS3-003.vpc
-        - functions.AutoRemediateKMS-002.vpc
-        - functions.AutoRemediateS3-004.vpc
-        - functions.AutoRemediateRDS-023.vpc
-        - functions.AutoRemediateGD-001.vpc
-        - functions.AutoRemediateS3-005.vpc
-        - functions.AutoRemediateS3-006.vpc
-        - functions.AutoRemediateS3-007.vpc
-        - functions.AutoRemediateKMS-004.vpc
-        - functions.AutoRemediateOrganizations-002.vpc
-        - functions.AutoRemediateS3-008.vpc
-        - functions.AutoRemediateS3-009.vpc
-        - functions.AutoRemediateCT-003.vpc
-        - functions.AutoRemediateRDS-006.vpc
-        - functions.AutoRemediateS3-010.vpc
-        - functions.AutoRemediateS3-012.vpc
-        - functions.AutoRemediateSQS-004.vpc
-        - functions.AutoRemediateRDS-008.vpc
-        - functions.AutoRemediateConfig-001.vpc
-        - functions.AutoRemediateCFM-005.vpc
-        - functions.AutoRemediateVPC-001.vpc
-        - functions.AutoRemediateEBS-009.vpc
-        - functions.AutoRemediateRS-001.vpc
-        - functions.AutoRemediateEC2-002.vpc
-        - functions.AutoRemediateRS-019.vpc
-        - functions.AutoRemediateEC2-003.vpc
-        - functions.AutoRemediateEC2-005.vpc
-        - functions.AutoRemediateEC2-019.vpc
-        - functions.AutoRemediateEC2-004.vpc
-        - functions.AutoRemediateEC2-006.vpc
-        - functions.AutoRemediateEC2-008.vpc
-        - functions.AutoRemediateEC2-043.vpc
-        - functions.AutoRemediateRS-023.vpc
-        - functions.AutoRemediateEC2-045.vpc
-        - functions.AutoRemediateEC2-038.vpc
-        - functions.AutoRemediateEC2-040.vpc
-        - functions.AutoRemediateEC2-039.vpc
-        - functions.TrustedAdvisor-003.vpc
-        - functions.AutoRemediateKinesis-001.vpc
-        - resources.AutoRemediateEC2002Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2003Role.Properties.Policies[0]
-        - resources.AutoRemediateS3014Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2005Role.Properties.Policies[0]
-        - resources.AutoRemediateLambda003Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2043Role.Properties.Policies[0]
-        - resources.AutoRemediateIAM001Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2042Role.Properties.Policies[0]
-        - resources.AutoRemediateRS001Role.Properties.Policies[0]
-        - resources.AutoRemediateKMS002Role.Properties.Policies[0]
-        - resources.AutoRemediateCFM005Role.Properties.Policies[0]
-        - resources.AutoRemediateRS019Role.Properties.Policies[0]
-        - resources.AutoRemediateConfig001Role.Properties.Policies[0]
-        - resources.AutoRemediateRDS008Role.Properties.Policies[0]
-        - resources.AutoRemediateCT001Role.Properties.Policies[0]
-        - resources.AutoRemediateS3001Role.Properties.Policies[0]
-        - resources.AutoRemediateS3002Role.Properties.Policies[0]
-        - resources.AutoRemediateS3003Role.Properties.Policies[0]
-        - resources.AutoRemediateGD001Role.Properties.Policies[0]
-        - resources.AutoRemediateS3009Role.Properties.Policies[0]
-        - resources.AutoRemediateIAM038Role.Properties.Policies[0]
-        - resources.AutoRemediateS3012Role.Properties.Policies[0]
-        - resources.AutoRemediateOrganizations002Role.Properties.Policies[0]
-        - resources.AutoRemediateOrchestratorRole.Properties.Policies[0]
-        - resources.AutoRemediateS3004Role.Properties.Policies[0]
-        - resources.AutoRemediateEBS009Role.Properties.Policies[0]
-        - resources.AutoRemediateS3005Role.Properties.Policies[0]
-        - resources.AutoRemediateS3006Role.Properties.Policies[0]
-        - resources.AutoRemediateS3007Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2019Role.Properties.Policies[0]
-        - resources.AutoRemediateS3008Role.Properties.Policies[0]
-        - resources.AutoRemediateS3010Role.Properties.Policies[0]
-        - resources.AutoRemediateRDS006Role.Properties.Policies[0]
-        - resources.AutoRemediateS3016Role.Properties.Policies[0]
-        - resources.AutoRemediateVPC001Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2008Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2045Role.Properties.Policies[0]
-        - resources.AutoRemediateRS023Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2006Role.Properties.Policies[0]
-        - resources.AutoRemediateRDS023Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2038Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2040Role.Properties.Policies[0]
-        - resources.AutoRemediateCT003Role.Properties.Policies[0]
-        - resources.AutoRemediateKMS004Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2004Role.Properties.Policies[0]
-        - resources.AutoRemediateEC2039Role.Properties.Policies[0]
-        - resources.AutoRemediateTrustedAdvisor003Role.Properties.Policies[0]
-        - resources.AutoRemediateSQS004Role.Properties.Policies[0]
-        - resources.AutoRemediateKinesis001Role.Properties.Policies[0]
 
 provider:
   name: aws
@@ -147,11 +44,6 @@ functions:
       include:
         - functions/AutoRemediateOrchestrator.js
     role: AutoRemediateOrchestratorRole
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-016:
     handler: functions/AutoRemediateS3-016.handler
@@ -165,11 +57,6 @@ functions:
       include:
         - functions/AutoRemediateS3-016.js
     role: AutoRemediateS3016Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateIAM-001:
     handler: functions/AutoRemediateIAM-001.handler
@@ -183,11 +70,6 @@ functions:
       include:
         - functions/AutoRemediateIAM-001.js
     role: AutoRemediateIAM001Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateCT-001:
     handler: functions/AutoRemediateCT-001.handler
@@ -201,11 +83,6 @@ functions:
       include:
         - functions/AutoRemediateCT-001.js
     role: AutoRemediateCT001Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateLambda-003:
     handler: functions/AutoRemediateLambda-003.handler
@@ -219,11 +96,6 @@ functions:
       include:
         - functions/AutoRemediateLambda-003.js
     role: AutoRemediateLambda003Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-001:
     handler: functions/AutoRemediateS3-001.handler
@@ -237,11 +109,6 @@ functions:
       include:
         - functions/AutoRemediateS3-001.js
     role: AutoRemediateS3001Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-002:
     handler: functions/AutoRemediateS3-002.handler
@@ -258,11 +125,6 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3002Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
 
   AutoRemediateIAM-038:
@@ -278,11 +140,6 @@ functions:
       include:
         - functions/AutoRemediateIAM-038.js
     role: AutoRemediateIAM038Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-014:
     handler: functions/AutoRemediateS3-014.handler
@@ -297,11 +154,6 @@ functions:
       include:
         - functions/AutoRemediateS3-014.js
     role: AutoRemediateS3014Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-003:
     handler: functions/AutoRemediateS3-003.handler
@@ -318,11 +170,6 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3003Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateKMS-002:
     handler: functions/AutoRemediateKMS-002.handler
@@ -337,11 +184,6 @@ functions:
       include:
         - functions/AutoRemediateKMS-002.js
     role: AutoRemediateKMS002Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
 
 
@@ -360,11 +202,6 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3004Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
 
   AutoRemediateRDS-023:
@@ -380,11 +217,6 @@ functions:
       include:
         - functions/AutoRemediateRDS-023.js
     role: AutoRemediateRDS023Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateGD-001:
     handler: functions/AutoRemediateGD-001.handler
@@ -399,11 +231,6 @@ functions:
       include:
         - functions/AutoRemediateGD-001.js
     role: AutoRemediateGD001Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-005:
     handler: functions/AutoRemediateS3-005.handler
@@ -420,11 +247,6 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3005Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-006:
     handler: functions/AutoRemediateS3-006.handler
@@ -441,11 +263,6 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3006Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-007:
     handler: functions/AutoRemediateS3-007.handler
@@ -462,11 +279,6 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3007Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
 
   AutoRemediateKMS-004:
@@ -482,11 +294,6 @@ functions:
       include:
         - functions/AutoRemediateKMS-004.js
     role: AutoRemediateKMS004Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
 
   AutoRemediateOrganizations-002:
@@ -502,11 +309,6 @@ functions:
       include:
         - functions/AutoRemediateOrganizations-002.js
     role: AutoRemediateOrganizations002Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-008:
     handler: functions/AutoRemediateS3-008.handler
@@ -523,11 +325,6 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3008Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-009:
     handler: functions/AutoRemediateS3-009.handler
@@ -544,11 +341,6 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3009Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateCT-003:
     handler: functions/AutoRemediateCT-003.handler
@@ -563,11 +355,6 @@ functions:
       include:
         - functions/AutoRemediateCT-003.js
     role: AutoRemediateCT003Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateRDS-006:
     handler: functions/AutoRemediateRDS-006.handler
@@ -582,11 +369,6 @@ functions:
       include:
         - functions/AutoRemediateRDS-006.js
     role: AutoRemediateRDS006Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-010:
     handler: functions/AutoRemediateS3-010.handler
@@ -603,11 +385,6 @@ functions:
         - utils/S3_utils.js
         - node_modules/lodash.isequal/**
     role: AutoRemediateS3010Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateS3-012:
     handler: functions/AutoRemediateS3-012.handler
@@ -621,11 +398,6 @@ functions:
       include:
         - functions/AutoRemediateS3-012.js
     role: AutoRemediateS3012Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateSQS-004:
     handler: functions/AutoRemediateSQS-004.handler
@@ -640,11 +412,6 @@ functions:
       include:
         - functions/AutoRemediateSQS-004.js
     role: AutoRemediateSQS004Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
   AutoRemediateRDS-008:
     handler: functions/AutoRemediateRDS-008.handler
     memorySize: 128
@@ -657,11 +424,6 @@ functions:
       include:
         - functions/AutoRemediateRDS-008.js
     role: AutoRemediateRDS008Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateConfig-001:
     handler: functions/AutoRemediateConfig-001.handler
@@ -676,11 +438,6 @@ functions:
       include:
         - functions/AutoRemediateConfig-001.js
     role: AutoRemediateConfig001Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateCFM-005:
     handler: functions/AutoRemediateCFM-005.handler
@@ -695,11 +452,6 @@ functions:
       include:
         - functions/AutoRemediateCFM-005.js
     role: AutoRemediateCFM005Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateVPC-001:
     handler: functions/AutoRemediateVPC-001.handler
@@ -714,11 +466,6 @@ functions:
       include:
         - functions/AutoRemediateVPC-001.js
     role: AutoRemediateVPC001Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEBS-009:
     handler: functions/AutoRemediateEBS-009.handler
@@ -733,11 +480,6 @@ functions:
       include:
         - functions/AutoRemediateEBS-009.js
     role: AutoRemediateEBS009Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
 
   AutoRemediateRS-001:
@@ -753,11 +495,6 @@ functions:
       include:
         - functions/AutoRemediateRS-001.js
     role: AutoRemediateRS001Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEC2-002:
     handler: functions/AutoRemediateEC2-002.handler
@@ -772,11 +509,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-002.js
     role: AutoRemediateEC2002Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateRS-019:
     handler: functions/AutoRemediateRS-019.handler
@@ -791,11 +523,6 @@ functions:
       include:
         - functions/AutoRemediateRS-019.js
     role: AutoRemediateRS019Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEC2-003:
     handler: functions/AutoRemediateEC2-003.handler
@@ -810,11 +537,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-003.js
     role: AutoRemediateEC2003Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEC2-005:
     handler: functions/AutoRemediateEC2-005.handler
@@ -829,11 +551,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-005.js
     role: AutoRemediateEC2005Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEC2-019:
     handler: functions/AutoRemediateEC2-019.handler
@@ -848,11 +565,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-019.js
     role: AutoRemediateEC2019Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEC2-004:
     handler: functions/AutoRemediateEC2-004.handler
@@ -867,11 +579,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-004.js
     role: AutoRemediateEC2004Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEC2-006:
     handler: functions/AutoRemediateEC2-006.handler
@@ -886,11 +593,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-006.js
     role: AutoRemediateEC2006Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEC2-008:
     handler: functions/AutoRemediateEC2-008.handler
@@ -905,11 +607,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-008.js
     role: AutoRemediateEC2008Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEC2-043:
     handler: functions/AutoRemediateEC2-043.handler
@@ -924,11 +621,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-043.js
     role: AutoRemediateEC2043Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateRS-023:
     handler: functions/AutoRemediateRS-023.handler
@@ -943,11 +635,6 @@ functions:
       include:
         - functions/AutoRemediateRS-023.js
     role: AutoRemediateRS023Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
 
   AutoRemediateEC2-045:
@@ -963,11 +650,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-045.js
     role: AutoRemediateEC2045Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEC2-038:
     handler: functions/AutoRemediateEC2-038.handler
@@ -982,11 +664,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-038.js
     role: AutoRemediateEC2038Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEC2-040:
     handler: functions/AutoRemediateEC2-040.handler
@@ -1001,11 +678,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-040.js
     role: AutoRemediateEC2040Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateEC2-039:
     handler: functions/AutoRemediateEC2-039.handler
@@ -1020,11 +692,6 @@ functions:
       include:
         - functions/AutoRemediateEC2-039.js
     role: AutoRemediateEC2039Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   TrustedAdvisor-003:
     handler: functions/AutoRemediateTrustedAdvisor-003.handler
@@ -1039,11 +706,6 @@ functions:
       include:
         - functions/AutoRemediateTrustedAdvisor-003.js
     role: AutoRemediateTrustedAdvisor003Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 
   AutoRemediateKinesis-001:
     handler: functions/AutoRemediateKinesis-001.handler
@@ -1058,11 +720,6 @@ functions:
       include:
         - functions/AutoRemediateKinesis-001.js
     role: AutoRemediateKinesis001Role
-    vpc:
-      securityGroupIds:
-        ${self:custom.vpcConfig.securityGroupIds}
-      subnetIds:
-        ${self:custom.vpcConfig.subnetIds}
 resources:
 
   Resources:
@@ -1216,15 +873,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1243,12 +891,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -1268,15 +916,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1295,12 +934,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -1320,15 +959,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1340,7 +970,6 @@ resources:
           - PolicyName: AutoRemediateS3-014Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1348,12 +977,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketPolicy
@@ -1375,15 +1004,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1395,7 +1015,6 @@ resources:
           - PolicyName: AutoRemediateEC2-005Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1403,12 +1022,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -1428,15 +1047,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1448,7 +1058,6 @@ resources:
           - PolicyName: AutoRemediateLambda-003Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1456,12 +1065,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - lambda:UpdateFunctionConfiguration
@@ -1484,15 +1093,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1504,7 +1104,6 @@ resources:
           - PolicyName: AutoRemediateEC2-043Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1512,12 +1111,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -1537,15 +1136,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1557,7 +1147,6 @@ resources:
           - PolicyName: AutoRemediateIAM-001Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1565,12 +1154,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - iam:UpdateAccessKey
@@ -1590,15 +1179,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1610,7 +1190,6 @@ resources:
           - PolicyName: AutoRemediateEC2-042Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1618,12 +1197,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -1643,15 +1222,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1663,7 +1233,6 @@ resources:
           - PolicyName: AutoRemediateRS-001Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1671,12 +1240,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - redshift:ModifyCluster
@@ -1696,15 +1265,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1716,7 +1276,6 @@ resources:
           - PolicyName: AutoRemediateKMS-002Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1724,12 +1283,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - kms:EnableKeyRotation
@@ -1749,15 +1308,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1769,7 +1319,6 @@ resources:
           - PolicyName: AutoRemediateCFM-005Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1777,12 +1326,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - cloudformation:UpdateTerminationProtection
@@ -1802,15 +1351,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1822,7 +1362,6 @@ resources:
           - PolicyName: AutoRemediateRS-019Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1830,12 +1369,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - redshift:ModifyCluster
@@ -1855,15 +1394,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1875,7 +1405,6 @@ resources:
           - PolicyName: AutoRemediateConfig-001Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1883,12 +1412,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - config:PutConfigurationRecorder
@@ -1922,15 +1451,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1942,7 +1462,6 @@ resources:
           - PolicyName: AutoRemediateRDS-008Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -1950,12 +1469,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - rds:ModifyDBInstance
@@ -1975,15 +1494,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -1995,7 +1505,6 @@ resources:
           - PolicyName: AutoRemediateCT-001Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2003,12 +1512,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - cloudtrail:UpdateTrail
@@ -2028,15 +1537,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2048,7 +1548,6 @@ resources:
           - PolicyName: AutoRemediateS3-001Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2056,12 +1555,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -2082,15 +1581,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2102,7 +1592,6 @@ resources:
           - PolicyName: AutoRemediateS3-002Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2110,12 +1599,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -2136,15 +1625,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2156,7 +1636,6 @@ resources:
           - PolicyName: AutoRemediateS3-003Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2164,12 +1643,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -2190,15 +1669,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2210,7 +1680,6 @@ resources:
           - PolicyName: AutoRemediateGD-001Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2218,12 +1687,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - guardduty:CreateDetector
@@ -2244,15 +1713,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2264,7 +1724,6 @@ resources:
           - PolicyName: AutoRemediateS3-009Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2272,12 +1731,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -2298,15 +1757,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2318,7 +1768,6 @@ resources:
           - PolicyName: AutoRemediateIAM-038Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2326,12 +1775,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - iam:UpdateAccessKey
@@ -2351,15 +1800,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2371,7 +1811,6 @@ resources:
           - PolicyName: AutoRemediateS3-012Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2379,12 +1818,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:PutBucketVersioning
@@ -2405,15 +1844,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2425,7 +1855,6 @@ resources:
           - PolicyName: AutoRemediateOrganizations-002Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2433,12 +1862,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - organizations:EnableAllFeatures
@@ -2458,15 +1887,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2478,7 +1898,6 @@ resources:
           - PolicyName: AutoRemediateOrchestratorPolicy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2486,12 +1905,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - lambda:InvokeFunction
@@ -2528,15 +1947,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2548,7 +1958,6 @@ resources:
           - PolicyName: AutoRemediateS3-004Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2556,12 +1965,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -2582,15 +1991,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2602,7 +2002,6 @@ resources:
           - PolicyName: AutoRemediateEBS-009Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2610,12 +2009,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:ModifySnapshotAttribute
@@ -2635,15 +2034,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2655,7 +2045,6 @@ resources:
           - PolicyName: AutoRemediateS3-005Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2663,12 +2052,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -2689,15 +2078,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2709,7 +2089,6 @@ resources:
           - PolicyName: AutoRemediateS3-006Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2717,12 +2096,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -2743,15 +2122,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2763,7 +2133,6 @@ resources:
           - PolicyName: AutoRemediateS3-007Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2771,12 +2140,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -2797,15 +2166,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2817,7 +2177,6 @@ resources:
           - PolicyName: AutoRemediateEC2-019Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2825,12 +2184,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:ModifyImageAttribute
@@ -2851,15 +2210,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2871,7 +2221,6 @@ resources:
           - PolicyName: AutoRemediateS3-008Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2879,12 +2228,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -2905,15 +2254,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2925,7 +2265,6 @@ resources:
           - PolicyName: AutoRemediateS3-010Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2933,12 +2272,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketAcl
@@ -2959,15 +2298,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -2979,7 +2309,6 @@ resources:
           - PolicyName: AutoRemediateRDS-006Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -2987,12 +2316,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - rds:ModifyDbInstance
@@ -3012,15 +2341,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3032,7 +2352,6 @@ resources:
           - PolicyName: AutoRemediateS3-016Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3040,12 +2359,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:GetBucketPolicy
@@ -3066,15 +2385,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3086,7 +2396,6 @@ resources:
           - PolicyName: AutoRemediateVPC-001Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3094,12 +2403,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - iam:AttachRolePolicy
@@ -3127,15 +2436,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3147,7 +2447,6 @@ resources:
           - PolicyName: AutoRemediateEC2-008Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3155,12 +2454,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -3180,15 +2479,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3200,7 +2490,6 @@ resources:
           - PolicyName: AutoRemediateEC2-045Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3208,12 +2497,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -3233,15 +2522,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3253,7 +2533,6 @@ resources:
           - PolicyName: AutoRemediateRS-023Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3261,12 +2540,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - redshift:ModifyClusterParameterGroup
@@ -3286,15 +2565,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3306,7 +2576,6 @@ resources:
           - PolicyName: AutoRemediateEC2-006Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3314,12 +2583,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -3339,15 +2608,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3359,7 +2619,6 @@ resources:
           - PolicyName: AutoRemediateRDS-023Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3367,12 +2626,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - rds:ModifyDBSnapshotAttribute
@@ -3392,15 +2651,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3412,7 +2662,6 @@ resources:
           - PolicyName: AutoRemediateEC2-038Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3420,12 +2669,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -3446,15 +2695,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3466,7 +2706,6 @@ resources:
           - PolicyName: AutoRemediateEC2-040Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3474,12 +2713,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -3499,15 +2738,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3519,7 +2749,6 @@ resources:
           - PolicyName: AutoRemediateCT-003Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3527,12 +2756,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - s3:PutBucketAcl
@@ -3552,15 +2781,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3572,7 +2792,6 @@ resources:
           - PolicyName: AutoRemediateKMS-004Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3580,12 +2799,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - kms:CancelKeyDeletion
@@ -3605,15 +2824,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3625,7 +2835,6 @@ resources:
           - PolicyName: AutoRemediateEC2-004Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3633,12 +2842,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -3658,15 +2867,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3678,7 +2878,6 @@ resources:
           - PolicyName: AutoRemediateEC2-039Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3686,12 +2885,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - ec2:RevokeSecurityGroupIngress
@@ -3711,15 +2910,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3731,7 +2921,6 @@ resources:
           - PolicyName: AutoRemediateTrustedAdvisor-003Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3739,12 +2928,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - iam:UpdateAccessKey
@@ -3764,15 +2953,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3784,7 +2964,6 @@ resources:
           - PolicyName: SQS-004Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3792,12 +2971,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - "kms:ListKeys"
@@ -3820,15 +2999,6 @@ resources:
               Action:
                 - sts:AssumeRole
         Policies:
-          - PolicyName: AutoRemediationVPCPolicy
-            PolicyDocument:
-              Statement:
-                - Effect: Allow
-                  Action:
-                    - ec2:CreateNetworkInterface
-                    - ec2:DescribeNetworkInterfaces
-                    - ec2:DeleteNetworkInterface
-                  Resource: "*"
           - PolicyName: AutoRemediationXRayPolicy
             PolicyDocument:
               Statement:
@@ -3840,7 +3010,6 @@ resources:
           - PolicyName: Kinesis-001Policy
             PolicyDocument:
               Statement:
-
                 - Effect: Allow
                   Action:
                     - logs:CreateLogGroup
@@ -3848,12 +3017,12 @@ resources:
                     - logs:PutLogEvents
                   Resource:
                     - 'Fn::Join':
-                        - ':'
-                        -
-                          - 'arn:aws:logs'
-                          - Ref: 'AWS::Region'
-                          - Ref: 'AWS::AccountId'
-                          - 'log-group:/aws/lambda/*:*:*'
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
                 - Effect: Allow
                   Action:
                     - "kms:ListKeys"

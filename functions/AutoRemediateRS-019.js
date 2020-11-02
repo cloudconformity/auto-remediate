@@ -2,7 +2,7 @@
 'use strict'
 
 const AWS = require('aws-sdk')
-const CONFIG = require('./config').function['AutoRemediateRS-019']
+const CONFIG = require('./config')['AutoRemediateRS-019']
 
 /**
  * Lambda function to Enable Automated Snapshot Retention Period for AWS Redshift 
