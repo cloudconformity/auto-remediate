@@ -132,6 +132,8 @@ The table below lists the supported auto auto-remediate functions:
 
 For more information about `Rule Id`, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
 
+Note: if you want to exclude auto-remediate resources for certain rules, you can use Conformity Profile, for example, `exclude-rules.json`. The example profile provides a list of rules to exlude low risk rules or rules that require extra resources or configurations. 
+
 ## How to contribute
 
 You are welcome to contribute to "Cloud Conformity Auto Remediation"

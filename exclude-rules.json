@@ -1,0 +1,140 @@
+{
+    "schema": "https://cloudconformity.com/external/profile.schema.json",
+    "version": "1.1",
+    "name": "exclude list of rules triggered by auto-remediate resources",
+    "description": "This is a Conformity Profile used to add tag exceptions to rules that triggered by auto-remediate resources. The excluded rules are either low risk rules or rules that require extra resources or configurations",
+    "ruleSettings": [
+        {
+            "id": "CFM-001",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "MEDIUM",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          },
+          {
+            "id": "CFM-002",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "MEDIUM",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          },
+          {
+            "id": "SNS-002",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "HIGH",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          },
+          {
+            "id": "Lambda-007",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "MEDIUM",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          },
+          {
+            "id": "S3-011",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "MEDIUM",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          },
+          {
+            "id": "S3-018",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "LOW",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          },
+          {
+            "id": "S3-012",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "LOW",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          },
+          {
+            "id": "S3-013",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "LOW",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          },
+          {
+            "id": "S3-020",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "LOW",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          },
+          {
+            "id": "S3-023",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "LOW",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          },
+          {
+            "id": "S3-024",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "LOW",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          },
+          {
+            "id": "SQS-006",
+            "enabled": true,
+            "provider": "aws",
+            "riskLevel": "LOW",
+            "exceptions": {
+              "tags": [
+                "service::auto-remediate"
+              ]
+            }
+          }
+    ]
+  }
