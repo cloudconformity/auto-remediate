@@ -34,25 +34,19 @@ git clone https://github.com/cloudconformity/auto-remediate.git
 ```bash
 cd auto-remediate
 ```
-4. `IMPORTANT` Update `functions/config.js` with required configurations. Please note that all the rules in config file are disabled by default to prevent unwanted changes. User needs to enabled the ones they need manually.
-5. `IMPORTANT` To avoid failing [Lambda-007 (VPC Access for AWS Lambda Functions)](https://www.cloudconformity.com/knowledge-base/aws/Lambda/function-in-vpc.html) we suggest configuring the `securityGroupIds` and `subnetIds` fields within `functions/config.js` 
-6. `IMPORTANT` Make any other necessary adjustments before deployment.
-7. Run `npm install` before deploying so that the node_modules folder would be available to AWS
+4. `IMPORTANT` Update `functions/config.json` with required configurations. Please note that all the rules in config file are disabled by default to prevent unwanted changed. User needs to enabled the ones they need manually.
+5. `IMPORTANT` Make any other necessary adjustments before deployment.
+6. Run `npm install` before deploying so that the node_modules folder would be available to AWS
 
 ```bash
 npm install
 ```
-8. Finally deploy
+7. Finally deploy
 
 ```bash
 serverless deploy --region us-west-2
 ```
 
-Or if you've configured your VPC
-
-```bash
-serverless deploy --region us-west-2 --vpc=true
-```
 
 ## Message Format
 
@@ -137,6 +131,8 @@ The table below lists the supported auto auto-remediate functions:
 
 
 For more information about `Rule Id`, please refer to [Cloud Conformity Services Endpoint](https://us-west-2.cloudconformity.com/v1/services)
+
+Note: if you want to exclude auto-remediate resources for certain rules, you can use Conformity Profile, for example, `exclude-rules.json`. The example profile provides a list of rules to exlude low risk rules or rules that require extra resources or configurations. 
 
 ## How to contribute
 

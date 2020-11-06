@@ -1,5 +1,5 @@
 'use strict'
-const CONFIG = require('./config').function
+const CONFIG = require('./config')
 const AWS = require('aws-sdk')
 module.exports.handler = (event, context, callback) => {
   console.log('Received event: ', JSON.stringify(event, null, 2))

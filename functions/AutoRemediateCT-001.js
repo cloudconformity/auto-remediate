@@ -1,7 +1,7 @@
 'use strict'
 
 const AWS = require('aws-sdk')
-const CONFIG = require('./config').function['AutoRemediateCT-001']
+const CONFIG = require('./config')['AutoRemediateCT-001']
 
 /**
 * Lambda function to automatically remediate CloudTrail not Global
