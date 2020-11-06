@@ -34,7 +34,7 @@ git clone https://github.com/cloudconformity/auto-remediate.git
 ```bash
 cd auto-remediate
 ```
-4. `IMPORTANT` Update `functions/config.js` with required configurations. Please note that all the rules in config file are disabled by default to prevent unwanted changed. User needs to enabled the ones they need manually.
+4. `IMPORTANT` Update `functions/config.json` with required configurations. Please note that all the rules in config file are disabled by default to prevent unwanted changed. User needs to enabled the ones they need manually.
 5. `IMPORTANT` Make any other necessary adjustments before deployment.
 6. Run `npm install` before deploying so that the node_modules folder would be available to AWS
 
