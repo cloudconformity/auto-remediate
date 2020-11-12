@@ -7,7 +7,8 @@
     "test": "jest",
     "test:watch": "jest --watch",
     "test:mocha": "./node_modules/.bin/mocha --recursive --reporter spec",
-    "lint": "./node_modules/.bin/eslint",
+    "lint": "eslint '**/*.js' --ignore-path .gitignore",
+    "lint:fix": "npm run lint -- --fix",
     "sls:deploy": "npm prune --production && serverless deploy --force"
   },
   "author": "Mike Rahmati",
