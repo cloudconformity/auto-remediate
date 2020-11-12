@@ -1,4 +1,4 @@
-name: Lint
+name: Lint and test
 
 on:
   pull_request
@@ -20,3 +20,7 @@ jobs:
       # Run ESLint
       - name: Running ESLint...
         run: npm run lint
+
+      # Run Tests
+      - name: Running tests...
+        run: npm run test
