@@ -1,6 +1,5 @@
 'use strict'
 
-const CONFIG = require('./config')
 const AWS = require('aws-sdk')
 
 AWS.config.update({
@@ -14,7 +13,6 @@ AWS.events.on('retry', function (resp) {
   }
 })
 
-const Utils = require('./Utils.js')
 // Using the native promise implementation of the JavaScript engine
 AWS.config.setPromisesDependency(null)
 
@@ -23,6 +21,11 @@ AWS.config.setPromisesDependency(null)
  */
 module.exports.handler = (event, context, callback) => {
   console.log('Enable Flow Logs   - Received event:', JSON.stringify(event, null, 2))
+
+  function handleError (message) {
+    message = message || 'Failed to process request.'
+    return callback(new Error(message))
+  }
 
   if (!event || !event.resource || !event.region) {
     return handleError('Invalid event')
@@ -112,6 +115,7 @@ module.exports.handler = (event, context, callback) => {
         }
         return IAM.putRolePolicy(PutRolePolicyParams).promise().then(function () {
           console.log('Successfully put role policy')
+          // eslint-disable-next-line no-undef
           return data.Role.Arn
         })
       })

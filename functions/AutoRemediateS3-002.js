@@ -1,6 +1,4 @@
 'use strict'
-
-const config = require('./config')
 const utils = require('../utils/S3_utils')
 const AWS = require('aws-sdk')
 

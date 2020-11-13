@@ -61,8 +61,9 @@ module.exports.handler = (event, context, callback) => {
         var currentStatement = statements[i]
         console.log('Processing statement ' + i + '  ...')
         for (var key in currentStatement) {
-          if (currentStatement.hasOwnProperty(key) && currentStatement[key] == 'Allow') {
-            if (currentStatement['Principal'] == '*') {
+          // eslint-disable-next-line no-prototype-builtins
+          if (currentStatement.hasOwnProperty(key) && currentStatement[key] === 'Allow') {
+            if (currentStatement['Principal'] === '*') {
               currentStatement['Principal'] = { AWS: 'arn:aws:iam::' + accountId + ':root' }
               console.log('Altered Principal to the root user')
               console.log(currentStatement)
