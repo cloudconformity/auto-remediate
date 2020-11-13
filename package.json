@@ -38,7 +38,9 @@
     "eslint-plugin-node": "^9.1.0",
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
+    "husky": "^4.3.0",
     "jest": "^24.8.0",
+    "lint-staged": "^10.5.1",
     "lodash.clonedeep": "^4.5.0",
     "mocha": "^6.2.0",
     "serverless-plugin-split-stacks": "^1.9.3",
@@ -47,5 +49,16 @@
   },
   "engines": {
     "node": ">= 12.13.0"
+  },
+  "lint-staged": {
+    "**/*.js": [
+      "npm run lint:fix"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test"
+    }
   }
 }
