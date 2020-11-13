@@ -61,11 +61,11 @@ module.exports.handler = (event, context, callback) => {
   }
 
   function getRole (accountId) {
-    let ConfigRoleName = 'AWSConfigRole'
+    const ConfigRoleName = 'AWSConfigRole'
 
-    let IAM = new AWS.IAM()
+    const IAM = new AWS.IAM()
 
-    return IAM.getRole({RoleName: ConfigRoleName}).promise().then(function (data) {
+    return IAM.getRole({ RoleName: ConfigRoleName }).promise().then(function (data) {
       return data.Role.Arn
     }).catch(function (err) {
       console.log(err.message)
@@ -74,17 +74,17 @@ module.exports.handler = (event, context, callback) => {
         throw err
       }
 
-      let CreateRoleParams = {
+      const CreateRoleParams = {
         AssumeRolePolicyDocument: JSON.stringify({
-          'Version': '2012-10-17',
-          'Statement': [
+          Version: '2012-10-17',
+          Statement: [
             {
-              'Sid': '',
-              'Effect': 'Allow',
-              'Principal': {
-                'Service': 'config.amazonaws.com'
+              Sid: '',
+              Effect: 'Allow',
+              Principal: {
+                Service: 'config.amazonaws.com'
               },
-              'Action': 'sts:AssumeRole'
+              Action: 'sts:AssumeRole'
             }
           ]
         }),
@@ -95,7 +95,7 @@ module.exports.handler = (event, context, callback) => {
       return IAM.createRole(CreateRoleParams).promise().then(function (data) {
         console.log('Successfully created the role')
 
-        let AttachRolePolicyParams = {
+        const AttachRolePolicyParams = {
           PolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSConfigRole',
           RoleName: ConfigRoleName
         }
@@ -103,28 +103,28 @@ module.exports.handler = (event, context, callback) => {
         return IAM.attachRolePolicy(AttachRolePolicyParams).promise().then(function () {
           console.log('Successfully attach AWSConfigRole managed policy to role')
 
-          let PutRolePolicyParams = {
+          const PutRolePolicyParams = {
             PolicyDocument: JSON.stringify({
-              'Version': '2012-10-17',
-              'Statement': [
+              Version: '2012-10-17',
+              Statement: [
                 {
-                  'Effect': 'Allow',
-                  'Action': [
+                  Effect: 'Allow',
+                  Action: [
                     's3:PutObject'
                   ],
-                  'Resource': 'arn:aws:s3:::' + CONFIG['AutoRemediateConfig-001']['S3BucketName'] + '/AWSLogs/' + accountId + '/Config/*',
-                  'Condition': {
-                    'StringLike': {
+                  Resource: 'arn:aws:s3:::' + CONFIG['AutoRemediateConfig-001']['S3BucketName'] + '/AWSLogs/' + accountId + '/Config/*',
+                  Condition: {
+                    StringLike: {
                       's3:x-amz-acl': 'bucket-owner-full-control'
                     }
                   }
                 },
                 {
-                  'Effect': 'Allow',
-                  'Action': [
+                  Effect: 'Allow',
+                  Action: [
                     's3:GetBucketAcl'
                   ],
-                  'Resource': 'arn:aws:s3:::' + CONFIG['AutoRemediateConfig-001']['S3BucketName']
+                  Resource: 'arn:aws:s3:::' + CONFIG['AutoRemediateConfig-001']['S3BucketName']
                 }
               ]
             }),
@@ -150,9 +150,9 @@ module.exports.handler = (event, context, callback) => {
   }
 
   function subscribe (roleARN) {
-    let ConfigService = new AWS.ConfigService({region: event.region})
+    const ConfigService = new AWS.ConfigService({ region: event.region })
 
-    let ConfigurationRecorderParams = {
+    const ConfigurationRecorderParams = {
       ConfigurationRecorder: {
         name: 'default',
         recordingGroup: {
@@ -166,7 +166,7 @@ module.exports.handler = (event, context, callback) => {
     return ConfigService.putConfigurationRecorder(ConfigurationRecorderParams).promise().then(function () {
       console.log('Successfully put configuration recorder')
 
-      let PutDeliveryChannelParams = {
+      const PutDeliveryChannelParams = {
         DeliveryChannel: {
           name: 'default',
           s3BucketName: CONFIG['AutoRemediateConfig-001']['S3BucketName']
@@ -176,7 +176,7 @@ module.exports.handler = (event, context, callback) => {
       return ConfigService.putDeliveryChannel(PutDeliveryChannelParams).promise().then(function () {
         console.log('Successfully put delivery channel')
 
-        let StartConfigurationRecorderparams = {
+        const StartConfigurationRecorderparams = {
           ConfigurationRecorderName: 'default'
         }
 

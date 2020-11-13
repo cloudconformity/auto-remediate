@@ -13,11 +13,11 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
-    KeyId : event.resource,
+  const params = {
+    KeyId: event.resource
   }
 
-  let KMS = new AWS.KMS({region: event.region})
+  const KMS = new AWS.KMS({ region: event.region })
 
   KMS.cancelKeyDeletion(params, function (err, result) {
     if (err) {

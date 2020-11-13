@@ -1,9 +1,9 @@
-let event = {
-  'resource': 'your_kms_key_id',
-  'region': 'us-east-1'
+const event = {
+  resource: 'your_kms_key_id',
+  region: 'us-east-1'
 }
 
-let AutoRemediate = require('../functions/AutoRemediateKMS-002')
+const AutoRemediate = require('../functions/AutoRemediateKMS-002')
 
 AutoRemediate.handler(event, {}, function (err, data) {
   console.log(err)

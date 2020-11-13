@@ -12,19 +12,19 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  const UserName = (event.extradata || []).filter(data => data.name === "UserName")
+  const UserName = (event.extradata || []).filter(data => data.name === 'UserName')
 
   if (UserName.length !== 1 && !UserName[0].value) {
     return handleError('Cannot find IAM Username')
   }
 
-  let params = {
+  const params = {
     AccessKeyId: event.resource,
     Status: 'Inactive',
     UserName: UserName[0].value
   }
 
-  let IAM = new AWS.IAM()
+  const IAM = new AWS.IAM()
 
   IAM.updateAccessKey(params, function (err, result) {
     if (err) {

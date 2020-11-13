@@ -1,9 +1,9 @@
-let event = {
-  'resource': 'YOUR_SECURITY_GROUP_NAME',
-  'region': 'us-east-1'
+const event = {
+  resource: 'YOUR_SECURITY_GROUP_NAME',
+  region: 'us-east-1'
 }
 
-let AutoRemediate = require('../functions/AutoRemediateEC2-002')
+const AutoRemediate = require('../functions/AutoRemediateEC2-002')
 
 AutoRemediate.handler(event, {}, function (err, data) {
   console.log(err)

@@ -10,12 +10,12 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
+  const params = {
     Bucket: event.resource,
-    ACL: "private"
+    ACL: 'private'
   }
 
-  let S3 = new AWS.S3({region: event.region})
+  const S3 = new AWS.S3({ region: event.region })
 
   S3.putBucketAcl(params, function (err, result) {
     if (err) {

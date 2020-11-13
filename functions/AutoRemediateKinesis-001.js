@@ -3,7 +3,7 @@ const CONFIG = require('./config')
 const AWS = require('aws-sdk')
 
 /**
- * Lambda function to enable AWS Kinesis streams encryption using Server-Side Encryption (SSE) 
+ * Lambda function to enable AWS Kinesis streams encryption using Server-Side Encryption (SSE)
  *
  */
 
@@ -18,13 +18,13 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Missing KmsKeyId value')
   }
 
-  let params = {
-    EncryptionType: "KMS",
-    KeyId: CONFIG['AutoRemediateKinesis-001']['KmsKeyId'], 
+  const params = {
+    EncryptionType: 'KMS',
+    KeyId: CONFIG['AutoRemediateKinesis-001']['KmsKeyId'],
     StreamName: event.resource
   }
 
-  let Kinesis = new AWS.Kinesis({region: event.region ,apiVersion: '2012-11-05'})
+  const Kinesis = new AWS.Kinesis({ region: event.region, apiVersion: '2012-11-05' })
 
   Kinesis.startStreamEncryption(params, function (err, result) {
     if (err) {

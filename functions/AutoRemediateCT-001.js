@@ -13,7 +13,7 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
+  const params = {
     Name: CONFIG['Name'],
     S3BucketName: CONFIG['S3BucketName'],
     IncludeGlobalServiceEvents: CONFIG['IncludeGlobalServiceEvents'],
@@ -21,7 +21,7 @@ module.exports.handler = (event, context, callback) => {
     S3KeyPrefix: CONFIG['S3KeyPrefix']
   }
 
-  let CloudTrail = new AWS.CloudTrail({apiVersion: '2013-11-01'})
+  const CloudTrail = new AWS.CloudTrail({ apiVersion: '2013-11-01' })
 
   CloudTrail.updateTrail(params, (err, result) => {
     if (err) {

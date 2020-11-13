@@ -19,7 +19,7 @@ const Utils = require('./Utils.js')
 AWS.config.setPromisesDependency(null)
 
 /**
- * Ensure that  Flow Logs feature is Enabled for your account 
+ * Ensure that  Flow Logs feature is Enabled for your account
  */
 module.exports.handler = (event, context, callback) => {
   console.log('Enable Flow Logs   - Received event:', JSON.stringify(event, null, 2))
@@ -32,7 +32,7 @@ module.exports.handler = (event, context, callback) => {
   CreateVPCFlowLogRole().then(function (roleARN) {
     console.log('Role ARN:', roleARN)
 
-    let params = {
+    const params = {
       ResourceIds: [event.resource],
       ResourceType: 'VPC',
       TrafficType: 'ALL',
@@ -40,7 +40,7 @@ module.exports.handler = (event, context, callback) => {
       LogGroupName: 'VPCFlowLogs'
     }
 
-    let Ec2 = new AWS.EC2({ region: event.region })
+    const Ec2 = new AWS.EC2({ region: event.region })
 
     Ec2.createFlowLogs(params, function (err, result) {
       if (err) {
@@ -58,9 +58,9 @@ module.exports.handler = (event, context, callback) => {
   })
 
   function CreateVPCFlowLogRole () {
-    let VPCFlowLogRole = 'VPCFlowLogRole'
+    const VPCFlowLogRole = 'VPCFlowLogRole'
 
-    let IAM = new AWS.IAM()
+    const IAM = new AWS.IAM()
 
     return IAM.getRole({ RoleName: VPCFlowLogRole }).promise().then(function (data) {
       return data.Role.Arn
@@ -71,16 +71,16 @@ module.exports.handler = (event, context, callback) => {
         throw err
       }
 
-      let CreateRoleParams = {
+      const CreateRoleParams = {
         AssumeRolePolicyDocument: JSON.stringify({
-          'Version': '2012-10-17',
-          'Statement': [
+          Version: '2012-10-17',
+          Statement: [
             {
-              'Effect': 'Allow',
-              'Principal': {
-                'Service': 'vpc-flow-logs.amazonaws.com'
+              Effect: 'Allow',
+              Principal: {
+                Service: 'vpc-flow-logs.amazonaws.com'
               },
-              'Action': 'sts:AssumeRole'
+              Action: 'sts:AssumeRole'
             }
           ]
         }
@@ -90,20 +90,20 @@ module.exports.handler = (event, context, callback) => {
       }
 
       return IAM.createRole(CreateRoleParams).promise().then(function () {
-        let PutRolePolicyParams = {
+        const PutRolePolicyParams = {
           PolicyDocument: JSON.stringify({
-            'Version': '2012-10-17',
-            'Statement': [
+            Version: '2012-10-17',
+            Statement: [
               {
-                'Action': [
+                Action: [
                   'logs:CreateLogGroup',
                   'logs:CreateLogStream',
                   'logs:PutLogEvents',
                   'logs:DescribeLogGroups',
                   'logs:DescribeLogStreams'
                 ],
-                'Effect': 'Allow',
-                'Resource': '*'
+                Effect: 'Allow',
+                Resource: '*'
               }
             ]
           }),

@@ -14,12 +14,12 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
+  const params = {
     ClusterIdentifier: event.resource,
     PubliclyAccessible: false
   }
 
-  let Redshift = new AWS.Redshift({region: event.region})
+  const Redshift = new AWS.Redshift({ region: event.region })
 
   Redshift.modifyCluster(params, function (err, result) {
     if (err) {

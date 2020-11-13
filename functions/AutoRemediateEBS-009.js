@@ -10,7 +10,7 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
+  const params = {
     SnapshotId: event.resource,
     Attribute: 'createVolumePermission',
     OperationType: 'remove',
@@ -20,7 +20,7 @@ module.exports.handler = (event, context, callback) => {
 
   }
 
-  let EC2 = new AWS.EC2({region: event.region})
+  const EC2 = new AWS.EC2({ region: event.region })
 
   EC2.modifySnapshotAttribute(params, function (err, result) {
     if (err) {

@@ -1,12 +1,12 @@
-let event = {
-	"ruleId": "GD-001",
-	"region": "us-east-1",
-	"status": "FAILURE"
+const event = {
+  ruleId: 'GD-001',
+  region: 'us-east-1',
+  status: 'FAILURE'
 }
 
-let AutoRemediate = require('../functions/AutoRemediateGD-001')
+const AutoRemediate = require('../functions/AutoRemediateGD-001')
 
 AutoRemediate.handler(event, {}, function (err, data) {
-	console.log(err)
-	console.log('data', JSON.stringify(data, null, 2))
+  console.log(err)
+  console.log('data', JSON.stringify(data, null, 2))
 })

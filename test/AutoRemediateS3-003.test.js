@@ -34,10 +34,10 @@ const sampleEvent = {
   lastModifiedBy: 'SYSTEM'
 }
 
-let awsMockCallback = (jestFn) => {
+const awsMockCallback = (jestFn) => {
   return function (params, callback) {
     try {
-      let result = jestFn(params, callback)
+      const result = jestFn(params, callback)
       callback(null, result)
     } catch (err) {
       callback(err)
@@ -48,23 +48,23 @@ let awsMockCallback = (jestFn) => {
 describe('S3-003 AutoRemediation', () => {
   let getBucketAclMock
   let putBucketAclMock
-  let grantReadAcpAllUsers = {
+  const grantReadAcpAllUsers = {
     Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'READ_ACP'
   }
-  let grantReadAllUsers = {
+  const grantReadAllUsers = {
     Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'READ'
   }
-  let grantWriteAcpAllUsers = {
+  const grantWriteAcpAllUsers = {
     Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'WRITE_ACP'
   }
-  let grantWriteAllUsers = {
+  const grantWriteAllUsers = {
     Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'WRITE'
   }
-  let grantWriteAuthenticatedUsers = {
+  const grantWriteAuthenticatedUsers = {
     Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers' }, Permission: 'WRITE'
   }
-  let grantFullControlCanonicalUser = {
-    Grantee: { 'DisplayName': 'user_name', 'ID': 'account_user_id123455667890abcdef', 'Type': 'CanonicalUser' }, Permission: 'FULL_CONTROL'
+  const grantFullControlCanonicalUser = {
+    Grantee: { DisplayName: 'user_name', ID: 'account_user_id123455667890abcdef', Type: 'CanonicalUser' }, Permission: 'FULL_CONTROL'
   }
 
   beforeEach(() => {
@@ -112,14 +112,14 @@ describe('S3-003 AutoRemediation', () => {
     })
 
     it('should get the correct bucket ACL from S3', () => {
-      let expectedParams = {
+      const expectedParams = {
         Bucket: 'sample-bucket'
       }
       expect(getBucketAclMock).toHaveBeenCalledWith(expectedParams, expect.any(Function))
     })
 
     it('should set a new ACL on the affected bucket', () => {
-      let expectedParams = {
+      const expectedParams = {
         Bucket: 'sample-bucket',
         AccessControlPolicy: expect.any(Object)
       }
@@ -132,7 +132,7 @@ describe('S3-003 AutoRemediation', () => {
     })
 
     it('should keep WRITE grants for other users', () => {
-      let expectedGrant = {
+      const expectedGrant = {
         AccessControlPolicy: {
           Grants: expect.arrayContaining([grantWriteAuthenticatedUsers]),
           Owner: expect.any(Object)
@@ -142,7 +142,7 @@ describe('S3-003 AutoRemediation', () => {
     })
 
     it('should keep READ grants for All Users', () => {
-      let expectedGrant = {
+      const expectedGrant = {
         AccessControlPolicy: {
           Grants: expect.arrayContaining([grantReadAllUsers]),
           Owner: expect.any(Object)
@@ -152,7 +152,7 @@ describe('S3-003 AutoRemediation', () => {
     })
 
     it('should keep READ_ACP grants for All Users', () => {
-      let expectedGrant = {
+      const expectedGrant = {
         AccessControlPolicy: {
           Grants: expect.arrayContaining([grantReadAcpAllUsers]),
           Owner: expect.any(Object)
@@ -162,7 +162,7 @@ describe('S3-003 AutoRemediation', () => {
     })
 
     it('should keep WRITE_ACP grants for All Users', () => {
-      let expectedGrant = {
+      const expectedGrant = {
         AccessControlPolicy: {
           Grants: expect.arrayContaining([grantWriteAcpAllUsers]),
           Owner: expect.any(Object)
@@ -172,7 +172,7 @@ describe('S3-003 AutoRemediation', () => {
     })
 
     it('should keep FULL_CONTROL grants for Canonical User', () => {
-      let expectedGrant = {
+      const expectedGrant = {
         AccessControlPolicy: {
           Grants: expect.arrayContaining([grantFullControlCanonicalUser]),
           Owner: expect.any(Object)
@@ -183,7 +183,7 @@ describe('S3-003 AutoRemediation', () => {
   })
 
   describe('invalid invocation', () => {
-    let mockCallback = (done) => {
+    const mockCallback = (done) => {
       return (err, data) => {
         expect(err).toBeDefined()
         expect(getBucketAclMock).not.toHaveBeenCalled()
@@ -197,14 +197,14 @@ describe('S3-003 AutoRemediation', () => {
     })
 
     it('should fail when "resource" missing from the event', done => {
-      let malformedEvent = {
+      const malformedEvent = {
         ruleId: 'S3-003'
       }
       source.handler(malformedEvent, jest.fn(), mockCallback(done))
     })
 
     it('should fail when the incorrect rule is received', done => {
-      let malformedEvent = {
+      const malformedEvent = {
         resource: 'sample-bucket',
         ruleId: 'S3-00x'
       }

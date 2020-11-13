@@ -14,12 +14,12 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
+  const params = {
     DBInstanceIdentifier: event.resource,
     PubliclyAccessible: false
   }
 
-  let RDS = new AWS.RDS({region: event.region})
+  const RDS = new AWS.RDS({ region: event.region })
 
   RDS.modifyDBInstance(params, function (err, result) {
     if (err) {

@@ -5,7 +5,7 @@ const AWS = require('aws-sdk')
 const CONFIG = require('./config')['AutoRemediateRS-019']
 
 /**
- * Lambda function to Enable Automated Snapshot Retention Period for AWS Redshift 
+ * Lambda function to Enable Automated Snapshot Retention Period for AWS Redshift
  */
 
 module.exports.handler = (event, context, callback) => {
@@ -15,14 +15,13 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-
-  let params = {
-    ClusterIdentifier : event.resource,
-    AutomatedSnapshotRetentionPeriod: CONFIG['RetentionPeriod'],
+  const params = {
+    ClusterIdentifier: event.resource,
+    AutomatedSnapshotRetentionPeriod: CONFIG['RetentionPeriod']
 
   }
 
-  let Redshift = new AWS.Redshift({region: event.region})
+  const Redshift = new AWS.Redshift({ region: event.region })
 
   Redshift.modifyCluster(params, function (err, result) {
     if (err) {

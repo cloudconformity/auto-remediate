@@ -3,7 +3,7 @@
 const AWS = require('aws-sdk')
 
 /**
- * Lambda function to Enabled KMS Key Rotation 
+ * Lambda function to Enabled KMS Key Rotation
  */
 
 module.exports.handler = (event, context, callback) => {
@@ -13,11 +13,11 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
-    KeyId : event.resource,
+  const params = {
+    KeyId: event.resource
   }
 
-  let KMS = new AWS.KMS({region: event.region})
+  const KMS = new AWS.KMS({ region: event.region })
 
   KMS.enableKeyRotation(params, function (err, result) {
     if (err) {

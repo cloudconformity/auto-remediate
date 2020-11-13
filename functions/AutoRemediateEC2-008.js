@@ -1,5 +1,5 @@
 'use strict'
-let AccessRevoker = require('../utils/security_group_access_revoker')
+const AccessRevoker = require('../utils/security_group_access_revoker')
 
 const TCP_MSSQL_PORT = 1433
 const PROTOCOL = 'tcp'
