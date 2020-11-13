@@ -1,0 +1,26 @@
+name: Lint and test
+
+on:
+  pull_request
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      # Install Node.js
+      - uses: actions/setup-node@v1
+        with:
+          node-version: 12
+
+      # Install your dependencies
+      - name: Installing package.json...
+        run: npm ci
+
+      # Run ESLint
+      - name: Running ESLint...
+        run: npm run lint
+
+      # Run Tests
+      - name: Running tests...
+        run: npm run test
