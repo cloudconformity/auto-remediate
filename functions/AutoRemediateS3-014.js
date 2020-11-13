@@ -21,9 +21,9 @@ const Utils = require('./Utils.js')
 /**
  * This function Alter Bucket policy to enforce AWS S3 bucket are not publicly accessible
  * * <b>Note:</b> Here we assume that the S3 Bucket has a policy with the
- * "Effect" : "Allow" and "Principal" : "*" 
+ * "Effect" : "Allow" and "Principal" : "*"
  * Which cause  S3-014 rule to fail.
- * 
+ *
  * This Function replace Principal in the policy with account root user
  */
 module.exports.handler = (event, context, callback) => {
@@ -33,59 +33,53 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let S3Bucket = event.resource
+  const S3Bucket = event.resource
 
   return Utils.getAccountId().then(function (accountId) {
     console.log('AWS Account ID:', accountId)
 
-    return AlterBucketPolicyPrincipal(S3Bucket , accountId).then(function () {
-        console.log('SES is Enabled for bucket ', event.resource)
-        return callback(null, 'Successfully processed event')
-  })
-
+    return AlterBucketPolicyPrincipal(S3Bucket, accountId).then(function () {
+      console.log('SES is Enabled for bucket ', event.resource)
+      return callback(null, 'Successfully processed event')
+    })
   }).catch(function (err) {
     console.log('Error', err)
     return handleError(err.message ? err.message : 'Failed to enable AWS Config')
   })
 
+  function AlterBucketPolicyPrincipal (S3Bucket, accountId) {
+    const S3 = new AWS.S3()
 
-
-  function AlterBucketPolicyPrincipal(S3Bucket , accountId) {
-    let S3 = new AWS.S3()
-
-    return S3.getBucketPolicy({Bucket: S3Bucket}).promise().then(function (data) {
+    return S3.getBucketPolicy({ Bucket: S3Bucket }).promise().then(function (data) {
       console.log('Retrieved Bucket Policy:', JSON.stringify(JSON.parse(data.Policy), undefined, 2))
-      
-      let BucketPolicy = JSON.parse(data.Policy)
+
+      const BucketPolicy = JSON.parse(data.Policy)
 
       var statements = BucketPolicy.Statement
 
-      for (var i=0;i<statements.length;i++){
-
-        var currentStatement=statements[i];
-            console.log( "Processing statement " +  i + "  ..." )
-            for (var key in currentStatement){
-                if (currentStatement.hasOwnProperty(key) && currentStatement[key]== "Allow"){
-                    if (currentStatement["Principal"] == "*" ){
-                        currentStatement["Principal"] = {"AWS":'arn:aws:iam::'+accountId+':root'}
-                        console.log("Altered Principal to the root user");
-                        console.log(currentStatement);
-                    }
-                    
-                }
+      for (var i = 0; i < statements.length; i++) {
+        var currentStatement = statements[i]
+        console.log('Processing statement ' + i + '  ...')
+        for (var key in currentStatement) {
+          if (currentStatement.hasOwnProperty(key) && currentStatement[key] == 'Allow') {
+            if (currentStatement['Principal'] == '*') {
+              currentStatement['Principal'] = { AWS: 'arn:aws:iam::' + accountId + ':root' }
+              console.log('Altered Principal to the root user')
+              console.log(currentStatement)
             }
-        }
-
-        let PutBucketPolicyParams = {
-            Policy: JSON.stringify(BucketPolicy),
-            Bucket: S3Bucket
           }
-    
-          return S3.putBucketPolicy(PutBucketPolicyParams).promise().then(function (data) {
-            console.log('Successfully put bucket policy')
-            return data.Policy
-          })
+        }
+      }
 
+      const PutBucketPolicyParams = {
+        Policy: JSON.stringify(BucketPolicy),
+        Bucket: S3Bucket
+      }
+
+      return S3.putBucketPolicy(PutBucketPolicyParams).promise().then(function (data) {
+        console.log('Successfully put bucket policy')
+        return data.Policy
+      })
     }).catch(function (err) {
       console.log(err.message)
       throw err

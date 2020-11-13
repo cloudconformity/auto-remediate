@@ -1,5 +1,5 @@
 'use strict'
-let AccessRevoker = require('../utils/security_group_access_revoker')
+const AccessRevoker = require('../utils/security_group_access_revoker')
 
 const TCP_ORACLE_PORT = 1521
 const PROTOCOL = 'tcp'

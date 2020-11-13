@@ -14,12 +14,12 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
+  const params = {
     EnableTerminationProtection: true,
     StackName: event.resource
   }
 
-  let CloudFormation = new AWS.CloudFormation({region: event.region})
+  const CloudFormation = new AWS.CloudFormation({ region: event.region })
 
   CloudFormation.updateTerminationProtection(params, function (err, result) {
     if (err) {

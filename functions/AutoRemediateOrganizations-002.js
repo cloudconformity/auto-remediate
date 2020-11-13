@@ -13,11 +13,11 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
-   
+  const params = {
+
   }
 
-  let Organizations = new AWS.Organizations({region: event.region})
+  const Organizations = new AWS.Organizations({ region: event.region })
 
   Organizations.enableAllFeatures(params, function (err, result) {
     if (err) {
@@ -34,7 +34,3 @@ module.exports.handler = (event, context, callback) => {
     return callback(new Error(message))
   }
 }
-
-
-
-

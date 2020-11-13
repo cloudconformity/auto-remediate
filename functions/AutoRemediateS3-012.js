@@ -13,14 +13,14 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
+  const params = {
     Bucket: event.resource,
     VersioningConfiguration: {
       Status: 'Enabled'
     }
   }
 
-  let S3 = new AWS.S3()
+  const S3 = new AWS.S3()
 
   S3.putBucketVersioning(params, function (err, result) {
     if (err) {

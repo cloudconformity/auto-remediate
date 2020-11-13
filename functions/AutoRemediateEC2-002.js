@@ -1,5 +1,5 @@
 'use strict'
-let AccessRevoker = require('../utils/security_group_access_revoker')
+const AccessRevoker = require('../utils/security_group_access_revoker')
 
 const TCP_SSH_PORT = 22
 const PROTOCOL = 'tcp'

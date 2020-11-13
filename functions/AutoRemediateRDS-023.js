@@ -3,7 +3,7 @@
 const AWS = require('aws-sdk')
 
 /**
- * Lambda function to enforce AWS Relational Database Service (RDS) database snapshots not to be shared publicly 
+ * Lambda function to enforce AWS Relational Database Service (RDS) database snapshots not to be shared publicly
  */
 
 module.exports.handler = (event, context, callback) => {
@@ -13,7 +13,7 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
+  const params = {
     DBSnapshotIdentifier: event.resource,
     AttributeName: 'restore',
     ValuesToRemove: [
@@ -22,7 +22,7 @@ module.exports.handler = (event, context, callback) => {
 
   }
 
-  let RDS = new AWS.RDS({region: event.region})
+  const RDS = new AWS.RDS({ region: event.region })
 
   RDS.modifyDBSnapshotAttribute(params, function (err, result) {
     if (err) {
