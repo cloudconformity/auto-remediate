@@ -1,5 +1,5 @@
 'use strict'
-let AccessRevoker = require('../utils/security_group_access_revoker')
+const AccessRevoker = require('../utils/security_group_access_revoker')
 
 const TCP_ORACLE_PORT = 1521
 const PROTOCOL = 'tcp'
@@ -15,7 +15,7 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  AccessRevoker.revoke(PROTOCOL, TCP_RDP_PORT, event.resource, event.region, function (err, result) {
+  AccessRevoker.revoke(PROTOCOL, TCP_ORACLE_PORT, event.resource, event.region, function (err, result) {
     if (err) {
       console.log('Error', err)
       return handleError(err.message ? err.message : 'removing Oracle database access on port 1521 failed')

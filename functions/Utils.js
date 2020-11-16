@@ -6,7 +6,7 @@ module.exports = {
    *
    */
   getAccountId: function () {
-    let STS = new AWS.STS({apiVersion: '2011-06-15'})
+    const STS = new AWS.STS({ apiVersion: '2011-06-15' })
 
     return STS.getCallerIdentity({}).promise().then(function (data) {
       return data.Account

@@ -13,16 +13,16 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
-    ParameterGroupName : event.resource,
-    Parameters:[{
-        ParameterName: "enable_user_activity_logging",
-        ParameterValue: "true"
-        } 
+  const params = {
+    ParameterGroupName: event.resource,
+    Parameters: [{
+      ParameterName: 'enable_user_activity_logging',
+      ParameterValue: 'true'
+    }
     ]
   }
 
-  let Redshift = new AWS.Redshift({region: event.region})
+  const Redshift = new AWS.Redshift({ region: event.region })
 
   Redshift.modifyClusterParameterGroup(params, function (err, result) {
     if (err) {
@@ -39,6 +39,3 @@ module.exports.handler = (event, context, callback) => {
     return callback(new Error(message))
   }
 }
-
-
-

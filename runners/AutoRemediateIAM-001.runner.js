@@ -1,8 +1,8 @@
-let event = {
-  'resource': 'YOUR_BUCKET_NAME'
+const event = {
+  resource: 'AKIA----------------'
 }
 
-let AutoRemediate = require('../functions/AutoRemediateS3-012')
+const AutoRemediate = require('../functions/AutoRemediateIAM-001')
 
 AutoRemediate.handler(event, {}, function (err, data) {
   console.log(err)

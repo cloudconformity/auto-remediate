@@ -1,9 +1,8 @@
-let event = {
-  'resource': 'snap-41df37a1',
-  'region': 'us-east-1'
+const event = {
+  resource: 'YOUR_BUCKET_NAME'
 }
 
-let AutoRemediate = require('../functions/AutoRemediateEBS-009')
+const AutoRemediate = require('../functions/AutoRemediateS3-012')
 
 AutoRemediate.handler(event, {}, function (err, data) {
   console.log(err)

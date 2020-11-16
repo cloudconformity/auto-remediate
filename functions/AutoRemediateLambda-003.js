@@ -17,7 +17,7 @@ AWS.events.on('retry', function (resp) {
 AWS.config.setPromisesDependency(null)
 
 /**
- * Enable tracing for your AWS Lambda functions 
+ * Enable tracing for your AWS Lambda functions
  */
 module.exports.handler = (event, context, callback) => {
   console.log('Lambda Function Tracing Enabled - Received event:', JSON.stringify(event, null, 2))
@@ -26,17 +26,17 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let FunctionName = event.resource
+  const FunctionName = event.resource
 
-  let Lambda = new AWS.Lambda()
-  let IAM = new AWS.IAM()
+  const Lambda = new AWS.Lambda()
+  const IAM = new AWS.IAM()
 
-  return Lambda.getFunctionConfiguration({FunctionName: FunctionName}).promise().then(function (data) {
+  return Lambda.getFunctionConfiguration({ FunctionName: FunctionName }).promise().then(function (data) {
     console.log('Role ARN:', data.Role)
 
-    let FunctionRoleName = data.Role.split('/')[1]
+    const FunctionRoleName = data.Role.split('/')[1]
 
-    let AttachRolePolicyParams = {
+    const AttachRolePolicyParams = {
       PolicyArn: 'arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess',
       RoleName: FunctionRoleName
     }
@@ -49,8 +49,7 @@ module.exports.handler = (event, context, callback) => {
           resolve()
         }, 10000)
       }).then(function () {
-
-        let FunctionConfigurationParams = {
+        const FunctionConfigurationParams = {
           FunctionName: FunctionName,
           TracingConfig: {
             Mode: 'Active'

@@ -3,31 +3,31 @@
 const AWS = require('aws-sdk')
 
 /**
- * Lambda function to disable access to EC2 AMI that publicly shared with  other AWS accounts 
+ * Lambda function to disable access to EC2 AMI that publicly shared with  other AWS accounts
  *
  */
 
 module.exports.handler = (event, context, callback) => {
   console.log('Publicly Shared AMI  - Received event:', JSON.stringify(event, null, 2))
 
-  if (!event ||  !event.resource || !event.region) {
+  if (!event || !event.resource || !event.region) {
     return handleError('Invalid event')
   }
 
-  let params = {
+  const params = {
     ImageId: event.resource,
     LaunchPermission: {
 
       Remove: [
         {
-          Group: "all"
-        },
-        
+          Group: 'all'
+        }
+
       ]
-    },
+    }
   }
 
-  let Ec2 = new AWS.EC2({region: event.region})
+  const Ec2 = new AWS.EC2({ region: event.region })
 
   Ec2.modifyImageAttribute(params, function (err, result) {
     if (err) {

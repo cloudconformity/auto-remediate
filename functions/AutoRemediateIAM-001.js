@@ -13,12 +13,12 @@ module.exports.handler = (event, context, callback) => {
     return handleError('Invalid event')
   }
 
-  let params = {
+  const params = {
     AccessKeyId: event.resource,
     Status: 'Inactive'
   }
 
-  let IAM = new AWS.IAM()
+  const IAM = new AWS.IAM()
 
   IAM.updateAccessKey(params, function (err, result) {
     if (err) {
