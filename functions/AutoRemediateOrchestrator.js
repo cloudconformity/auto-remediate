@@ -8,8 +8,7 @@ module.exports.handler = (event, context, callback) => {
     callback(new Error('No event specified'))
     return
   }
-  const parsedBody = JSON.parse(event.Records[0].body)
-  const message = JSON.parse(parsedBody.Message)
+  const message = JSON.parse(event.Records[0].body)
   const AutoRemediate = 'AutoRemediate' + message.ruleId
   if (!CONFIG[`${AutoRemediate}`]) {
     console.log(
