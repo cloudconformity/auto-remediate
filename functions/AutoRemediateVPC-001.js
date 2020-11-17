@@ -20,7 +20,7 @@ AWS.config.setPromisesDependency(null)
  * Ensure that  Flow Logs feature is Enabled for your account
  */
 module.exports.handler = (event, context, callback) => {
-  console.log('Enable Flow Logs   - Received event:', JSON.stringify(event, null, 2))
+  console.log('Enable Flow Logs - Received event:', JSON.stringify(event, null, 2))
 
   function handleError (message) {
     message = message || 'Failed to process request.'
