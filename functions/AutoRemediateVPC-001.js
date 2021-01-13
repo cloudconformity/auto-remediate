@@ -113,11 +113,12 @@ module.exports.handler = (event, context, callback) => {
           PolicyName: 'VPCFlowLogRolePolicy',
           RoleName: VPCFlowLogRole
         }
-        IAM.putRolePolicy(PutRolePolicyParams).promise().then(function () {
+        return IAM.putRolePolicy(PutRolePolicyParams).promise().then(function () {
           console.log('Successfully put role policy')
-        })
-        return IAM.getRole({ RoleName: VPCFlowLogRole }).promise().then(function (data) {
-          return data.Role.Arn
+        }).then(function () {
+          return IAM.getRole({ RoleName: VPCFlowLogRole }).promise().then(function (data) {
+            return data.Role.Arn
+          })
         })
       })
     })
