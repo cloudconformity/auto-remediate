@@ -115,7 +115,9 @@ module.exports.handler = (event, context, callback) => {
         }
         return IAM.putRolePolicy(PutRolePolicyParams).promise().then(function () {
           console.log('Successfully put role policy')
-          // eslint-disable-next-line no-undef
+        }).then(function () {
+          return IAM.getRole({ RoleName: VPCFlowLogRole }).promise()
+        }).then(function (data) {
           return data.Role.Arn
         })
       })
