@@ -2420,16 +2420,6 @@ resources:
                   Action:
                     - ec2:CreateFlowLogs
                   Resource: "*"
-                - Effect: Allow
-                  Action:
-                    - iam:PassRole
-                  Resource:
-                    - 'Fn::Join':
-                      - ':'
-                      -
-                        - 'arn:aws:iam:'
-                        - Ref: 'AWS::AccountId'
-                        - 'role/VPCFlowLogRole'
 
     AutoRemediateEC2008Role:
       Type: AWS::IAM::Role
