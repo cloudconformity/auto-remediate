@@ -43,10 +43,11 @@ module.exports.handler = (event, context, callback) => {
       LogGroupName: 'VPCFlowLogs'
     }
 
-    const Ec2 = new AWS.EC2({ region: event.region })
-
-    Ec2.createFlowLogs(params, function (err, result) {
-      if (err) {
+    const EC2 = new AWS.EC2({ region: event.region })
+    EC2.createFlowLogs(params, function (err, result) {
+      if (err.code === 'FlowLogAlreadyExists') {
+        console.log('There is an existing Flow Log with the same configuration and log destination.')
+      } else if (err) {
         console.log('Error', err)
         return handleError(err.message ? err.message : 'Failed to createFlowLogs')
       }
@@ -115,7 +116,9 @@ module.exports.handler = (event, context, callback) => {
         }
         return IAM.putRolePolicy(PutRolePolicyParams).promise().then(function () {
           console.log('Successfully put role policy')
-          // eslint-disable-next-line no-undef
+        }).then(function () {
+          return IAM.getRole({ RoleName: VPCFlowLogRole }).promise()
+        }).then(function (data) {
           return data.Role.Arn
         })
       })
