@@ -35,30 +35,37 @@ module.exports.handler = (event, context, callback) => {
   CreateVPCFlowLogRole().then(function (roleARN) {
     console.log('Role ARN:', roleARN)
 
-    const params = {
-      ResourceIds: [event.resource],
-      ResourceType: 'VPC',
-      TrafficType: 'ALL',
-      DeliverLogsPermissionArn: roleARN,
-      LogGroupName: 'VPCFlowLogs'
+    const describeParam = {
+      Filter: [
+        {
+          Name: 'resource-id',
+          Values: [event.resource]
+        }
+      ]
     }
 
     const EC2 = new AWS.EC2({ region: event.region })
-    EC2.createFlowLogs(params, function (err, result) {
-      if (err.code === 'FlowLogAlreadyExists') {
-        console.log('There is an existing Flow Log with the same configuration and log destination.')
-      } else if (err) {
-        console.log('Error', err)
-        return handleError(err.message ? err.message : 'Failed to createFlowLogs')
+    EC2.describeFlowLogs(describeParam).promise().then(function (data) {
+      return data.FlowLogs
+    }).then(function (flowLogs) {
+      if (!flowLogs.length) {
+        const params = {
+          ResourceIds: [event.resource],
+          ResourceType: 'VPC',
+          TrafficType: 'ALL',
+          DeliverLogsPermissionArn: roleARN,
+          LogGroupName: 'VPCFlowLogs'
+        }
+        return EC2.createFlowLogs(params).promise()
       }
-
+    }).then(function (result) {
       console.log('Result', result)
       return callback(null, 'Successfully processed event')
-    })
-    function handleError (message) {
-      message = message || 'Failed to process request.'
+    }).catch(function (err) {
+      console.log('Error', err)
+      const message = err.message ? err.message : 'Failed to createFlowLogs'
       return callback(new Error(message))
-    }
+    })
   })
 
   function CreateVPCFlowLogRole () {
