@@ -2419,6 +2419,7 @@ resources:
                 - Effect: Allow
                   Action:
                     - ec2:CreateFlowLogs
+                    - ec2:DescribeFlowLogs
                   Resource: "*"
                 - Effect: Allow
                   Action:
