@@ -35,29 +35,37 @@ module.exports.handler = (event, context, callback) => {
   CreateVPCFlowLogRole().then(function (roleARN) {
     console.log('Role ARN:', roleARN)
 
-    const params = {
-      ResourceIds: [event.resource],
-      ResourceType: 'VPC',
-      TrafficType: 'ALL',
-      DeliverLogsPermissionArn: roleARN,
-      LogGroupName: 'VPCFlowLogs'
+    const describeParam = {
+      Filter: [
+        {
+          Name: 'resource-id',
+          Values: [event.resource]
+        }
+      ]
     }
 
-    const Ec2 = new AWS.EC2({ region: event.region })
-
-    Ec2.createFlowLogs(params, function (err, result) {
-      if (err) {
-        console.log('Error', err)
-        return handleError(err.message ? err.message : 'Failed to createFlowLogs')
+    const EC2 = new AWS.EC2({ region: event.region })
+    EC2.describeFlowLogs(describeParam).promise().then(function (data) {
+      return data.FlowLogs
+    }).then(function (flowLogs) {
+      if (!flowLogs.length) {
+        const params = {
+          ResourceIds: [event.resource],
+          ResourceType: 'VPC',
+          TrafficType: 'ALL',
+          DeliverLogsPermissionArn: roleARN,
+          LogGroupName: 'VPCFlowLogs'
+        }
+        return EC2.createFlowLogs(params).promise()
       }
-
+    }).then(function (result) {
       console.log('Result', result)
       return callback(null, 'Successfully processed event')
-    })
-    function handleError (message) {
-      message = message || 'Failed to process request.'
+    }).catch(function (err) {
+      console.log('Error', err)
+      const message = err.message ? err.message : 'Failed to createFlowLogs'
       return callback(new Error(message))
-    }
+    })
   })
 
   function CreateVPCFlowLogRole () {
@@ -115,7 +123,9 @@ module.exports.handler = (event, context, callback) => {
         }
         return IAM.putRolePolicy(PutRolePolicyParams).promise().then(function () {
           console.log('Successfully put role policy')
-          // eslint-disable-next-line no-undef
+        }).then(function () {
+          return IAM.getRole({ RoleName: VPCFlowLogRole }).promise()
+        }).then(function (data) {
           return data.Role.Arn
         })
       })
