@@ -728,6 +728,7 @@ resources:
       Type: "AWS::KMS::Key"
       Properties:
         Description: "Encrypts messages publishes to an SQS queue from an SNS topic"
+        EnableKeyRotation: true
         KeyPolicy: '
                   {
                     "Version": "2012-10-17",
