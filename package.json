@@ -47,7 +47,7 @@
   },
   "lint-staged": {
     "**/*.js": [
-      "npm run lint:fix"
+      "eslint --fix"
     ]
   },
   "husky": {
