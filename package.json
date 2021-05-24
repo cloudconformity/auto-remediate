@@ -6,6 +6,7 @@
   "scripts": {
     "test": "jest",
     "test:watch": "npm test -- --watch",
+    "coverage": "npm run test -- --coverage --silent",
     "lint": "eslint '**/*.js' --ignore-path .gitignore",
     "lint:fix": "npm run lint -- --fix",
     "sls:deploy": "npm prune --production && serverless deploy --force"
