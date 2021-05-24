@@ -5,7 +5,7 @@
   "main": "Orchestrator.js",
   "scripts": {
     "test": "jest",
-    "test:watch": "jest --watch",
+    "test:watch": "npm test -- --watch",
     "lint": "eslint '**/*.js' --ignore-path .gitignore",
     "lint:fix": "npm run lint -- --fix",
     "sls:deploy": "npm prune --production && serverless deploy --force"
