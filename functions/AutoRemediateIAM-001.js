@@ -8,14 +8,20 @@ const AWS = require('aws-sdk')
 
 module.exports.handler = (event, context, callback) => {
   console.log('AccessKeysRotated30Days - Received event:', JSON.stringify(event, null, 2))
-
-  if (!event || !event.resource) {
+  if (!event || !event.resource || !event.extradata) {
     return handleError('Invalid event')
+  }
+
+  const userName = (event.extradata || []).find(data => data.name === 'UserName')
+
+  if (!userName || !userName.value) {
+    return handleError('Cannot find IAM Username')
   }
 
   const params = {
     AccessKeyId: event.resource,
-    Status: 'Inactive'
+    Status: 'Inactive',
+    UserName: userName.value
   }
 
   const IAM = new AWS.IAM()
