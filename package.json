@@ -22,7 +22,8 @@
   "license": "MIT",
   "dependencies": {
     "bluebird": "^3.5.5",
-    "lodash.isequal": "^4.5.0"
+    "lodash.isequal": "^4.5.0",
+    "serverless": "^3.22.0"
   },
   "devDependencies": {
     "aws-sdk": "^2.912.0",
