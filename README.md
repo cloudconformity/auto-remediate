@@ -21,32 +21,34 @@ Here's an example:
 4. S3 BucketPublicReadAccess Auto Remediate Function (AutoRemediateS3-001) updates the S3 bucket ACL and closes the security gap
 
 
-## Installation
-Note that you need to follow the [Deleting a stack on the AWS CloudFormation console](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-delete-stack.html) to delete the current stack if you plan to update to the latest version.
+## Prerequisites
+1. Install [Node.js](https://nodejs.org/en/) v16 or later.
 
-1. Go to the official [Serverless Framework](https://serverless.com/framework/docs/providers/aws/guide/installation/)  and follow the instructions to install the framework
-2. Create a working copy of "Cloud Conformity Auto Remediation" repository by running the following command:
+## Installation
+> Note that you need to follow the [Deleting a stack on the AWS CloudFormation console](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-delete-stack.html) to delete the current stack if you plan to update to the latest version.
+
+
+1. Create a working copy of "Cloud Conformity Auto Remediation" repository by running the following command:
 ```bash
 git clone https://github.com/cloudconformity/auto-remediate.git
 ```
-3. Change directory to auto-remediation:
+2. Change directory to auto-remediation:
 
 ```bash
 cd auto-remediate
 ```
-4. `IMPORTANT` Update `functions/config.json` with required configurations. Please note that all the rules in config file are disabled by default to prevent unwanted changed. User needs to enabled the ones they need manually.
-5. `IMPORTANT` Make any other necessary adjustments before deployment.
-6. Run `npm install` before deploying so that the node_modules folder would be available to AWS
+3. `IMPORTANT` Update `functions/config.json` with required configurations. Please note that all the rules in config file are disabled by default to prevent unwanted changed. User needs to enabled the ones they need manually.
+4. `IMPORTANT` Make any other necessary adjustments before deployment.
+5. Run `npm install` before deploying so that the node_modules folder would be available to AWS
 
 ```bash
 npm install
 ```
-7. Finally deploy
+6. Finally deploy
 
 ```bash
-serverless deploy --region us-west-2
+npx serverless deploy --region us-west-2
 ```
-
 
 ## Message Format
 
