@@ -1,7 +1,7 @@
 service: auto-remediate
+frameworkVersion: "^3"
 
 plugins:
-  - serverless-pseudo-parameters
   - serverless-plugin-split-stacks
   - serverless-stack-termination-protection
 
@@ -738,7 +738,7 @@ resources:
                         "Sid": "Enable IAM User Permissions",
                         "Effect": "Allow",
                         "Principal": {
-                          "AWS": [ "arn:aws:iam::#{AWS::AccountId}:root"]
+                          "AWS": [ "arn:aws:iam::${aws:accountId}:root"]
                         },
                         "Action": "kms:*",
                         "Resource": "*"
