@@ -44,7 +44,7 @@
     "serverless-stack-termination-protection": "^2.0.2"
   },
   "engines": {
-    "node": ">= 12.13.0"
+    "node": ">= 14.20.0"
   },
   "lint-staged": {
     "**/*.js": [
