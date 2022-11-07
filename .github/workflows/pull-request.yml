@@ -11,7 +11,7 @@ jobs:
       # Install Node.js
       - uses: actions/setup-node@v1
         with:
-          node-version: 12
+          node-version: 16
 
       # Install your dependencies
       - name: Installing package.json...
