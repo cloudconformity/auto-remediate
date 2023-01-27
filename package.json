@@ -39,7 +39,7 @@
     "jest": "^26.6.3",
     "lint-staged": "^11.0.0",
     "lodash.clonedeep": "^4.5.0",
-    "serverless": "^3.22.0",
+    "serverless": "^3.27.0",
     "serverless-plugin-split-stacks": "^1.11.3",
     "serverless-stack-termination-protection": "^2.0.2"
   },
