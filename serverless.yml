@@ -22,6 +22,14 @@ provider:
   stackTags:
     service: auto-remediate
 
+  tags:
+    Service: ${self:service}
+    Squad: unknown
+    Owner: alloftrendc1conformitydevelopers@dl.trendmicro.com
+    Environment: ${env:CC_ENVIRONMENT}
+    Region: ${self:provider.region}
+
+  stackTags: ${self:provider.tags}
 
 functions:
 
