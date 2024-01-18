@@ -21,6 +21,11 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-cloudformation": "^3.490.0",
+    "@aws-sdk/client-cloudtrail": "^3.490.0",
+    "@aws-sdk/client-config-service": "^3.490.0",
+    "@aws-sdk/client-iam": "^3.490.0",
+    "@aws-sdk/util-retry": "^3.374.0",
     "bluebird": "^3.5.5",
     "lodash.isequal": "^4.5.0"
   },
@@ -45,8 +50,8 @@
     "serverless-stack-termination-protection": "^2.0.2"
   },
   "engines": {
-    "node": "^16",
-    "npm": "^8"
+    "node": "^18",
+    "npm": "^9"
   },
   "lint-staged": {
     "**/*.js": [

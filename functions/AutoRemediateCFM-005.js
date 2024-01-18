@@ -1,13 +1,13 @@
 'use strict'
 
-const AWS = require('aws-sdk')
+const { CloudFormationClient, UpdateTerminationProtectionCommand } = require('@aws-sdk/client-cloudformation')
 
 /**
  * Lambda function to enable CloudFormation Stack Termination Protection
  *
  */
 
-module.exports.handler = (event, context, callback) => {
+const handler = async (event, context, callback) => {
   console.log('StackTerminationProtection - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.ccrn || !event.resource || !event.region) {
@@ -19,20 +19,21 @@ module.exports.handler = (event, context, callback) => {
     StackName: event.resource
   }
 
-  const CloudFormation = new AWS.CloudFormation({ region: event.region })
+  const CloudFormation = new CloudFormationClient({ region: event.region })
 
-  CloudFormation.updateTerminationProtection(params, function (err, result) {
-    if (err) {
-      console.log('Error', err)
-      return handleError(err.message ? err.message : 'Failed to enable CloudFormation Stack Termination Protection')
-    }
-
+  try {
+    const result = await CloudFormation.send(new UpdateTerminationProtectionCommand(params))
     console.log('Result', result)
     return callback(null, 'Successfully processed event')
-  })
+  } catch (err) {
+    console.log('Error', err)
+    return handleError(err.message ? err.message : 'Failed to enable CloudFormation Stack Termination Protection')
+  }
 
   function handleError (message) {
     message = message || 'Failed to process request.'
     return callback(new Error(message))
   }
 }
+
+module.exports = handler

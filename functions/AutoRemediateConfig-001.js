@@ -1,23 +1,16 @@
 'use strict'
 
 const CONFIG = require('./config')
-const AWS = require('aws-sdk')
+const { IAMClient, GetRoleCommand, CreateRoleCommand, AttachRolePolicyCommand, PutRolePolicyCommand } = require('@aws-sdk/client-iam')
+const { ConfiguredRetryStrategy } = require('@aws-sdk/util-retry')
+const { ConfigServiceClient } = require('@aws-sdk/client-config-service ')
+const { setTimeout } = require('timers/promises')
 
-AWS.config.update({
-  maxRetries: 10
-})
-
-AWS.events.on('retry', function (resp) {
-  // retry all requests with a 5 sec delay (if they are retry-able)
-  if (resp.error) {
-    resp.error.retryDelay = 5000
-  }
-})
+// retry all requests with a 5 sec delay (if they are retry-able), up to 10 times
+const retryStrategy = new ConfiguredRetryStrategy(10, 5000)
 
 const Utils = require('./Utils.js')
-
-// Using the native promise implementation of the JavaScript engine
-AWS.config.setPromisesDependency(null)
+const { PutConfigurationRecorderCommand, PutDeliveryChannelCommand, StartConfigurationRecorderCommand } = require('@aws-sdk/client-config-service')
 
 /**
  * <b>Ensure AWS Config is enabled in all regions</b><br/>
@@ -27,7 +20,7 @@ AWS.config.setPromisesDependency(null)
  * @param context Lambda Context
  * @param callback Lambda Callback
  */
-module.exports.handler = (event, context, callback) => {
+const handler = async (event, context, callback) => {
   console.log('Config AutoRemediateConfig-001 - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region) {
@@ -60,14 +53,15 @@ module.exports.handler = (event, context, callback) => {
     return callback(new Error(message))
   }
 
-  function getRole (accountId) {
+  async function getRole (accountId) {
     const ConfigRoleName = 'AWSConfigRole'
 
-    const IAM = new AWS.IAM()
+    const IAM = new IAMClient({ retryStrategy })
 
-    return IAM.getRole({ RoleName: ConfigRoleName }).promise().then(function (data) {
-      return data.Role.Arn
-    }).catch(function (err) {
+    try {
+      const role = await IAM.send(new GetRoleCommand({ RoleName: ConfigRoleName }))
+      return role.Role.Arn
+    } catch (err) {
       console.log(err.message)
 
       if (err.code !== 'NoSuchEntity') {
@@ -91,66 +85,56 @@ module.exports.handler = (event, context, callback) => {
         RoleName: ConfigRoleName,
         Description: 'AWS Config Role Created By Cloud Conformity AutoRemediateConfig-001'
       }
+      const role = await IAM.send(new CreateRoleCommand(CreateRoleParams))
+      console.log('Successfully created the role')
+      const AttachRolePolicyParams = {
+        PolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSConfigRole',
+        RoleName: ConfigRoleName
+      }
 
-      return IAM.createRole(CreateRoleParams).promise().then(function (data) {
-        console.log('Successfully created the role')
+      await IAM.send(new AttachRolePolicyCommand(AttachRolePolicyParams))
+      console.log('Successfully attach AWSConfigRole managed policy to role')
 
-        const AttachRolePolicyParams = {
-          PolicyArn: 'arn:aws:iam::aws:policy/service-role/AWSConfigRole',
-          RoleName: ConfigRoleName
-        }
-
-        return IAM.attachRolePolicy(AttachRolePolicyParams).promise().then(function () {
-          console.log('Successfully attach AWSConfigRole managed policy to role')
-
-          const PutRolePolicyParams = {
-            PolicyDocument: JSON.stringify({
-              Version: '2012-10-17',
-              Statement: [
-                {
-                  Effect: 'Allow',
-                  Action: [
-                    's3:PutObject'
-                  ],
-                  Resource: 'arn:aws:s3:::' + CONFIG['AutoRemediateConfig-001']['S3BucketName'] + '/AWSLogs/' + accountId + '/Config/*',
-                  Condition: {
-                    StringLike: {
-                      's3:x-amz-acl': 'bucket-owner-full-control'
-                    }
-                  }
-                },
-                {
-                  Effect: 'Allow',
-                  Action: [
-                    's3:GetBucketAcl'
-                  ],
-                  Resource: 'arn:aws:s3:::' + CONFIG['AutoRemediateConfig-001']['S3BucketName']
+      const PutRolePolicyParams = {
+        PolicyDocument: JSON.stringify({
+          Version: '2012-10-17',
+          Statement: [
+            {
+              Effect: 'Allow',
+              Action: [
+                's3:PutObject'
+              ],
+              Resource: 'arn:aws:s3:::' + CONFIG['AutoRemediateConfig-001']['S3BucketName'] + '/AWSLogs/' + accountId + '/Config/*',
+              Condition: {
+                StringLike: {
+                  's3:x-amz-acl': 'bucket-owner-full-control'
                 }
-              ]
-            }),
-            PolicyName: 'AWSConfigRolePolicy',
-            RoleName: ConfigRoleName
-          }
+              }
+            },
+            {
+              Effect: 'Allow',
+              Action: [
+                's3:GetBucketAcl'
+              ],
+              Resource: 'arn:aws:s3:::' + CONFIG['AutoRemediateConfig-001']['S3BucketName']
+            }
+          ]
+        }),
+        PolicyName: 'AWSConfigRolePolicy',
+        RoleName: ConfigRoleName
+      }
 
-          return IAM.putRolePolicy(PutRolePolicyParams).promise().then(function () {
-            console.log('Successfully put role policy')
+      await IAM.send(new PutRolePolicyCommand(PutRolePolicyParams))
+      console.log('Successfully put role policy')
 
-            return new Promise(function (resolve) {
-              setTimeout(function () {
-                // Wait 15 seconds to avoid InsufficientDeliveryPolicyException: Insufficient delivery policy to s3 bucket:
-                resolve()
-              }, 15000)
-            }).then(function () {
-              return data.Role.Arn
-            })
-          })
-        })
-      })
-    })
+      // Wait 15 seconds to avoid InsufficientDeliveryPolicyException: Insufficient delivery policy to s3 bucket:
+      await setTimeout(15000)
+      return role.Role.Arn
+    }
   }
 
-  function subscribe (roleARN) {
-    const ConfigService = new AWS.ConfigService({ region: event.region })
+  async function subscribe (roleARN) {
+    const ConfigService = new ConfigServiceClient({ region: event.region })
 
     const ConfigurationRecorderParams = {
       ConfigurationRecorder: {
@@ -163,29 +147,27 @@ module.exports.handler = (event, context, callback) => {
       }
     }
 
-    return ConfigService.putConfigurationRecorder(ConfigurationRecorderParams).promise().then(function () {
-      console.log('Successfully put configuration recorder')
+    await ConfigService.send(new PutConfigurationRecorderCommand(ConfigurationRecorderParams))
+    console.log('Successfully put configuration recorder')
 
-      const PutDeliveryChannelParams = {
-        DeliveryChannel: {
-          name: 'default',
-          s3BucketName: CONFIG['AutoRemediateConfig-001']['S3BucketName']
-        }
+    const PutDeliveryChannelParams = {
+      DeliveryChannel: {
+        name: 'default',
+        s3BucketName: CONFIG['AutoRemediateConfig-001']['S3BucketName']
       }
+    }
 
-      return ConfigService.putDeliveryChannel(PutDeliveryChannelParams).promise().then(function () {
-        console.log('Successfully put delivery channel')
+    await ConfigService.send(new PutDeliveryChannelCommand(PutDeliveryChannelParams))
+    console.log('Successfully put delivery channel')
 
-        const StartConfigurationRecorderparams = {
-          ConfigurationRecorderName: 'default'
-        }
+    const StartConfigurationRecorderParams = {
+      ConfigurationRecorderName: 'default'
+    }
 
-        return ConfigService.startConfigurationRecorder(StartConfigurationRecorderparams).promise().then(function (data) {
-          console.log('Successfully start configuration recorder')
-
-          return data
-        })
-      })
-    })
+    const startConfigurationRecorderResult = await ConfigService.send(new StartConfigurationRecorderCommand(StartConfigurationRecorderParams))
+    console.log('Successfully start configuration recorder')
+    return startConfigurationRecorderResult
   }
 }
+
+module.exports = handler
