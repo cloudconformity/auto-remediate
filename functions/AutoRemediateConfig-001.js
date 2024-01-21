@@ -31,22 +31,21 @@ const handler = async (event, context, callback) => {
     return handleError('Missing CONFIG_S3_BUCKET configuration')
   }
 
-  return Utils.getAccountId().then(function (accountId) {
+  try {
+    const accountId = await Utils.getAccountId()
     console.log('AWS Account ID:', accountId)
 
-    return getRole(accountId).then(function (roleARN) {
-      console.log('Role ARN:', roleARN)
+    const roleARN = await getRole(accountId)
+    console.log('Role ARN:', roleARN)
 
-      return subscribe(roleARN).then(function () {
-        console.log('Successfully enabled AWS config in', event.region)
+    await subscribe(roleARN)
+    console.log('Successfully enabled AWS config in', event.region)
 
-        return callback(null, 'Successfully processed event')
-      })
-    })
-  }).catch(function (err) {
+    return callback(null, 'Successfully processed event')
+  } catch (err) {
     console.log('Error', err)
     return handleError(err.message ? err.message : 'Failed to enable AWS Config')
-  })
+  }
 
   function handleError (message) {
     message = message || 'Failed to process request.'
