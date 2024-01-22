@@ -1,25 +1,18 @@
 'use strict'
 
-const AWS = require('aws-sdk')
+const { IAMClient, AttachRolePolicyCommand } = require('@aws-sdk/client-iam')
+const { LambdaClient, GetFunctionConfigurationCommand, UpdateFunctionConfigurationCommand } = require('@aws-sdk/client-lambda')
+const { ConfiguredRetryStrategy } = require('@aws-sdk/util-retry')
 
-AWS.config.update({
-  maxRetries: 10
-})
+const { setTimeout } = require('timers/promises')
 
-AWS.events.on('retry', function (resp) {
-  // retry all requests with a 5 sec delay (if they are retry-able)
-  if (resp.error) {
-    resp.error.retryDelay = 5000
-  }
-})
-
-// Using the native promise implementation of the JavaScript engine
-AWS.config.setPromisesDependency(null)
+// retry all requests with a 5 sec delay (if they are retry-able), up to 10 times
+const retryStrategy = new ConfiguredRetryStrategy(10, 5000)
 
 /**
  * Enable tracing for your AWS Lambda functions
  */
-module.exports.handler = (event, context, callback) => {
+const handler = async (event, context, callback) => {
   console.log('Lambda Function Tracing Enabled - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region) {
@@ -28,46 +21,44 @@ module.exports.handler = (event, context, callback) => {
 
   const FunctionName = event.resource
 
-  const Lambda = new AWS.Lambda()
-  const IAM = new AWS.IAM()
+  const Lambda = new LambdaClient()
+  const IAM = new IAMClient({ retryStrategy })
 
-  return Lambda.getFunctionConfiguration({ FunctionName: FunctionName }).promise().then(function (data) {
-    console.log('Role ARN:', data.Role)
+  try {
+    const lambdaConfig = await Lambda.send(new GetFunctionConfigurationCommand({ FunctionName }))
+    console.log('Role ARN:', lambdaConfig.Role)
 
-    const FunctionRoleName = data.Role.split('/')[1]
+    const FunctionRoleName = lambdaConfig.Role.split('/')[1]
 
     const AttachRolePolicyParams = {
       PolicyArn: 'arn:aws:iam::aws:policy/AWSXrayWriteOnlyAccess',
       RoleName: FunctionRoleName
     }
-    return IAM.attachRolePolicy(AttachRolePolicyParams).promise().then(function (data) {
-      console.log('Successfully attached AWSXray managed policy to the function role')
 
-      return new Promise(function (resolve) {
-        setTimeout(function () {
-          // Wait 10 seconds to avoid Error: The provided execution role does not have permissions to call PutTraceSegments on XRAY
-          resolve()
-        }, 10000)
-      }).then(function () {
-        const FunctionConfigurationParams = {
-          FunctionName: FunctionName,
-          TracingConfig: {
-            Mode: 'Active'
-          }
-        }
+    await IAM.send(new AttachRolePolicyCommand(AttachRolePolicyParams))
+    console.log('Successfully attached AWSXray managed policy to the function role')
 
-        return Lambda.updateFunctionConfiguration(FunctionConfigurationParams).promise().then(function (data) {
-          return callback(null, 'Successfully updated function configuration')
-        })
-      }).catch(function (err) {
-        console.log('Error', err)
-        return handleError(err.message ? err.message : 'Failed to enable tracing for the function')
-      })
-    })
-  })
+    // Wait 10 seconds to avoid Error: The provided execution role does not have permissions to call PutTraceSegments on XRAY
+    await setTimeout(10000)
+
+    const FunctionConfigurationParams = {
+      FunctionName: FunctionName,
+      TracingConfig: {
+        Mode: 'Active'
+      }
+    }
+
+    await Lambda.send(new UpdateFunctionConfigurationCommand(FunctionConfigurationParams))
+    return callback(null, 'Successfully updated function configuration')
+  } catch (err) {
+    console.log('Error', err)
+    return handleError(err.message ? err.message : 'Failed to enable tracing for the function')
+  }
 
   function handleError (message) {
     message = message || 'Failed to process request.'
     return callback(new Error(message))
   }
 }
+
+module.exports = handler
