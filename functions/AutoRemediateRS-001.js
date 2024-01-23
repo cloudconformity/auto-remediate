@@ -1,13 +1,13 @@
 'use strict'
 
-const AWS = require('aws-sdk')
+const { RedshiftClient, ModifyClusterCommand } = require('@aws-sdk/client-redshift')
 
 /**
  * Lambda function to make Redshift Cluster private to minimise security risks
  *
  */
 
-module.exports.handler = (event, context, callback) => {
+const handler = async (event, context, callback) => {
   console.log('ClusterPubliclyAccessible - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.ccrn || !event.resource || !event.region) {
@@ -19,20 +19,21 @@ module.exports.handler = (event, context, callback) => {
     PubliclyAccessible: false
   }
 
-  const Redshift = new AWS.Redshift({ region: event.region })
+  const Redshift = new RedshiftClient({ region: event.region })
 
-  Redshift.modifyCluster(params, function (err, result) {
-    if (err) {
-      console.log('Error', err)
-      return handleError(err.message ? err.message : 'Failed to make Redshift cluster private')
-    }
-
+  try {
+    const result = await Redshift.send(new ModifyClusterCommand(params))
     console.log('Result', result)
     return callback(null, 'Successfully processed event')
-  })
+  } catch (err) {
+    console.log('Error', err)
+    return handleError(err.message ? err.message : 'Failed to make Redshift cluster private')
+  }
 
   function handleError (message) {
     message = message || 'Failed to process request.'
     return callback(new Error(message))
   }
 }
+
+module.exports = handler
