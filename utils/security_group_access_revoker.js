@@ -1,7 +1,7 @@
-const AWS = require('aws-sdk')
+const { EC2Client, RevokeSecurityGroupIngressCommand } = require('@aws-sdk/client-ec2')
 
-const revokeSecurityGroupAccess = (protocol, port, resource, region, callback) => {
-  const ec2 = new AWS.EC2({ region: region })
+const revokeSecurityGroupAccess = async (protocol, port, resource, region, callback) => {
+  const ec2 = new EC2Client({ region: region })
 
   const params = {
     GroupId: resource,
@@ -14,44 +14,26 @@ const revokeSecurityGroupAccess = (protocol, port, resource, region, callback) =
       }
     ]
   }
+  try {
+    const revokeIngressResponse = await ec2.send(new RevokeSecurityGroupIngressCommand(params))
+    console.log('Revoking %s, %s on 0.0.0.0/0 succeeded')
+    console.log(revokeIngressResponse)
+  } catch (err) {
+    console.log('Revoking %s, %s on 0.0.0.0/0 failed')
+    console.error(err)
+  }
 
-  return ec2
-    .revokeSecurityGroupIngress(params)
-    .promise()
-    .then(data => {
-      console.log('Revoking %s, %s on 0.0.0.0/0 succeeded')
-      console.log(data)
-    })
-    .catch(err => {
-      console.log('Revoking %s, %s on 0.0.0.0/0 failed')
-      console.error(err)
-    })
-    .then(() => {
-      const params = {
-        GroupId: resource,
-        IpPermissions: [
-          {
-            FromPort: port,
-            ToPort: port,
-            IpProtocol: protocol,
-            IpRanges: [{ CidrIp: '::/0' }]
-          }
-        ]
-      }
+  try {
+    params.IpPermissions[0].IpRanges[0].CidrIp = '::/0'
+    const revokeIngressResponse = await ec2.send(new RevokeSecurityGroupIngressCommand(params))
+    console.log('Revoking %s, %s on ::/0 succeeded')
+    console.log(revokeIngressResponse)
+  } catch (err) {
+    console.log('Revoking %s, %s on ::/0 failed')
+    console.error(err)
+  }
 
-      return ec2.revokeSecurityGroupIngress(params).promise()
-    })
-    .then(data => {
-      console.log('Revoking %s, %s on ::/0 succeeded')
-      console.log(data)
-    })
-    .catch(err => {
-      console.log('Revoking %s, %s on ::/0 failed')
-      console.error(err)
-    })
-    .then(() => {
-      callback(null, 'done')
-    })
+  return callback(null, 'done')
 }
 
 exports.revoke = revokeSecurityGroupAccess

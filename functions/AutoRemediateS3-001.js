@@ -1,6 +1,6 @@
 'use strict'
 
-const { S3Client, GetBucketAclCommand } = require('@aws-sdk/client-s3')
+const { S3Client, GetBucketAclCommand, PutBucketAclCommand } = require('@aws-sdk/client-s3')
 const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
 const readPermission = 'READ'
 
@@ -62,12 +62,10 @@ const handler = async (event, context, callback) => {
       Bucket: event.resource,
       AccessControlPolicy: aclNew
     }
-    const putAclPromise = s3.putBucketAcl(putAclParams).promise()
+    const result = await s3.send(new PutBucketAclCommand(putAclParams))
+    console.log('result>' + JSON.stringify(result))
 
-    putAclPromise.then(result => {
-      console.log('result>' + JSON.stringify(result))
-      callback(null, 'Success')
-    })
+    callback(null, 'Success')
   } catch (err) {
     console.log(err, err.stack)
     callback(err, 'failed to auto-remediate s3-001')

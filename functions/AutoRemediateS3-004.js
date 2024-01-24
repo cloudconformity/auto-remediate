@@ -25,12 +25,13 @@ const handler = async (event, context, callback) => {
 
   var s3 = new S3Client({ apiVersion: '2006-03-01' })
 
-  await utils.filterAcl(s3, event.resource, writeAllUsers).then(() => {
+  try {
+    await utils.filterAcl(s3, event.resource, writeAllUsers)
     callback(null, 'Success')
-  }).catch((err) => {
+  } catch (err) {
     console.log(err, err.stack)
     callback(err, 'failed to auto-remediate', CCRuleCode)
-  })
+  }
 }
 
 module.exports = {

@@ -35,8 +35,8 @@
     "@aws-sdk/client-redshift": "^3.496.0",
     "@aws-sdk/client-s3": "^3.490.0",
     "@aws-sdk/client-sqs": "^3.496.0",
+    "@aws-sdk/client-sts": "^3.496.0",
     "@aws-sdk/util-retry": "^3.374.0",
-    "bluebird": "^3.5.5",
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {
@@ -44,7 +44,6 @@
     "aws-sdk": "^2.912.0",
     "aws-sdk-client-mock": "^3.0.1",
     "aws-sdk-client-mock-jest": "^3.0.1",
-    "aws-sdk-mock": "^5.1.0",
     "dotenv": "^10.0.0",
     "eslint": "^7.11.0",
     "eslint-config-standard": "^13.0.1",

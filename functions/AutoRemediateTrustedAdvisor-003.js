@@ -1,13 +1,13 @@
 'use strict'
 
-const AWS = require('aws-sdk')
+const { IAMClient, UpdateAccessKeyCommand } = require('@aws-sdk/client-iam')
 
 /**
  * Lambda function disable  exposed Amazon IAM access keys
  *
 */
 
-module.exports.handler = (event, context, callback) => {
+const handler = async (event, context, callback) => {
   console.log('Exposed IAM Access Keys - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource) {
@@ -19,20 +19,21 @@ module.exports.handler = (event, context, callback) => {
     Status: 'Inactive'
   }
 
-  const IAM = new AWS.IAM()
+  const IAM = new IAMClient()
 
-  IAM.updateAccessKey(params, function (err, result) {
-    if (err) {
-      console.log('Error', err)
-      return handleError(err.message ? err.message : 'update Access Key failed')
-    }
-
+  try {
+    const result = await IAM.send(new UpdateAccessKeyCommand(params))
     console.log('Result', result)
     return callback(null, 'Successfully processed event')
-  })
+  } catch (err) {
+    console.log('Error', err)
+    return handleError(err.message ? err.message : 'update Access Key failed')
+  }
 
   function handleError (message) {
     message = message || 'Failed to process request.'
     return callback(new Error(message))
   }
 }
+
+module.exports = { handler }
