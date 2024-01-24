@@ -41,4 +41,4 @@ const handler = async (event, context, callback) => {
   }
 }
 
-module.exports = handler
+module.exports = { handler }
