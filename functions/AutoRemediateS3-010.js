@@ -1,7 +1,7 @@
 'use strict'
 
 const utils = require('../utils/S3_utils')
-const AWS = require('aws-sdk')
+const { S3Client } = require('@aws-sdk/client-s3')
 
 const CCRuleCode = 'S3-010'
 const CCRuleName = 'BucketAuthenticatedUsersFullControlAccess'
@@ -16,16 +16,16 @@ function handleError (message, callback) {
 }
 
 // look for and remove S3 BucketAuthenticatedUsersFullControlAccess
-const handler = (event, context, callback) => {
+const handler = async (event, context, callback) => {
   console.log('S3', CCRuleName, ' - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource || event.ruleId !== CCRuleCode) {
     return handleError('Invalid event', callback)
   }
 
-  var s3 = new AWS.S3({ apiVersion: '2006-03-01' })
+  var s3 = new S3Client({ apiVersion: '2006-03-01' })
 
-  utils.filterAcl(s3, event.resource, authenticatedUsersFullControlAccess).then(() => {
+  await utils.filterAcl(s3, event.resource, authenticatedUsersFullControlAccess).then(() => {
     callback(null, 'Success')
   }).catch((err) => {
     console.log(err, err.stack)

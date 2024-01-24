@@ -1,7 +1,10 @@
 'use strict'
 
 const source = require('../functions/AutoRemediateS3-004')
-var AWS = require('aws-sdk-mock')
+const { S3Client, GetBucketAclCommand, PutBucketAclCommand } = require('@aws-sdk/client-s3')
+const { mockClient } = require('aws-sdk-client-mock')
+// eslint-disable-next-line node/no-extraneous-require
+require('aws-sdk-client-mock-jest')
 
 const sampleEvent = {
   id: 'ccc:HJzFMHchx:S3-004:S3:ap-southeast-2:sample-bucket',
@@ -34,20 +37,7 @@ const sampleEvent = {
   lastModifiedBy: 'SYSTEM'
 }
 
-const awsMockCallback = (jestFn) => {
-  return function (params, callback) {
-    try {
-      const result = jestFn(params, callback)
-      callback(null, result)
-    } catch (err) {
-      callback(err)
-    }
-  }
-}
-
 describe('S3-004 AutoRemediation', () => {
-  let getBucketAclMock
-  let putBucketAclMock
   const grantReadAcpAllUsers = {
     Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'READ_ACP'
   }
@@ -67,40 +57,34 @@ describe('S3-004 AutoRemediation', () => {
     Grantee: { DisplayName: 'user_name', ID: 'account_user_id123455667890abcdef', Type: 'CanonicalUser' }, Permission: 'FULL_CONTROL'
   }
 
-  beforeEach(() => {
-    getBucketAclMock = jest.fn()
-    putBucketAclMock = jest.fn()
-    AWS.mock('S3', 'getBucketAcl', awsMockCallback(getBucketAclMock))
-    AWS.mock('S3', 'putBucketAcl', awsMockCallback(putBucketAclMock))
-  })
+  const mockS3 = mockClient(S3Client)
 
   afterEach(() => {
-    AWS.restore()
+    mockS3.reset()
   })
 
   describe('valid invocation', () => {
     beforeEach((done) => {
-      getBucketAclMock.mockImplementation(() => {
-        return {
-          Owner: {
-            DisplayName: 'user_name', ID: 'account_user_id123455667890abcdef'
-          },
-          Grants: [
-            {
-              Grantee: {
-                DisplayName: 'user_name', ID: 'account_user_id123455667890abcdef', Type: 'CanonicalUser'
-              },
-              Permission: 'FULL_CONTROL'
+      mockS3.on(GetBucketAclCommand).resolves({
+        Owner: {
+          DisplayName: 'user_name', ID: 'account_user_id123455667890abcdef'
+        },
+        Grants: [
+          {
+            Grantee: {
+              DisplayName: 'user_name', ID: 'account_user_id123455667890abcdef', Type: 'CanonicalUser'
             },
-            grantReadAllUsers,
-            grantReadAcpAllUsers,
-            grantWriteAllUsers,
-            grantWriteAcpAllUsers,
-            grantWriteAcpAuthenticatedUsers,
-            grantFullControlCanonicalUser
-          ]
-        }
+            Permission: 'FULL_CONTROL'
+          },
+          grantReadAllUsers,
+          grantReadAcpAllUsers,
+          grantWriteAllUsers,
+          grantWriteAcpAllUsers,
+          grantWriteAcpAuthenticatedUsers,
+          grantFullControlCanonicalUser
+        ]
       })
+
       const mockCallback = (err, data) => {
         if (err) {
           done.fail()
@@ -115,7 +99,7 @@ describe('S3-004 AutoRemediation', () => {
       const expectedParams = {
         Bucket: 'sample-bucket'
       }
-      expect(getBucketAclMock).toHaveBeenCalledWith(expectedParams, expect.any(Function))
+      expect(mockS3).toHaveReceivedCommandWith(GetBucketAclCommand, expectedParams)
     })
 
     it('should set a new ACL on the affected bucket', () => {
@@ -123,12 +107,11 @@ describe('S3-004 AutoRemediation', () => {
         Bucket: 'sample-bucket',
         AccessControlPolicy: expect.any(Object)
       }
-      expect(putBucketAclMock).toHaveBeenCalled()
-      expect(putBucketAclMock).toHaveBeenCalledWith(expectedParams, expect.any(Function))
+      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedParams)
     })
 
     it('should remove WRITE_ACP grants for AllUsers', () => {
-      expect(putBucketAclMock).not.toHaveBeenCalledWith(expect.objectContaining(grantWriteAcpAllUsers), expect.any(Function))
+      expect(mockS3).not.toHaveReceivedCommandWith(PutBucketAclCommand, grantWriteAcpAllUsers)
     })
 
     it('should keep WRITE_ACP grants for other users', () => {
@@ -138,7 +121,7 @@ describe('S3-004 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(putBucketAclMock).toHaveBeenCalledWith(expect.objectContaining(expectedGrant), expect.any(Function))
+      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
     })
 
     it('should keep READ grants for All Users', () => {
@@ -148,7 +131,7 @@ describe('S3-004 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(putBucketAclMock).toHaveBeenCalledWith(expect.objectContaining(expectedGrant), expect.any(Function))
+      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
     })
 
     it('should keep READ_ACP grants for All Users', () => {
@@ -158,7 +141,7 @@ describe('S3-004 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(putBucketAclMock).toHaveBeenCalledWith(expect.objectContaining(expectedGrant), expect.any(Function))
+      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
     })
 
     it('should keep WRITE grants for All Users', () => {
@@ -168,7 +151,7 @@ describe('S3-004 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(putBucketAclMock).toHaveBeenCalledWith(expect.objectContaining(expectedGrant), expect.any(Function))
+      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
     })
 
     it('should keep FULL_CONTROL grants for Canonical User', () => {
@@ -178,7 +161,7 @@ describe('S3-004 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(putBucketAclMock).toHaveBeenCalledWith(expect.objectContaining(expectedGrant), expect.any(Function))
+      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
     })
   })
 
@@ -186,8 +169,8 @@ describe('S3-004 AutoRemediation', () => {
     const mockCallback = (done) => {
       return (err, data) => {
         expect(err).toBeDefined()
-        expect(getBucketAclMock).not.toHaveBeenCalled()
-        expect(putBucketAclMock).not.toHaveBeenCalled()
+        expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
+        expect(mockS3).not.toHaveReceivedCommand(PutBucketAclCommand)
         done()
       }
     }
