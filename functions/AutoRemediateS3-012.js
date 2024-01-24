@@ -1,12 +1,12 @@
 'use strict'
 
-const AWS = require('aws-sdk')
+const { S3Client, PutBucketVersioningCommand } = require('@aws-sdk/client-s3')
 
 /**
  * Lambda function to enable versioning on an s3 bucket
  */
 
-module.exports.handler = (event, context, callback) => {
+const handler = async (event, context, callback) => {
   console.log('S3BucketVersioning - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource) {
@@ -20,20 +20,21 @@ module.exports.handler = (event, context, callback) => {
     }
   }
 
-  const S3 = new AWS.S3()
+  const S3 = new S3Client()
 
-  S3.putBucketVersioning(params, function (err, result) {
-    if (err) {
-      console.log('Error', err)
-      return handleError(err.message ? err.message : 'enabling bucket versioning failed')
-    }
-
+  try {
+    const result = await S3.send(new PutBucketVersioningCommand(params))
     console.log('Result', result)
     return callback(null, 'Successfully processed event')
-  })
+  } catch (err) {
+    console.log('Error', err)
+    return handleError(err.message ? err.message : 'enabling bucket versioning failed')
+  }
 
   function handleError (message) {
     message = message || 'Failed to process request.'
     return callback(new Error(message))
   }
 }
+
+module.exports = handler
