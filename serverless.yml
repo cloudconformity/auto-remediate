@@ -12,6 +12,7 @@ custom:
     perGroupFunction: false
 
 provider:
+  logRetentionInDays: 30
   name: aws
   runtime: nodejs16.x
   stage: v1
