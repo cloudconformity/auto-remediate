@@ -1,4 +1,3 @@
-'use strict'
 const AccessRevoker = require('../utils/security_group_access_revoker')
 
 const TCP_TELNET_PORT = 23
