@@ -1,4 +1,3 @@
-'use strict'
 
 const utils = require('../../utils/S3_utils')
 const clonedeep = require('lodash.clonedeep')

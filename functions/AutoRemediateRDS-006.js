@@ -1,4 +1,3 @@
-'use strict'
 const { RDSClient, ModifyDBInstanceCommand } = require('@aws-sdk/client-rds')
 /**
 * Lambda function to enable Update Minor Version flag for AWS RDS

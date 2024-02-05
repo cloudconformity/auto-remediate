@@ -1,4 +1,3 @@
-'use strict'
 
 const { S3Client, GetBucketPolicyCommand, PutBucketPolicyCommand } = require('@aws-sdk/client-s3')
 

@@ -1,4 +1,3 @@
-'use strict'
 
 const { CloudTrailClient, UpdateTrailCommand } = require('@aws-sdk/client-cloudtrail')
 

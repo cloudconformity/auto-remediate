@@ -1,4 +1,3 @@
-'use strict'
 
 const { OrganizationsClient, EnableAllFeaturesCommand } = require('@aws-sdk/client-organizations')
 

@@ -1,4 +1,3 @@
-'use strict'
 
 const { EC2Client, ModifyImageAttributeCommand } = require('@aws-sdk/client-ec2')
 

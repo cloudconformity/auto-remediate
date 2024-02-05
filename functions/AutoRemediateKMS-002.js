@@ -1,4 +1,3 @@
-'use strict'
 
 const { KMSClient, EnableKeyRotationCommand } = require('@aws-sdk/client-kms')
 

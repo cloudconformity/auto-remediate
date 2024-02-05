@@ -1,4 +1,3 @@
-'use strict'
 const CONFIG = require('./config')
 const { KinesisClient, StartStreamEncryptionCommand } = require('@aws-sdk/client-kinesis')
 

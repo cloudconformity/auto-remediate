@@ -1,4 +1,3 @@
-'use strict'
 
 const { S3Client, PutBucketVersioningCommand } = require('@aws-sdk/client-s3')
 

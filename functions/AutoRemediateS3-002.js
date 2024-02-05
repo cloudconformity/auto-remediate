@@ -1,4 +1,3 @@
-'use strict'
 const utils = require('../utils/S3_utils')
 const { S3Client } = require('@aws-sdk/client-s3')
 

@@ -1,4 +1,3 @@
-'use strict'
 
 const { KMSClient, CancelKeyDeletionCommand } = require('@aws-sdk/client-kms')
 

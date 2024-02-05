@@ -1,4 +1,3 @@
-'use strict'
 
 const { GuardDutyClient, CreateDetectorCommand } = require('@aws-sdk/client-guardduty')
 

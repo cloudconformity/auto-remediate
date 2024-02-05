@@ -1,4 +1,3 @@
-'use strict'
 
 const { IAMClient, AttachRolePolicyCommand } = require('@aws-sdk/client-iam')
 const { LambdaClient, GetFunctionConfigurationCommand, UpdateFunctionConfigurationCommand } = require('@aws-sdk/client-lambda')

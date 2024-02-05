@@ -1,6 +1,4 @@
 
-'use strict'
-
 const { RedshiftClient, ModifyClusterCommand } = require('@aws-sdk/client-redshift')
 const CONFIG = require('./config')['AutoRemediateRS-019']
 

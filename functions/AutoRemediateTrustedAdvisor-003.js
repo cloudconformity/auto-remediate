@@ -1,4 +1,3 @@
-'use strict'
 
 const { IAMClient, UpdateAccessKeyCommand } = require('@aws-sdk/client-iam')
 

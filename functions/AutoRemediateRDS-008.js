@@ -1,4 +1,3 @@
-'use strict'
 
 const { RDSClient, ModifyDBInstanceCommand } = require('@aws-sdk/client-rds')
 

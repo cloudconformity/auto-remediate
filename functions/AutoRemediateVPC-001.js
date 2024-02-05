@@ -1,4 +1,3 @@
-'use strict'
 
 const { IAMClient, GetRoleCommand, CreateRoleCommand, PutRolePolicyCommand } = require('@aws-sdk/client-iam')
 const { EC2Client, DescribeFlowLogsCommand, CreateFlowLogsCommand } = require(`@aws-sdk/client-ec2`)

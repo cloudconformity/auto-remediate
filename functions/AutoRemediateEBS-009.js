@@ -1,4 +1,3 @@
-'use strict'
 const { EC2Client, ModifySnapshotAttributeCommand } = require('@aws-sdk/client-ec2')
 /**
 * Lambda function enforce Elastic Block Store (EBS) volume snapshots not to be public

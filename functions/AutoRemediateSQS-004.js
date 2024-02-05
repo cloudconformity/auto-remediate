@@ -1,4 +1,3 @@
-'use strict'
 const { SQSClient, SetQueueAttributesCommand } = require('@aws-sdk/client-sqs')
 const CONFIG = require('./config')
 

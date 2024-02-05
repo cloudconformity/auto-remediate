@@ -1,4 +1,3 @@
-'use strict'
 
 const { RedshiftClient, ModifyClusterParameterGroupCommand } = require('@aws-sdk/client-redshift')
 

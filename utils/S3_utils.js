@@ -1,4 +1,3 @@
-'use strict'
 const { GetBucketAclCommand, PutBucketAclCommand } = require('@aws-sdk/client-s3')
 const isEqual = require('lodash.isequal')
 const filterAclGrants = function (acl, grantToRemove) {

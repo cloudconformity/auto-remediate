@@ -1,4 +1,3 @@
-'use strict'
 
 const { S3Client, GetBucketAclCommand, PutBucketAclCommand } = require('@aws-sdk/client-s3')
 const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'

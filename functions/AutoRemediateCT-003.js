@@ -1,4 +1,3 @@
-'use strict'
 const { S3Client, PutBucketAclCommand } = require('@aws-sdk/client-s3')
 /**
 * Lambda function to disable access to any AWS CloudTrail logging buckets that are publicly accessible

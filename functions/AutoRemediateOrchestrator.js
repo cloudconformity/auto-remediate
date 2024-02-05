@@ -1,4 +1,3 @@
-'use strict'
 const CONFIG = require('./config')
 const { LambdaClient, InvokeCommand } = require('@aws-sdk/client-lambda')
 

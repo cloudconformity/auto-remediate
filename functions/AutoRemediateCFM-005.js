@@ -1,4 +1,3 @@
-'use strict'
 
 const { CloudFormationClient, UpdateTerminationProtectionCommand } = require('@aws-sdk/client-cloudformation')
 

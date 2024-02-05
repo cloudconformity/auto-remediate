@@ -1,4 +1,3 @@
-'use strict'
 
 const source = require('../functions/AutoRemediateS3-003')
 const { S3Client, GetBucketAclCommand, PutBucketAclCommand } = require('@aws-sdk/client-s3')

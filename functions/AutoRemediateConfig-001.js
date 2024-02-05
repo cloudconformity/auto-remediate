@@ -1,4 +1,3 @@
-'use strict'
 
 const CONFIG = require('./config')
 const { IAMClient, GetRoleCommand, CreateRoleCommand, AttachRolePolicyCommand, PutRolePolicyCommand } = require('@aws-sdk/client-iam')

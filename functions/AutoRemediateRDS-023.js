@@ -1,4 +1,3 @@
-'use strict'
 
 const { RDSClient, ModifyDBSnapshotAttributeCommand } = require('@aws-sdk/client-rds')
 
