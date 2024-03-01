@@ -1,0 +1,40 @@
+# Author: daniel_moore@trendmicro.com
+# Purpose: Enables dependabot to raise pull requests to update
+# out of date dependencies.
+#
+# A maximum of 5 pull requests will be raised for a given repository
+# at any one time.
+version: 2
+registries:
+  # Allows dependabot to access @conformity/* private npm
+  # packages.
+  npm-github:
+    type: npm-registry
+    url: https://jfrog.trendmicro.com/artifactory/api/npm/conformity-npm_virtual/
+    # The workflow token is configured at the org level as was created under
+    # service-cloudconformity account. The token is stored in 1password.
+    token: ${{secrets.ARTIFACTORY_TOKEN_PREPARED}}
+updates:
+  - package-ecosystem: "npm"
+    # Assign to anyone in dev team. Someone responsible for the repo should check
+    # and merge the pull request.
+    reviewers:
+      - cloudconformity/developers
+    # Ignore all semver major updates as these need special consideration
+    # when performing updates due to breaking changes.
+    ignore:
+      - dependency-name: "*"
+        update-types:
+          - version-update:semver-major
+    registries:
+      - npm-github
+    directory: "/"
+    open-pull-requests-limit: 0
+    schedule:
+      interval: "daily"
+    # prefix commits and PR titles with dependabot so they're easily identifiable and
+    # so commitlint can ignore the misssing ticket.
+    commit-message:
+      include: scope
+      prefix: "dependabot"
+      prefix-development: "dependabot"
