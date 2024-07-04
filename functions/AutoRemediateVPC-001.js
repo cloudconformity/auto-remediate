@@ -14,7 +14,7 @@ const handler = async (event, context, callback) => {
 
   function handleError (message) {
     message = message || 'Failed to process request.'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 
   if (!event || !event.resource || !event.region) {
@@ -47,11 +47,11 @@ const handler = async (event, context, callback) => {
       const result = await EC2.send(new CreateFlowLogsCommand(params))
       console.log('Result', result)
     }
-    return callback(null, 'Successfully processed event')
+    return 'Successfully processed event'
   } catch (err) {
     console.log('Error', err)
     const message = err.message ? err.message : 'Failed to createFlowLogs'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 
   async function putRolePolicy (IAM, roleName) {

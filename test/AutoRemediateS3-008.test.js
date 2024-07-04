@@ -235,32 +235,35 @@ describe('S3-008 AutoRemediation', () => {
   })
 
   describe('invalid invocation', () => {
-    const mockCallback = (done) => {
-      return (err, data) => {
-        expect(err).toBeDefined()
-        expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
-        expect(mockS3).not.toHaveReceivedCommand(PutBucketAclCommand)
-        done()
-      }
-    }
-
-    it('should fail when event is undefined', done => {
-      source.handler(undefined, jest.fn(), mockCallback(done))
+    it('should fail when event is undefined', async () => {
+      await expect(source.handler(undefined, jest.fn()))
+        .rejects
+        .toThrow('Invalid event')
+      expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
+      expect(mockS3).not.toHaveReceivedCommand(PutBucketAclCommand)
     })
 
-    it('should fail when "resource" missing from the event', done => {
+    it('should fail when "resource" missing from the event', async () => {
       const malformedEvent = {
         ruleId: 'S3-008'
       }
-      source.handler(malformedEvent, jest.fn(), mockCallback(done))
+      await expect(source.handler(malformedEvent, jest.fn()))
+        .rejects
+        .toThrow('Invalid event')
+      expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
+      expect(mockS3).not.toHaveReceivedCommand(PutBucketAclCommand)
     })
 
-    it('should fail when the incorrect rule is received', done => {
+    it('should fail when the incorrect rule is received', async () => {
       const malformedEvent = {
         resource: 'sample-bucket',
         ruleId: 'S3-00x'
       }
-      source.handler(malformedEvent, jest.fn(), mockCallback(done))
+      await expect(source.handler(malformedEvent, jest.fn()))
+        .rejects
+        .toThrow('Invalid event')
+      expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
+      expect(mockS3).not.toHaveReceivedCommand(PutBucketAclCommand)
     })
   })
 })

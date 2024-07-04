@@ -22,7 +22,7 @@ const handler = async (event, context, callback) => {
   try {
     const result = await GuardDuty.send(new CreateDetectorCommand(params))
     console.log('Result', result)
-    return callback(null, 'Successfully processed event')
+    return 'Successfully processed event'
   } catch (err) {
     console.log('Error', err)
     return handleError(err.message ? err.message : 'Failed to enable GuardDuty')
@@ -30,7 +30,7 @@ const handler = async (event, context, callback) => {
 
   function handleError (message) {
     message = message || 'Failed to process request.'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 }
 

@@ -20,7 +20,7 @@ const handler = async (event, context, callback) => {
   await UpdateBucketPolicy(S3Bucket)
 
   console.log('SES is Enabled for bucket ', event.resource)
-  return callback(null, 'Successfully processed event')
+  return 'Successfully processed event'
 
   async function UpdateBucketPolicy (S3Bucket) {
     const S3 = new S3Client({ retryStrategy })
@@ -106,7 +106,7 @@ const handler = async (event, context, callback) => {
 
   function handleError (message) {
     message = message || 'Failed to process request.'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 }
 

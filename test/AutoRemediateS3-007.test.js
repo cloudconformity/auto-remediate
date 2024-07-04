@@ -1,6 +1,9 @@
-
 const source = require('../functions/AutoRemediateS3-007')
-const { S3Client, GetBucketAclCommand, PutBucketAclCommand } = require('@aws-sdk/client-s3')
+const {
+  S3Client,
+  GetBucketAclCommand,
+  PutBucketAclCommand
+} = require('@aws-sdk/client-s3')
 const { mockClient } = require('aws-sdk-client-mock')
 // eslint-disable-next-line node/no-extraneous-require
 require('aws-sdk-client-mock-jest')
@@ -14,12 +17,8 @@ const sampleEvent = {
   service: 'S3',
   region: 'ap-southeast-2',
   riskLevel: 'VERY_HIGH',
-  categories: [
-    'security'
-  ],
-  compliances: [
-    'AWAF'
-  ],
+  categories: ['security'],
+  compliances: ['AWAF'],
   message: 'Bucket sample-bucket allows authenticated users READ_ACP access.',
   resource: 'sample-bucket',
   status: 'FAILURE',
@@ -38,37 +37,82 @@ const sampleEvent = {
 
 describe('S3-007 AutoRemediation', () => {
   const grantReadAcpAllUsers = {
-    Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'READ_ACP'
+    Grantee: {
+      Type: 'Group',
+      URI: 'http://acs.amazonaws.com/groups/global/AllUsers'
+    },
+    Permission: 'READ_ACP'
   }
   const grantReadAllUsers = {
-    Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'READ'
+    Grantee: {
+      Type: 'Group',
+      URI: 'http://acs.amazonaws.com/groups/global/AllUsers'
+    },
+    Permission: 'READ'
   }
   const grantWriteAcpAllUsers = {
-    Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'WRITE_ACP'
+    Grantee: {
+      Type: 'Group',
+      URI: 'http://acs.amazonaws.com/groups/global/AllUsers'
+    },
+    Permission: 'WRITE_ACP'
   }
   const grantWriteAllUsers = {
-    Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'WRITE'
+    Grantee: {
+      Type: 'Group',
+      URI: 'http://acs.amazonaws.com/groups/global/AllUsers'
+    },
+    Permission: 'WRITE'
   }
   const grantFullControlAllUsers = {
-    Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'FULL_CONTROL'
+    Grantee: {
+      Type: 'Group',
+      URI: 'http://acs.amazonaws.com/groups/global/AllUsers'
+    },
+    Permission: 'FULL_CONTROL'
   }
   const grantReadAcpAuthenticatedUsers = {
-    Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers' }, Permission: 'READ_ACP'
+    Grantee: {
+      Type: 'Group',
+      URI: 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers'
+    },
+    Permission: 'READ_ACP'
   }
   const grantReadAuthenticatedUsers = {
-    Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers' }, Permission: 'READ'
+    Grantee: {
+      Type: 'Group',
+      URI: 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers'
+    },
+    Permission: 'READ'
   }
   const grantWriteAcpAuthenticatedUsers = {
-    Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers' }, Permission: 'WRITE_ACP'
+    Grantee: {
+      Type: 'Group',
+      URI: 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers'
+    },
+    Permission: 'WRITE_ACP'
   }
   const grantWriteAuthenticatedUsers = {
-    Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers' }, Permission: 'WRITE'
+    Grantee: {
+      Type: 'Group',
+      URI: 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers'
+    },
+    Permission: 'WRITE'
   }
   const grantFullControlAuthenticatedUsers = {
-    Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers' }, Permission: 'FULL_CONTROL'
+    Grantee: {
+      Type: 'Group',
+      URI: 'http://acs.amazonaws.com/groups/global/AuthenticatedUsers'
+    },
+    Permission: 'FULL_CONTROL'
   }
   const grantFullControlCanonicalUser = {
-    Grantee: { DisplayName: 'user_name', ID: 'account_user_id123455667890abcdef', Type: 'CanonicalUser' }, Permission: 'FULL_CONTROL'
+    Grantee: {
+      DisplayName: 'user_name',
+      ID: 'account_user_id123455667890abcdef',
+      Type: 'CanonicalUser'
+    },
+    Permission: 'FULL_CONTROL'
   }
 
   const mockS3 = mockClient(S3Client)
@@ -81,12 +125,15 @@ describe('S3-007 AutoRemediation', () => {
     beforeEach((done) => {
       mockS3.on(GetBucketAclCommand).resolves({
         Owner: {
-          DisplayName: 'user_name', ID: 'account_user_id123455667890abcdef'
+          DisplayName: 'user_name',
+          ID: 'account_user_id123455667890abcdef'
         },
         Grants: [
           {
             Grantee: {
-              DisplayName: 'user_name', ID: 'account_user_id123455667890abcdef', Type: 'CanonicalUser'
+              DisplayName: 'user_name',
+              ID: 'account_user_id123455667890abcdef',
+              Type: 'CanonicalUser'
             },
             Permission: 'FULL_CONTROL'
           },
@@ -118,7 +165,10 @@ describe('S3-007 AutoRemediation', () => {
       const expectedParams = {
         Bucket: 'sample-bucket'
       }
-      expect(mockS3).toHaveReceivedCommandWith(GetBucketAclCommand, expectedParams)
+      expect(mockS3).toHaveReceivedCommandWith(
+        GetBucketAclCommand,
+        expectedParams
+      )
     })
 
     it('should set a new ACL on the affected bucket', () => {
@@ -126,11 +176,17 @@ describe('S3-007 AutoRemediation', () => {
         Bucket: 'sample-bucket',
         AccessControlPolicy: expect.any(Object)
       }
-      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedParams)
+      expect(mockS3).toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        expectedParams
+      )
     })
 
     it('should remove READ_ACP grants for Authenticated Users', () => {
-      expect(mockS3).not.toHaveReceivedCommandWith(PutBucketAclCommand, grantReadAcpAuthenticatedUsers)
+      expect(mockS3).not.toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        grantReadAcpAuthenticatedUsers
+      )
     })
 
     it('should keep READ grants for Authenticated Users', () => {
@@ -140,7 +196,10 @@ describe('S3-007 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
+      expect(mockS3).toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        expectedGrant
+      )
     })
 
     it('should keep WRITE grants for Authenticated Users', () => {
@@ -150,7 +209,10 @@ describe('S3-007 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
+      expect(mockS3).toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        expectedGrant
+      )
     })
 
     it('should keep WRITE_ACP grants for Authenticated Users', () => {
@@ -160,7 +222,10 @@ describe('S3-007 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
+      expect(mockS3).toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        expectedGrant
+      )
     })
 
     it('should keep FULL_CONTROL grants for Authenticated Users', () => {
@@ -170,7 +235,10 @@ describe('S3-007 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
+      expect(mockS3).toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        expectedGrant
+      )
     })
 
     it('should keep READ grants for All Users', () => {
@@ -180,7 +248,10 @@ describe('S3-007 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
+      expect(mockS3).toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        expectedGrant
+      )
     })
 
     it('should keep READ_ACP grants for All Users', () => {
@@ -190,7 +261,10 @@ describe('S3-007 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
+      expect(mockS3).toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        expectedGrant
+      )
     })
 
     it('should keep WRITE grants for All Users', () => {
@@ -200,7 +274,10 @@ describe('S3-007 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
+      expect(mockS3).toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        expectedGrant
+      )
     })
 
     it('should keep WRITE_ACP grants for All Users', () => {
@@ -210,7 +287,10 @@ describe('S3-007 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
+      expect(mockS3).toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        expectedGrant
+      )
     })
 
     it('should keep FULL_CONTROL grants for All Users', () => {
@@ -220,7 +300,10 @@ describe('S3-007 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
+      expect(mockS3).toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        expectedGrant
+      )
     })
 
     it('should keep FULL_CONTROL grants for Canonical User', () => {
@@ -230,37 +313,43 @@ describe('S3-007 AutoRemediation', () => {
           Owner: expect.any(Object)
         }
       }
-      expect(mockS3).toHaveReceivedCommandWith(PutBucketAclCommand, expectedGrant)
+      expect(mockS3).toHaveReceivedCommandWith(
+        PutBucketAclCommand,
+        expectedGrant
+      )
     })
   })
 
   describe('invalid invocation', () => {
-    const mockCallback = (done) => {
-      return (err, data) => {
-        expect(err).toBeDefined()
-        expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
-        expect(mockS3).not.toHaveReceivedCommand(PutBucketAclCommand)
-        done()
-      }
-    }
-
-    it('should fail when event is undefined', done => {
-      source.handler(undefined, jest.fn(), mockCallback(done))
+    it('should fail when event is undefined', async () => {
+      await expect(source.handler(undefined, jest.fn()))
+        .rejects
+        .toThrow('Invalid event')
+      expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
+      expect(mockS3).not.toHaveReceivedCommand(PutBucketAclCommand)
     })
 
-    it('should fail when "resource" missing from the event', done => {
+    it('should fail when "resource" missing from the event', async () => {
       const malformedEvent = {
         ruleId: 'S3-007'
       }
-      source.handler(malformedEvent, jest.fn(), mockCallback(done))
+      await expect(source.handler(malformedEvent, jest.fn()))
+        .rejects
+        .toThrow('Invalid event')
+      expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
+      expect(mockS3).not.toHaveReceivedCommand(PutBucketAclCommand)
     })
 
-    it('should fail when the incorrect rule is received', done => {
+    it('should fail when the incorrect rule is received', async () => {
       const malformedEvent = {
         resource: 'sample-bucket',
         ruleId: 'S3-00x'
       }
-      source.handler(malformedEvent, jest.fn(), mockCallback(done))
+      await expect(source.handler(malformedEvent, jest.fn()))
+        .rejects
+        .toThrow('Invalid event')
+      expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
+      expect(mockS3).not.toHaveReceivedCommand(PutBucketAclCommand)
     })
   })
 })

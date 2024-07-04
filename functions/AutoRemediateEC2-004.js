@@ -20,11 +20,11 @@ module.exports.handler = (event, context, callback) => {
       return handleError(err.message ? err.message : 'removing Oracle database access on port 1521 failed')
     }
     console.log('Result', result)
-    return callback(null, 'Successfully processed event')
+    return 'Successfully processed event'
   })
 
   function handleError (message) {
     message = message || 'Failed to process request.'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 }

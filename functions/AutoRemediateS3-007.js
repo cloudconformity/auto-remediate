@@ -11,7 +11,7 @@ const readAcpAuthenticatedUsers = {
 
 function handleError (message, callback) {
   message = message || 'Failed to process request.'
-  return callback(new Error(message))
+  throw new Error(message)
 }
 
 // look for and remove S3 BucketAuthenticatedUsersReadAcpAccess

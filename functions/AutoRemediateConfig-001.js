@@ -40,7 +40,7 @@ const handler = async (event, context, callback) => {
     await subscribe(roleARN)
     console.log('Successfully enabled AWS config in', event.region)
 
-    return callback(null, 'Successfully processed event')
+    return 'Successfully processed event'
   } catch (err) {
     console.log('Error', err)
     return handleError(err.message ? err.message : 'Failed to enable AWS Config')
@@ -48,7 +48,7 @@ const handler = async (event, context, callback) => {
 
   function handleError (message) {
     message = message || 'Failed to process request.'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 
   async function getRole (accountId) {

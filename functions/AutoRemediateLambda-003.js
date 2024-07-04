@@ -56,7 +56,7 @@ const handler = async (event, context, callback) => {
 
   function handleError (message) {
     message = message || 'Failed to process request.'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 }
 
