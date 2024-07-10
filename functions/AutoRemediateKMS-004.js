@@ -5,7 +5,7 @@ const { KMSClient, CancelKeyDeletionCommand } = require('@aws-sdk/client-kms')
  * Lambda function to make AWS KMS Customer Master Keys (CMK) that has been scheduled for deletion canceled
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('Recover KMS Customer Master Keys  - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource) {

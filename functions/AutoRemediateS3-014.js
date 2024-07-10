@@ -14,7 +14,7 @@ const retryStrategy = new ConfiguredRetryStrategy(10, 5000)
  *
  * This Function replace Principal in the policy with account root user
  */
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('S3 Bucket Public Access Via Policy - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region) {

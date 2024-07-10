@@ -5,7 +5,7 @@ const { RDSClient, ModifyDBSnapshotAttributeCommand } = require('@aws-sdk/client
  * Lambda function to enforce AWS Relational Database Service (RDS) database snapshots not to be shared publicly
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('RDS Snapshot Publicly Accessible  - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource) {

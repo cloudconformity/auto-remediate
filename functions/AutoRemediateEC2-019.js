@@ -6,7 +6,7 @@ const { EC2Client, ModifyImageAttributeCommand } = require('@aws-sdk/client-ec2'
  *
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('Publicly Shared AMI  - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource || !event.region) {

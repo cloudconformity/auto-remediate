@@ -3,6 +3,8 @@ const { S3Client, GetBucketAclCommand, PutBucketAclCommand } = require('@aws-sdk
 const allUsersURI = 'http://acs.amazonaws.com/groups/global/AllUsers'
 const readPermission = 'READ'
 
+const CCRuleCode = 'S3-001'
+
 const aclNew = {
   Owner: '',
   Grants: []
@@ -17,14 +19,14 @@ function remediateAllUsers (thisGrant, newAcl) {
 }
 
 // look for and remove S3BucketPublicReadAccess
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log(
     'S3 BucketPublicReadAccess - Received event:',
     JSON.stringify(event, null, 2)
   )
 
   if (!event || !event.resource || event.ruleId !== 'S3-001') {
-    return callback(new Error('Invalid event'))
+    throw new Error('Invalid event')
   }
 
   var s3 = new S3Client({ apiVersion: '2006-03-01' })
@@ -64,10 +66,10 @@ const handler = async (event, context, callback) => {
     const result = await s3.send(new PutBucketAclCommand(putAclParams))
     console.log('result>' + JSON.stringify(result))
 
-    callback(null, 'Success')
+    return 'Success'
   } catch (err) {
     console.log(err, err.stack)
-    callback(err, 'failed to auto-remediate s3-001')
+    throw new Error(`failed to auto-remediate ${CCRuleCode}: ${err}`)
   }
 }
 

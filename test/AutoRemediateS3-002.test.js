@@ -62,7 +62,7 @@ describe('S3-002 AutoRemediation', () => {
   })
 
   describe('valid invocation', () => {
-    beforeEach((done) => {
+    beforeEach(async () => {
       mockS3.on(GetBucketAclCommand).resolves({
         Owner: {
           DisplayName: 'user_name', ID: 'account_user_id123455667890abcdef'
@@ -82,14 +82,8 @@ describe('S3-002 AutoRemediation', () => {
           grantFullControlCanonicalUser
         ]
       })
-      const mockCallback = (err, data) => {
-        if (err) {
-          done.fail()
-        } else {
-          done()
-        }
-      }
-      source.handler(sampleEvent, jest.fn(), mockCallback)
+
+      await source.handler(sampleEvent)
     })
 
     it('should get the correct bucket ACL from S3', () => {

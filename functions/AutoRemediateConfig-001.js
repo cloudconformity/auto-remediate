@@ -19,7 +19,7 @@ const { PutConfigurationRecorderCommand, PutDeliveryChannelCommand, StartConfigu
  * @param context Lambda Context
  * @param callback Lambda Callback
  */
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('Config AutoRemediateConfig-001 - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region) {

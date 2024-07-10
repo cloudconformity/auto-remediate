@@ -5,7 +5,7 @@ const { RedshiftClient, ModifyClusterParameterGroupCommand } = require('@aws-sdk
  * Lambda function to enable Redshift User Activity Logging
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('Enable Redshift User Activity Logging  - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource) {

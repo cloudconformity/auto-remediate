@@ -9,27 +9,27 @@ const writeAllUsers = {
   Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'WRITE_ACP'
 }
 
-function handleError (message, callback) {
+function handleError (message) {
   message = message || 'Failed to process request.'
   throw new Error(message)
 }
 
 // look for and remove S3BucketPublicReadAccess
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('S3', CCRuleName, ' - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource || event.ruleId !== CCRuleCode) {
-    return handleError('Invalid event', callback)
+    return handleError('Invalid event')
   }
 
   var s3 = new S3Client({ apiVersion: '2006-03-01' })
 
   try {
     await utils.filterAcl(s3, event.resource, writeAllUsers)
-    callback(null, 'Success')
+    return 'Success'
   } catch (err) {
     console.log(err, err.stack)
-    callback(err, 'failed to auto-remediate', CCRuleCode)
+    throw new Error(`failed to auto-remediate ${CCRuleCode}: ${err}`)
   }
 }
 

@@ -3,7 +3,7 @@ const { EC2Client, ModifySnapshotAttributeCommand } = require('@aws-sdk/client-e
 * Lambda function enforce Elastic Block Store (EBS) volume snapshots not to be public
 *
 */
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('Publicly Accessible EBS Snapshot  - Received event:', JSON.stringify(event, null, 2))
   if (!event || !event.resource || !event.region) {
     return handleError('Invalid event')

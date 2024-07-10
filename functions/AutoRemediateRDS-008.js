@@ -6,7 +6,7 @@ const { RDSClient, ModifyDBInstanceCommand } = require('@aws-sdk/client-rds')
  *
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('PubliclyAccessible - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.ccrn || !event.resource || !event.region) {

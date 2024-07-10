@@ -11,7 +11,7 @@ const retryStrategy = new ConfiguredRetryStrategy(10, 5000)
 /**
  * Enable tracing for your AWS Lambda functions
  */
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('Lambda Function Tracing Enabled - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region) {
@@ -48,7 +48,7 @@ const handler = async (event, context, callback) => {
     }
 
     await Lambda.send(new UpdateFunctionConfigurationCommand(FunctionConfigurationParams))
-    return callback(null, 'Successfully updated function configuration')
+    return 'Successfully updated function configuration'
   } catch (err) {
     console.log('Error', err)
     return handleError(err.message ? err.message : 'Failed to enable tracing for the function')

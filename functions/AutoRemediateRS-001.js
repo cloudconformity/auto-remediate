@@ -6,7 +6,7 @@ const { RedshiftClient, ModifyClusterCommand } = require('@aws-sdk/client-redshi
  *
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('ClusterPubliclyAccessible - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.ccrn || !event.resource || !event.region) {

@@ -8,7 +8,7 @@ const retryStrategy = new ConfiguredRetryStrategy(10, (attempt) => 5000 + attemp
 /**
  * Enable Server-Side Encryption for AWS S3 buckets
  */
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('S3 Server Side Encryption - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region) {

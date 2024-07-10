@@ -5,7 +5,7 @@ const { ClientIam, UpdateAccessKeyCommand } = require('@aws-sdk/client-iam')
  * Lambda function to deactivate access keys older than 30 days
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('AccessKeysRotated30Days - Received event:', JSON.stringify(event, null, 2))
   if (!event || !event.resource || !event.extradata) {
     return handleError('Invalid event')

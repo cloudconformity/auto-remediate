@@ -9,7 +9,7 @@ const retryStrategy = new ConfiguredRetryStrategy(10, 5000)
 /**
  * Ensure that  Flow Logs feature is Enabled for your account
  */
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('Enable Flow Logs   - Received event:', JSON.stringify(event, null, 2))
 
   function handleError (message) {

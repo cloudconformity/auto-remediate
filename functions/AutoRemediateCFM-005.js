@@ -6,7 +6,7 @@ const { CloudFormationClient, UpdateTerminationProtectionCommand } = require('@a
  *
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('StackTerminationProtection - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.ccrn || !event.resource || !event.region) {

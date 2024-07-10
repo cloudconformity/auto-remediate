@@ -6,7 +6,7 @@ const CONFIG = require('./config')['AutoRemediateCT-001']
 /**
 * Lambda function to automatically remediate CloudTrail not Global
 */
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('CloudTrail not Global - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region || event.ruleId !== 'CT-001') {

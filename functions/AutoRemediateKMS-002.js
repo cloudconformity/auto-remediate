@@ -5,7 +5,7 @@ const { KMSClient, EnableKeyRotationCommand } = require('@aws-sdk/client-kms')
  * Lambda function to Enabled KMS Key Rotation
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('Enable AWS KMS Key Rotation - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource) {

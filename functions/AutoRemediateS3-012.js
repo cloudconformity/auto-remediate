@@ -5,7 +5,7 @@ const { S3Client, PutBucketVersioningCommand } = require('@aws-sdk/client-s3')
  * Lambda function to enable versioning on an s3 bucket
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('S3BucketVersioning - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource) {

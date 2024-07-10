@@ -5,7 +5,7 @@ const { IAMClient, UpdateAccessKeyCommand } = require('@aws-sdk/client-iam')
  * Lambda function to deactivate access keys older than 90 days
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('AWS IAM Access Keys Rotation- 90 Days - Received event:', JSON.stringify(event, null, 2))
   if (!event || !event.resource || !event.extradata) {
     return handleError('Invalid event')

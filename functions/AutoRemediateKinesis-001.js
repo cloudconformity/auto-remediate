@@ -6,7 +6,7 @@ const { KinesisClient, StartStreamEncryptionCommand } = require('@aws-sdk/client
  *
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log(' Enable Kinesis Server-Side Encryption   - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource || !event.region) {

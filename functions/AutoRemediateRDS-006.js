@@ -3,7 +3,7 @@ const { RDSClient, ModifyDBInstanceCommand } = require('@aws-sdk/client-rds')
 * Lambda function to enable Update Minor Version flag for AWS RDS
 *
 */
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log(' Update Minor Version for RDS - Received event:', JSON.stringify(event, null, 2))
   if (!event || !event.resource || !event.region) {
     return handleError('Invalid event')

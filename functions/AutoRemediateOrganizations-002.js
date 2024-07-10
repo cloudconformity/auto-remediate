@@ -5,7 +5,7 @@ const { OrganizationsClient, EnableAllFeaturesCommand } = require('@aws-sdk/clie
  * Lambda function to enable  All Features for Organizations
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('Enable All Features - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region) {

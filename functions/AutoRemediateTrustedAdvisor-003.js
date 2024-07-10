@@ -6,7 +6,7 @@ const { IAMClient, UpdateAccessKeyCommand } = require('@aws-sdk/client-iam')
  *
 */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('Exposed IAM Access Keys - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource) {

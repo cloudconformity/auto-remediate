@@ -6,7 +6,7 @@ const { GuardDutyClient, CreateDetectorCommand } = require('@aws-sdk/client-guar
  *
  */
 
-const handler = async (event, context, callback) => {
+const handler = async (event) => {
   console.log('GuardDuty In Use - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region) {
