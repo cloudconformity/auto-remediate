@@ -20,7 +20,7 @@ module.exports.handler = (event, context, callback) => {
       return handleError(err.message ? err.message : 'removing smtp access on port 25 failed')
     }
     console.log('Result', result)
-    return 'Successfully processed event'
+    return callback(null, 'Successfully processed event')
   })
 
   function handleError (message) {

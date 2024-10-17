@@ -14,11 +14,11 @@ const handler = async (event) => {
       'The %s is not supported. Exiting gracefully ...',
       AutoRemediate
     )
-    return null
+    return
   }
   if (!CONFIG[`${AutoRemediate}`]['enabled']) {
     console.log('The %s is not enabled. Exiting gracefully ...', AutoRemediate)
-    return null
+    return
   }
   const FunctionName =
     process.env['AWS_LAMBDA_FUNCTION_NAME'].substring(
