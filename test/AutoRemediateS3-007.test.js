@@ -315,7 +315,7 @@ describe('S3-007 AutoRemediation', () => {
 
   describe('invalid invocation', () => {
     it('should fail when event is undefined', async () => {
-      await expect(source.handler(undefined, jest.fn()))
+      await expect(source.handler(undefined))
         .rejects
         .toThrow('Invalid event')
       expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
@@ -326,7 +326,7 @@ describe('S3-007 AutoRemediation', () => {
       const malformedEvent = {
         ruleId: 'S3-007'
       }
-      await expect(source.handler(malformedEvent, jest.fn()))
+      await expect(source.handler(malformedEvent))
         .rejects
         .toThrow('Invalid event')
       expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
@@ -338,7 +338,7 @@ describe('S3-007 AutoRemediation', () => {
         resource: 'sample-bucket',
         ruleId: 'S3-00x'
       }
-      await expect(source.handler(malformedEvent, jest.fn()))
+      await expect(source.handler(malformedEvent))
         .rejects
         .toThrow('Invalid event')
       expect(mockS3).not.toHaveReceivedCommand(GetBucketAclCommand)
