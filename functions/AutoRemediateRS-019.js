@@ -1,14 +1,12 @@
 
-'use strict'
-
-const AWS = require('aws-sdk')
+const { RedshiftClient, ModifyClusterCommand } = require('@aws-sdk/client-redshift')
 const CONFIG = require('./config')['AutoRemediateRS-019']
 
 /**
  * Lambda function to Enable Automated Snapshot Retention Period for AWS Redshift
  */
 
-module.exports.handler = (event, context, callback) => {
+const handler = async (event) => {
   console.log('AWS Redshift Automated Snapshot Retention Period - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource) {
@@ -21,20 +19,21 @@ module.exports.handler = (event, context, callback) => {
 
   }
 
-  const Redshift = new AWS.Redshift({ region: event.region })
+  const Redshift = new RedshiftClient({ region: event.region })
 
-  Redshift.modifyCluster(params, function (err, result) {
-    if (err) {
-      console.log('Error', err)
-      return handleError(err.message ? err.message : 'Modify Cluster failed')
-    }
-
+  try {
+    const result = await Redshift.send(new ModifyClusterCommand(params))
     console.log('Result', result)
-    return callback(null, 'Successfully processed event')
-  })
+    return 'Successfully processed event'
+  } catch (err) {
+    console.log('Error', err)
+    return handleError(err.message ? err.message : 'Modify Cluster failed')
+  }
 
   function handleError (message) {
     message = message || 'Failed to process request.'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 }
+
+module.exports = { handler }

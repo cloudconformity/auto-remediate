@@ -1,13 +1,12 @@
-'use strict'
 const CONFIG = require('./config')
-const AWS = require('aws-sdk')
+const { KinesisClient, StartStreamEncryptionCommand } = require('@aws-sdk/client-kinesis')
 
 /**
  * Lambda function to enable AWS Kinesis streams encryption using Server-Side Encryption (SSE)
  *
  */
 
-module.exports.handler = (event, context, callback) => {
+const handler = async (event) => {
   console.log(' Enable Kinesis Server-Side Encryption   - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource || !event.region) {
@@ -24,20 +23,21 @@ module.exports.handler = (event, context, callback) => {
     StreamName: event.resource
   }
 
-  const Kinesis = new AWS.Kinesis({ region: event.region, apiVersion: '2012-11-05' })
+  const Kinesis = new KinesisClient({ region: event.region, apiVersion: '2012-11-05' })
 
-  Kinesis.startStreamEncryption(params, function (err, result) {
-    if (err) {
-      console.log('Error', err)
-      return handleError(err.message ? err.message : 'Failed to enable Kinesis Server Side Encryption')
-    }
-
+  try {
+    const result = await Kinesis.send(new StartStreamEncryptionCommand(params))
     console.log('Result', result)
-    return callback(null, 'Successfully processed event')
-  })
+    return 'Successfully processed event'
+  } catch (err) {
+    console.log('Error', err)
+    return handleError(err.message ? err.message : 'Failed to enable Kinesis Server Side Encryption')
+  }
 
   function handleError (message) {
     message = message || 'Failed to process request.'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 }
+
+module.exports = { handler }

@@ -1,7 +1,6 @@
-'use strict'
 
 const utils = require('../utils/S3_utils')
-const AWS = require('aws-sdk')
+const { S3Client } = require('@aws-sdk/client-s3')
 
 const CCRuleCode = 'S3-003'
 const CCRuleName = 'BucketPublicWriteAccess'
@@ -10,27 +9,28 @@ const writeAllUsers = {
   Grantee: { Type: 'Group', URI: 'http://acs.amazonaws.com/groups/global/AllUsers' }, Permission: 'WRITE'
 }
 
-function handleError (message, callback) {
+function handleError (message) {
   message = message || 'Failed to process request.'
-  return callback(new Error(message))
+  throw new Error(message)
 }
 
 // look for and remove S3BucketPublicReadAccess
-const handler = (event, context, callback) => {
+const handler = async (event) => {
   console.log('S3', CCRuleName, ' - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.resource || event.ruleId !== CCRuleCode) {
-    return handleError('Invalid event', callback)
+    return handleError('Invalid event')
   }
 
-  var s3 = new AWS.S3({ apiVersion: '2006-03-01' })
+  var s3 = new S3Client({ apiVersion: '2006-03-01' })
 
-  utils.filterAcl(s3, event.resource, writeAllUsers).then(() => {
-    callback(null, 'Success')
-  }).catch((err) => {
+  try {
+    await utils.filterAcl(s3, event.resource, writeAllUsers)
+    return 'Success'
+  } catch (err) {
     console.log(err, err.stack)
-    callback(err, 'failed to auto-remediate', CCRuleCode)
-  })
+    throw new Error(`failed to auto-remediate ${CCRuleCode}: ${err}`)
+  }
 }
 
 module.exports = {

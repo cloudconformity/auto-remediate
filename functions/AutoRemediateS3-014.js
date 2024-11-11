@@ -1,22 +1,10 @@
-'use strict'
 
-const AWS = require('aws-sdk')
-
-AWS.config.update({
-  maxRetries: 10
-})
-
-AWS.events.on('retry', function (resp) {
-  // retry all requests with a 5 sec delay (if they are retry-able)
-  if (resp.error) {
-    resp.error.retryDelay = 5000
-  }
-})
-
-// Using the native promise implementation of the JavaScript engine
-AWS.config.setPromisesDependency(null)
+const { S3Client, GetBucketPolicyCommand, PutBucketPolicyCommand } = require('@aws-sdk/client-s3')
+const { ConfiguredRetryStrategy } = require('@aws-sdk/util-retry')
 
 const Utils = require('./Utils.js')
+
+const retryStrategy = new ConfiguredRetryStrategy(10, 5000)
 
 /**
  * This function Alter Bucket policy to enforce AWS S3 bucket are not publicly accessible
@@ -26,7 +14,7 @@ const Utils = require('./Utils.js')
  *
  * This Function replace Principal in the policy with account root user
  */
-module.exports.handler = (event, context, callback) => {
+const handler = async (event) => {
   console.log('S3 Bucket Public Access Via Policy - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region) {
@@ -35,31 +23,29 @@ module.exports.handler = (event, context, callback) => {
 
   const S3Bucket = event.resource
 
-  return Utils.getAccountId().then(function (accountId) {
+  try {
+    const accountId = await Utils.getAccountId()
     console.log('AWS Account ID:', accountId)
-
-    return AlterBucketPolicyPrincipal(S3Bucket, accountId).then(function () {
-      console.log('SES is Enabled for bucket ', event.resource)
-      return callback(null, 'Successfully processed event')
-    })
-  }).catch(function (err) {
+    await AlterBucketPolicyPrincipal(S3Bucket, accountId)
+    console.log('SES is Enabled for bucket ', event.resource)
+    return 'Successfully processed event'
+  } catch (err) {
     console.log('Error', err)
     return handleError(err.message ? err.message : 'Failed to enable AWS Config')
-  })
+  }
 
-  function AlterBucketPolicyPrincipal (S3Bucket, accountId) {
-    const S3 = new AWS.S3()
+  async function AlterBucketPolicyPrincipal (S3Bucket, accountId) {
+    const S3 = new S3Client({ retryStrategy })
 
-    return S3.getBucketPolicy({ Bucket: S3Bucket }).promise().then(function (data) {
+    try {
+      const data = await S3.send(new GetBucketPolicyCommand({ Bucket: S3Bucket }))
       console.log('Retrieved Bucket Policy:', JSON.stringify(JSON.parse(data.Policy), undefined, 2))
-
       const BucketPolicy = JSON.parse(data.Policy)
-
       var statements = BucketPolicy.Statement
 
       for (var i = 0; i < statements.length; i++) {
         var currentStatement = statements[i]
-        console.log('Processing statement ' + i + '  ...')
+        console.log(`Processing statement ${i}...`)
         for (var key in currentStatement) {
           // eslint-disable-next-line no-prototype-builtins
           if (currentStatement.hasOwnProperty(key) && currentStatement[key] === 'Allow') {
@@ -77,18 +63,19 @@ module.exports.handler = (event, context, callback) => {
         Bucket: S3Bucket
       }
 
-      return S3.putBucketPolicy(PutBucketPolicyParams).promise().then(function (data) {
-        console.log('Successfully put bucket policy')
-        return data.Policy
-      })
-    }).catch(function (err) {
+      const putBucketPolicyResult = await S3.send(new PutBucketPolicyCommand(PutBucketPolicyParams))
+      console.log('Successfully put bucket policy')
+      return putBucketPolicyResult.Policy
+    } catch (err) {
       console.log(err.message)
       throw err
-    })
+    }
   }
 
   function handleError (message) {
     message = message || 'Failed to process request.'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 }
+
+module.exports = { handler }

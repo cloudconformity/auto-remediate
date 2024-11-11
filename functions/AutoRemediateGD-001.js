@@ -1,13 +1,12 @@
-'use strict'
 
-const AWS = require('aws-sdk')
+const { GuardDutyClient, CreateDetectorCommand } = require('@aws-sdk/client-guardduty')
 
 /**
  * Lambda function to make Amazon GuardDuty service is currently enabled in order to protect your AWS environment and infrastructure
  *
  */
 
-module.exports.handler = (event, context, callback) => {
+const handler = async (event) => {
   console.log('GuardDuty In Use - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region) {
@@ -18,20 +17,21 @@ module.exports.handler = (event, context, callback) => {
     Enable: true
   }
 
-  const GuardDuty = new AWS.GuardDuty({ region: event.region })
+  const GuardDuty = new GuardDutyClient({ region: event.region })
 
-  GuardDuty.createDetector(params, function (err, result) {
-    if (err) {
-      console.log('Error', err)
-      return handleError(err.message ? err.message : 'Failed to enable GuardDuty')
-    }
-
+  try {
+    const result = await GuardDuty.send(new CreateDetectorCommand(params))
     console.log('Result', result)
-    return callback(null, 'Successfully processed event')
-  })
+    return 'Successfully processed event'
+  } catch (err) {
+    console.log('Error', err)
+    return handleError(err.message ? err.message : 'Failed to enable GuardDuty')
+  }
 
   function handleError (message) {
     message = message || 'Failed to process request.'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 }
+
+module.exports = { handler }

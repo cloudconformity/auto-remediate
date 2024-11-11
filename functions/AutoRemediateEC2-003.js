@@ -1,4 +1,3 @@
-'use strict'
 const AccessRevoker = require('../utils/security_group_access_revoker')
 
 const TCP_RDP_PORT = 3389

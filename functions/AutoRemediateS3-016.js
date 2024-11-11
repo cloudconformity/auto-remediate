@@ -1,26 +1,14 @@
-'use strict'
 
-const AWS = require('aws-sdk')
-const Promise = require('bluebird')
+const { S3Client, GetBucketPolicyCommand, PutBucketPolicyCommand } = require('@aws-sdk/client-s3')
 
-AWS.config.update({
-  maxRetries: 10
-})
+const { ConfiguredRetryStrategy } = require('@aws-sdk/util-retry')
 
-AWS.events.on('retry', function (resp) {
-  // retry all requests with a 5 sec delay (if they are retry-able)
-  if (resp.error) {
-    resp.error.retryDelay = 5000
-  }
-})
-
-// Using the native promise implementation of the JavaScript engine
-AWS.config.setPromisesDependency(null)
+const retryStrategy = new ConfiguredRetryStrategy(10, (attempt) => 5000 + attempt * 1000)
 
 /**
  * Enable Server-Side Encryption for AWS S3 buckets
  */
-module.exports.handler = (event, context, callback) => {
+const handler = async (event) => {
   console.log('S3 Server Side Encryption - Received event:', JSON.stringify(event, null, 2))
 
   if (!event || !event.region) {
@@ -28,33 +16,14 @@ module.exports.handler = (event, context, callback) => {
   }
 
   const S3Bucket = event.resource
-  let retries = 5
 
-  const retryable = function (S3Bucket) {
-    return UpdateBucketPolicy(S3Bucket).catch(function (err) {
-      console.log('Error found:')
-      console.error(err)
-      console.log('%d attempts remaining, retrying...', retries)
+  await UpdateBucketPolicy(S3Bucket)
 
-      if (retries <= 0) {
-        throw err
-      }
+  console.log('SES is Enabled for bucket ', event.resource)
+  return 'Successfully processed event'
 
-      retries--
-
-      return Promise.delay(1000).then(function () {
-        return UpdateBucketPolicy(S3Bucket)
-      })
-    })
-  }
-
-  return retryable(S3Bucket).then(function () {
-    console.log('SES is Enabled for bucket ', event.resource)
-    return callback(null, 'Successfully processed event')
-  })
-
-  function UpdateBucketPolicy (S3Bucket) {
-    const S3 = new AWS.S3()
+  async function UpdateBucketPolicy (S3Bucket) {
+    const S3 = new S3Client({ retryStrategy })
 
     const SseStatement1 = JSON.stringify({
       Sid: 'DenyIncorrectEncryptionHeader',
@@ -83,11 +52,12 @@ module.exports.handler = (event, context, callback) => {
     }
     )
 
-    return S3.getBucketPolicy({ Bucket: S3Bucket }).promise().then(function (data) {
-      console.log('Retrieved Bucket Policy:', JSON.stringify(JSON.parse(data.Policy), undefined, 2))
-      const BucketPolicy = JSON.parse(data.Policy)
+    try {
+      const currentPolicy = await S3.send(new GetBucketPolicyCommand({ Bucket: S3Bucket }))
+      console.log('Retrieved Bucket Policy:', JSON.stringify(JSON.parse(currentPolicy.Policy), undefined, 2))
+      const BucketPolicy = JSON.parse(currentPolicy.Policy)
 
-      if ((data.Policy).includes('s3:x-amz-server-side-encryption')) {
+      if ((currentPolicy.Policy).includes('s3:x-amz-server-side-encryption')) {
         console.log('Bucket already has SSE policy in place')
         return BucketPolicy
       } else {
@@ -99,12 +69,9 @@ module.exports.handler = (event, context, callback) => {
           Bucket: S3Bucket
         }
 
-        return S3.putBucketPolicy(PutBucketPolicyParams).promise().then(function (data) {
-          console.log('Successfully put bucket policy')
-          return data.Policy
-        })
+        return putBucketPolicy(S3, PutBucketPolicyParams)
       }
-    }).catch(function (err) {
+    } catch (err) {
       console.log(err.message)
 
       if (err.code !== 'NoSuchBucketPolicy') {
@@ -127,15 +94,20 @@ module.exports.handler = (event, context, callback) => {
         Bucket: S3Bucket
       }
 
-      return S3.putBucketPolicy(PutBucketPolicyParams).promise().then(function (data) {
-        console.log('Successfully put bucket policy')
-        return data.Policy
-      })
-    })
+      return putBucketPolicy(S3, PutBucketPolicyParams)
+    }
+  }
+
+  async function putBucketPolicy (S3, PutBucketPolicyParams) {
+    const result = await S3.send(new PutBucketPolicyCommand(PutBucketPolicyParams))
+    console.log('Successfully put bucket policy')
+    return result.Policy
   }
 
   function handleError (message) {
     message = message || 'Failed to process request.'
-    return callback(new Error(message))
+    throw new Error(message)
   }
 }
+
+module.exports = { handler }
