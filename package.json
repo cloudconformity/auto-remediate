@@ -40,7 +40,6 @@
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {
-    "@conformity/commitlint-config-conformity": "^1.2.3",
     "aws-sdk-client-mock": "^3.0.1",
     "aws-sdk-client-mock-jest": "^3.0.1",
     "dotenv": "^10.0.0",
