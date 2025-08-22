@@ -97,6 +97,10 @@
     "enabled": false
   },
 
+  "AutoRemediateEC2-034": {
+	  "enabled": false
+  },
+
   "AutoRemediateEC2-038": {
     "enabled": false
   },

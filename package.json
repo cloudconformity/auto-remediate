@@ -24,7 +24,7 @@
     "@aws-sdk/client-cloudformation": "^3.490.0",
     "@aws-sdk/client-cloudtrail": "^3.490.0",
     "@aws-sdk/client-config-service": "^3.490.0",
-    "@aws-sdk/client-ec2": "^3.496.0",
+    "@aws-sdk/client-ec2": "^3.873.0",
     "@aws-sdk/client-guardduty": "^3.496.0",
     "@aws-sdk/client-iam": "^3.490.0",
     "@aws-sdk/client-kinesis": "^3.496.0",
