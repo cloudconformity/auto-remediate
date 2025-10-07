@@ -73,6 +73,10 @@
     "enabled": false
   },
 
+  "AutoRemediateIAM-029": {
+	  "enabled": false
+  },
+
   "AutoRemediateEC2-002": {
     "enabled": false
   },
