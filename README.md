@@ -98,6 +98,7 @@ The table below lists the supported auto auto-remediate functions:
 |  CloudTrail | [CT-001](https://www.cloudconformity.com/knowledge-base/aws/CloudTrail/cloudtrail-enabled.html)    | Ensure CloudTrail API logging is activated for all Regions |
 |  Redshift | [RS-001](https://www.cloudconformity.com/knowledge-base/aws/Redshift/redshift-cluster-publicly-accessible.html)    | Ensure Redshift clusters are not publicly accessible to minimise security risks |
 |  IAM | [IAM-001](https://www.cloudconformity.com/knowledge-base/aws/IAM/access-keys-rotated-30-days.html)    | Ensure that all your IAM user access keys are rotated every month  |
+|  IAM | [IAM-029](https://www.trendmicro.com/cloudoneconformity/knowledge-base/aws/IAM/unused-iam-user.html)    | Identify and remove any unused AWS IAM users |
 |  EC2 | [EC2-002](https://www.cloudconformity.com/knowledge-base/aws/EC2/unrestricted-ssh-access.html)    | Ensure that there is no unrestricted access through TCP port 22 from the selected EC2 security group  |
 |  EC2 | [EC2-003](https://www.cloudconformity.com/knowledge-base/aws/EC2/unrestricted-rdp-access.html)    | Ensure that there is no unrestricted access through TCP port 3389 (which is used for MS Remote Desktop Protocol) from the selected EC2 security group  |
 |  EC2 | [EC2-004](https://www.cloudconformity.com/knowledge-base/aws/EC2/unrestricted-oracle-access.html)    | Ensure that there is no unrestricted access through TCP port 1521 (which is used by Oracle Database Server) from the selected EC2 security group  |

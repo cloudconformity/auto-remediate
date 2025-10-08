@@ -73,6 +73,19 @@ functions:
         - functions/AutoRemediateIAM-001.js
     role: AutoRemediateIAM001Role
 
+  AutoRemediateIAM-029:
+    handler: functions/AutoRemediateIAM-029.handler
+    memorySize: 128
+    tags:
+      Name: Auto Remediate IAM-029
+      Owner: CloudConformity
+      Role: Auto Remediate
+      Environment: Ops
+    package:
+      include:
+        - functions/AutoRemediateIAM-029.js
+    role: AutoRemediateIAM029Role
+
   AutoRemediateCT-001:
     handler: functions/AutoRemediateCT-001.handler
     memorySize: 128
@@ -1167,6 +1180,57 @@ resources:
                   Action:
                     - iam:UpdateAccessKey
                   Resource: "*"
+
+    AutoRemediateIAM029Role:
+      Type: AWS::IAM::Role
+      Properties:
+        RoleName: AutoRemediateIAM-029Role
+        AssumeRolePolicyDocument:
+          Version: '2012-10-17'
+          Statement:
+            - Effect: Allow
+              Principal:
+                Service:
+                  - lambda.amazonaws.com
+              Action:
+                - sts:AssumeRole
+        Policies:
+          - PolicyName: AutoRemediationXRayPolicy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - xray:PutTraceSegments
+                    - xray:PutTelemetryRecords
+                  Resource: "*"
+          - PolicyName: AutoRemediateIAM-029Policy
+            PolicyDocument:
+              Statement:
+                - Effect: Allow
+                  Action:
+                    - logs:CreateLogGroup
+                    - logs:CreateLogStream
+                    - logs:PutLogEvents
+                  Resource:
+                    - 'Fn::Join':
+                      - ':'
+                      -
+                        - 'arn:aws:logs'
+                        - Ref: 'AWS::Region'
+                        - Ref: 'AWS::AccountId'
+                        - 'log-group:/aws/lambda/*:*:*'
+                - Effect: Allow
+                  Action:
+                    - iam:DeleteUser
+                    - iam:DeleteUserPolicy
+                    - iam:DeleteLoginProfile
+                    - iam:DetachUserPolicy
+                    - iam:ListAttachedUserPolicies
+                    - iam:ListUserPolicies
+                    - iam:ListGroupsForUser
+                    - iam:RemoveUserFromGroup
+                  Resource: "*"
+
 
     AutoRemediateEC2042Role:
       Type: AWS::IAM::Role
