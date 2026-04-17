@@ -9,7 +9,10 @@
     "coverage": "npm run test -- --coverage --silent",
     "lint": "eslint '**/*.js' --ignore-path .gitignore",
     "lint:fix": "npm run lint -- --fix",
-    "sls:deploy": "npm prune --production && serverless deploy --force"
+    "sls:deploy": "npm prune --production && serverless deploy --force",
+    "build": "tsc",
+    "watch": "tsc -w",
+    "cdk": "cdk"
   },
   "author": "Mike Rahmati",
   "contributors": [
@@ -40,8 +43,13 @@
     "lodash.isequal": "^4.5.0"
   },
   "devDependencies": {
+    "@types/jest": "^30.0.0",
+    "@types/node": "^24.12.2",
+    "aws-cdk": "^2.1118.4",
+    "aws-cdk-lib": "^2.250.0",
     "aws-sdk-client-mock": "^3.0.1",
     "aws-sdk-client-mock-jest": "^3.0.1",
+    "constructs": "^10.6.0",
     "dotenv": "^10.0.0",
     "eslint": "^7.11.0",
     "eslint-config-standard": "^13.0.1",
@@ -51,16 +59,16 @@
     "eslint-plugin-promise": "^4.2.1",
     "eslint-plugin-standard": "^4.0.0",
     "husky": "^4.3.0",
-    "jest": "^26.6.3",
+    "jest": "^30.3.0",
     "lint-staged": "^11.0.0",
     "lodash.clonedeep": "^4.5.0",
-    "serverless": "^3.27.0",
-    "serverless-plugin-split-stacks": "^1.11.3",
-    "serverless-stack-termination-protection": "^2.0.2"
+    "ts-jest": "^29.4.9",
+    "ts-node": "^10.9.2",
+    "typescript": "5.9"
   },
   "engines": {
-    "node": "^18",
-    "npm": "^9"
+    "node": "^24",
+    "npm": "^11"
   },
   "lint-staged": {
     "**/*.js": [

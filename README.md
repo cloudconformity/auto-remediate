@@ -22,7 +22,8 @@ Here's an example:
 
 
 ## Prerequisites
-1. Install [Node.js](https://nodejs.org/en/) v18 or later.
+1. Install [Node.js](https://nodejs.org/en/) v24 or later.
+2. Install [Docker](https://www.docker.com/)
 
 ## Installation
 > Note that you need to follow the [Deleting a stack on the AWS CloudFormation console](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-delete-stack.html) to delete the current stack if you plan to update to the latest version.
@@ -37,9 +38,17 @@ git clone https://github.com/cloudconformity/auto-remediate.git
 ```bash
 cd auto-remediate
 ```
-3. `IMPORTANT` Update `functions/config.json` with required configurations. Please note that all the rules in config file are disabled by default to prevent unwanted changes. User needs to enable the ones they need manually.
-4. `IMPORTANT` Make any other necessary adjustments before deployment.
-5. Run `npm install` before deploying so that the node_modules folder would be available to AWS
+3. Update `functions/config.json` with required configurations. Please note that all the rules in config file are disabled by default to prevent unwanted changes. User needs to enable the ones they need manually.
+4. Update `bin/auto-remediate.ts` with your AWS Account ID and AWS deployment region.
+5. Make any other necessary adjustments before deployment.
+6. Run `npm install` before deploying so that the node_modules folder would be available to AWS
+
+> [!IMPORTANT]
+> Make sure to update `functions/config.json` with the rules you want enabled for automatic remediation
+
+> [!IMPORTANT]
+> Make sure to update `bin/auto-remediate.ts` with your AWS Account ID and AWS deployment region, otherwise deployment will not work
+
 
 ```bash
 npm install
@@ -47,7 +56,7 @@ npm install
 6. Finally deploy
 
 ```bash
-npx serverless deploy --region us-west-2
+npx cdk deploy
 ```
 
 ## Message Format

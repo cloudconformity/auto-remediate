@@ -7,3 +7,9 @@ node_modules
 coverage
 *.swp
 yarn.lock
+cdk.out
+
+# TypeScript compiled output
+*.d.ts
+bin/**/*.js
+lib/**/*.js

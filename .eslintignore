@@ -1,0 +1,7 @@
+# Generated TypeScript output files
+*.d.ts
+bin/**/*.js
+lib/**/*.js
+
+# Build output
+cdk.out/
