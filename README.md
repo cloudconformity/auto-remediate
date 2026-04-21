@@ -42,22 +42,24 @@ cd auto-remediate
 4. Update `bin/auto-remediate.ts` with your AWS Account ID and AWS deployment region.
 5. Make any other necessary adjustments before deployment.
 6. Run `npm install` before deploying so that the node_modules folder would be available to AWS
+7. Run `npm run cdk bootstrap` to setup CDK in the target account
 
 > [!IMPORTANT]
 > Make sure to update `functions/config.json` with the rules you want enabled for automatic remediation
 
 > [!IMPORTANT]
-> Make sure to update `bin/auto-remediate.ts` with your AWS Account ID and AWS deployment region, otherwise deployment will not work
+> Make sure to update `bin/auto-remediate.ts` with your AWS Account ID and AWS deployment region, otherwise both CDK bootstrapping and deployment will fail
 
 
 ```bash
 npm install
 ```
-6. Finally deploy
+6. Deploy
 
 ```bash
-npx cdk deploy
+npm run cdk deploy
 ```
+7. Review the changes and either approve or deny the changes that CDK will make
 
 ## Message Format
 
