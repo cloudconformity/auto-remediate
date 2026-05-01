@@ -23,7 +23,6 @@ Here's an example:
 
 ## Prerequisites
 1. Install [Node.js](https://nodejs.org/en/) v24 or later.
-2. Install [Docker](https://www.docker.com/)
 
 ## Installation
 > Note that you need to follow the [Deleting a stack on the AWS CloudFormation console](https://docs.aws.amazon.com/AWSCloudFormation/latest/UserGuide/cfn-console-delete-stack.html) to delete the current stack if you plan to update to the latest version.
